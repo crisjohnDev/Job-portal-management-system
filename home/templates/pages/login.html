@@ -1,0 +1,202 @@
+{% extends 'home_base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* --- Login Workspace Card Container --- */
+    .form-workspace-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        width: 100%;
+        max-width: 450px;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        text-align: left;
+        margin: 100px 20px 40px 20px; /* Offset to clear the header context space */
+    }
+
+    .form-workspace-card h2 {
+        color: var(--gov-blue);
+        font-size: 1.8rem;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .form-workspace-card p {
+        color: #4b5563;
+        font-size: 0.95rem;
+        margin-bottom: 32px;
+    }
+
+    /* --- Form Field Elements --- */
+    .field-group {
+        margin-bottom: 24px;
+    }
+
+    .field-group label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--gov-blue);
+        margin-bottom: 6px;
+    }
+
+    /* Target Wrapper for Password + Toggle Position styling */
+    .password-input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .field-group input[type="text"],
+    .field-group input[type="password"] {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        color: var(--text-dark);
+        outline: none;
+        transition: border-color 0.2s ease;
+    }
+
+    /* Prevent right-padding overlap with the toggle button */
+    .password-input-wrapper input {
+        padding-right: 48px !important;
+    }
+
+    .field-group input:focus {
+        border-color: var(--gov-blue-light);
+        box-shadow: 0 0 0 3px rgba(12, 35, 64, 0.15);
+    }
+
+    /* Visibility Action Toggle Button */
+    .password-toggle-btn {
+        position: absolute;
+        right: 12px;
+        background: none;
+        border: none;
+        color: #64748b;
+        cursor: pointer;
+        padding: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.2s;
+    }
+
+    .password-toggle-btn:hover {
+        color: var(--gov-blue);
+    }
+
+    .password-toggle-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* --- Primary Action System --- */
+    .btn-login-submit {
+        width: 100%;
+        padding: 14px;
+        font-size: 1rem;
+        font-weight: 600;
+        background-color: var(--gov-blue);
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        margin-top: 8px;
+    }
+
+    .btn-login-submit:hover {
+        background-color: var(--gov-blue-light);
+    }
+
+    .form-footer-options {
+        margin-top: 24px;
+        text-align: center;
+        font-size: 0.85rem;
+        color: #64748b;
+    }
+
+    .form-footer-options a {
+        color: var(--gov-red);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .form-footer-options a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="form-workspace-card">
+    <h2>Account Login</h2>
+    <p>Sign in to access your custom PESO dashboard panel.</p>
+
+    <!-- Account Identification Matrix -->
+    <form id="loginForm" method="POST" action="#">
+        {% csrf_token %}
+
+        <!-- Username field node -->
+        <div class="field-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your registered username" required autocomplete="username">
+        </div>
+
+        <!-- Password entry block with state toggle controls -->
+        <div class="field-group">
+            <label for="password">Password</label>
+            <div class="password-input-wrapper">
+                <input type="password" id="password" name="password" placeholder="Enter security password" required autocomplete="current-password">
+                
+                <button type="button" class="password-toggle-btn" id="passwordToggle" onclick="togglePasswordVisibility()" aria-label="Toggle password visibility">
+                    <!-- Eye Icon (Visible state default presentation) -->
+                    <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Authentication Access Trigger -->
+        <button type="submit" class="btn-login-submit">Sign In</button>
+        
+        <div class="form-footer-options">
+            Don't have an account yet? <br style="margin-bottom: 4px;">
+            Register as an <a href="{% url 'applicant-registration' %}">Applicant</a> or <a href="{% url 'employee-registration' %}">Employer</a>
+        </div>
+    </form>
+</div>
+
+<!-- COMPONENT LOGIC SCRIPT CONTROLLERS -->
+<script>
+    function togglePasswordVisibility() {
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            // Mutate vector coordinates inside inline DOM structure into "Eye Off" path configuration
+            eyeIcon.innerHTML = `
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+            `;
+        } else {
+            passwordInput.type = 'password';
+            // Restore context variables back to standard baseline open-eye graphic
+            eyeIcon.innerHTML = `
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+            `;
+        }
+    }
+</script>
+{% endblock %}

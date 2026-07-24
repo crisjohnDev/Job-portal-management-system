@@ -1,0 +1,207 @@
+{% extends "employer_base.html" %}
+{% block content %}
+            <!-- Dashboard Header Node -->
+            <header class="dashboard-header">
+                <div>
+                    <h1>Employer Dashboard</h1>
+                    <p style="color: #64748b; margin-top: 4px; font-size: 0.95rem;">Welcome back! Monitor your metrics, analytics, and active vacancies.</p>
+                </div>
+                <div class="company-badge">
+                    <svg viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                    <span>{{ employer.company_name }}</span>
+                </div>
+            </header>
+
+            <!-- BENTO METRICS PANEL SYSTEM -->
+            <section class="metrics-bento-grid">
+                <div class="bento-card">
+                    <div class="bento-card-title">Active Job Posts</div>
+                    <div class="bento-card-value">
+                        {{ total_jobs }}
+                    </div>
+                </div>
+                <div class="bento-card">
+                    <div class="bento-card-title">Total Applicants</div>
+                    <div class="bento-card-value">
+                        {{ total_applications }}
+                    </div>
+                </div>
+                <div class="bento-card">
+                    <div class="bento-card-title">Pending Review</div>
+                    <div class="bento-card-value">
+                        {{ pending_review }}
+                    </div>
+                </div>
+            </section>
+
+            <!-- ANALYTICS: WEEKLY & MONTHLY REPORT SECTION -->
+            <section class="analytics-section" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-bottom: 32px;">
+                
+                <!-- Weekly Trends Overview -->
+                <div class="content-panel-block" style="padding:24px;">
+                    <h3 style="font-size:1.1rem;margin-bottom:20px;">
+                        Weekly Application Trends
+                    </h3>
+
+                    <div>
+
+                        <div style="display:flex;justify-content:space-between;">
+                            <span>This Week</span>
+                            <strong>{{ this_week }} Applicants</strong>
+                        </div>
+
+                        <div style="background:#f1f5f9;height:8px;border-radius:5px;">
+                            <div style="
+                                width:{{ this_week_percent }}%;
+                                background:#2563eb;
+                                height:8px;
+                                border-radius:5px;">
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div style="display:flex;justify-content:space-between;">
+                            <span>Last Week</span>
+                            <strong>{{ last_week }} Applicants</strong>
+                        </div>
+
+                        <div style="background:#f1f5f9;height:8px;border-radius:5px;">
+                            <div style="
+                                width:{{ last_week_percent }}%;
+                                background:#94a3b8;
+                                height:8px;
+                                border-radius:5px;">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Monthly Distribution Report -->
+<div class="content-panel-block" style="padding:24px;">
+
+<h3 style="font-size:1.1rem;margin-bottom:20px;">
+Monthly Turnout Breakdown
+</h3>
+
+<div style="
+display:flex;
+align-items:flex-end;
+height:180px;
+gap:18px;
+justify-content:space-around;
+">
+
+{% for item in monthly %}
+
+<div style="
+display:flex;
+flex-direction:column;
+align-items:center;
+flex:1;
+">
+
+<div
+style="
+width:40px;
+height:{{ item.total|add:'0' }}0px;
+background:#0c2340;
+border-radius:6px 6px 0 0;
+">
+</div>
+
+<span style="margin-top:8px;">
+{{ item.month|date:"M" }}
+</span>
+
+<small>{{ item.total }}</small>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+            </section>
+
+            <!-- WORKSPACE DYNAMIC PANEL MAIN DISPLAY -->
+            <section class="content-panel-block">
+                <h3>Recent Activity Feed</h3>
+                <div style="overflow-x: auto; margin-top: 16px;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #f1f5f9; color: #64748b;">
+                                <th style="padding: 12px 8px; font-weight: 600;">Applicant Name</th>
+                                <th style="padding: 12px 8px; font-weight: 600;">Position Applied</th>
+                                <th style="padding: 12px 8px; font-weight: 600;">Timeline Group</th>
+                                <th style="padding: 12px 8px; font-weight: 600;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for application in recent_applications %}
+                            <tr style="border-bottom:1px solid #f1f5f9;">
+
+                                <td style="padding:14px 8px;font-weight:500;">
+                                    {{ application.applicant.first_name }}
+                                    {{ application.applicant.last_name }}
+                                </td>
+
+                                <td style="padding:14px 8px;color:#475569;">
+                                    {{ application.job.title }}
+                                </td>
+
+                                <td style="padding:14px 8px;color:#64748b;">
+                                    {{ application.applied_at|date:"M d, Y" }}
+                                </td>
+
+                                <td style="padding:14px 8px;">
+
+                                    {% if application.status == "pending" %}
+                                        <span style="background:#fef3c7;color:#d97706;padding:4px 8px;border-radius:12px;font-size:.8rem;">
+                                            Pending
+                                        </span>
+
+                                    {% elif application.status == "reviewing" %}
+                                        <span style="background:#dbeafe;color:#2563eb;padding:4px 8px;border-radius:12px;font-size:.8rem;">
+                                            Reviewing
+                                        </span>
+
+                                    {% elif application.status == "shortlisted" %}
+                                        <span style="background:#dcfce7;color:#15803d;padding:4px 8px;border-radius:12px;font-size:.8rem;">
+                                            Shortlisted
+                                        </span>
+
+                                    {% elif application.status == "accepted" %}
+                                        <span style="background:#bbf7d0;color:#166534;padding:4px 8px;border-radius:12px;font-size:.8rem;">
+                                            Accepted
+                                        </span>
+
+                                    {% else %}
+                                        <span style="background:#fee2e2;color:#dc2626;padding:4px 8px;border-radius:12px;font-size:.8rem;">
+                                            Rejected
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                            {% empty %}
+
+                            <tr>
+                                <td colspan="4" style="padding:25px;text-align:center;">
+                                    No applications yet.
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+{% endblock %}

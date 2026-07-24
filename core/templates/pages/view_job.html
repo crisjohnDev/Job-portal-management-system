@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Content Control Bar Header -->
+<header class="content-header">
+    <div class="page-title">
+        <h2>Job Specification Details</h2>
+    </div>
+
+    <div class="admin-profile">
+        <span>Welcome, <strong>Admin Portal</strong></span>
+        <div class="profile-badge">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        </div>
+    </div>
+</header>
+
+<div class="dashboard-workspace">
+
+    <!-- JOB METADATA CARD -->
+    <div class="data-card">
+        
+        <div class="data-card-header">
+            <h3>{{ job.title }}</h3>
+            <div>
+                {% if job.status == "approved" or job.status == "Approved" %}
+                    <span class="badge-status active">Approved Position</span>
+                {% elif job.status == "pending" or job.status == "Pending" %}
+                    <span class="badge-status pending">Pending Review</span>
+                {% else %}
+                    <span class="badge-status suspended">Rejected / Inactive</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Meta Specification Parameters Table -->
+        <div class="table-responsive">
+            <table class="meta-table">
+                <tbody>
+                    <tr>
+                        <th>Hiring Organization</th>
+                        <td style="font-weight: 600; color: var(--gov-blue-light);">{{ job.employer.company_name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Business Permit Reference</th>
+                        <td style="font-family: monospace; font-size: 0.95rem;">{{ job.employer.business_permit_no }}</td>
+                    </tr>
+                    <tr>
+                        <th>Corporate Contact Hotline</th>
+                        <td>{{ job.employer.contact_no }}</td>
+                    </tr>
+                    <tr>
+                        <th>Functional Placement Role</th>
+                        <td><strong>{{ job.title }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Core Job Summary</th>
+                        <td style="line-height: 1.6; color: #374151;">{{ job.description|default:"No role breakdown details provided." }}</td>
+                    </tr>
+                    <tr>
+                        <th>Minimum Job Qualifications</th>
+                        <td style="line-height: 1.6; color: #374151; padding: 12px 0;">{{ job.qualifications|linebreaks }}</td>
+                    </tr>
+                    <tr>
+                        <th>Performance Responsibilities</th>
+                        <td style="line-height: 1.6; color: #374151; padding: 12px 0;">{{ job.responsibilities|linebreaks }}</td>
+                    </tr>
+                    <tr>
+                        <th>Offered Monthly Compensation</th>
+                        <td style="font-weight: 600; color: var(--success-green);">₱{{ job.salary }}</td>
+                    </tr>
+                    <tr>
+                        <th>Primary Work Location</th>
+                        <td>{{ job.location }}</td>
+                    </tr>
+                    <tr>
+                        <th>Employment Class Arrangement</th>
+                        <td><span style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: 500;">{{ job.get_job_type_display }}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Open Target Vacancies</th>
+                        <td style="font-weight: 600;">{{ job.vacancies }} open slot{{ job.vacancies|pluralize }}</td>
+                    </tr>
+                    <tr>
+                        <th>Application Grace Deadline</th>
+                        <td style="color: #b91c1c; font-weight: 500;">{{ job.deadline|date:"F d, Y" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Administrative Review Remarks</th>
+                        <td>
+                            {% if job.admin_remarks %}
+                                <div style="background-color: #f8fafc; padding: 10px 14px; border-left: 4px solid #cbd5e1; border-radius: 0 4px 4px 0; font-style: italic;">
+                                    "{{ job.admin_remarks }}"
+                                </div>
+                            {% else %}
+                                <span style="color: var(--text-muted); font-style: italic;">No logged internal audit remarks.</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>System Posting Timestamp</th>
+                        <td style="color: var(--text-muted);">{{ job.created_at|date:"F d, Y" }} at {{ job.created_at|date:"h:i A" }}</td>
+                    </tr>
+                    {% if job.approved_at %}
+                    <tr>
+                        <th>System Verification Date</th>
+                        <td style="color: var(--text-muted);">{{ job.approved_at|date:"F d, Y" }} at {{ job.approved_at|date:"h:i A" }}</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Navigation Footer Controls -->
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-gray);">
+            <a href="{% url 'job-post-list' %}" class="btn btn-secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>Return to Job Posts</span>
+            </a>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

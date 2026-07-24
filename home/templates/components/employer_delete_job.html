@@ -1,0 +1,86 @@
+{% extends "employer_base.html" %}
+
+{% block content %}
+
+<style>
+.delete-card{
+    max-width:600px;
+    margin:80px auto;
+    background:#fff;
+    border-radius:12px;
+    border:1px solid #e2e8f0;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    padding:40px;
+    text-align:center;
+}
+
+.delete-card h2{
+    color:#dc2626;
+    margin-bottom:15px;
+}
+
+.delete-card p{
+    color:#64748b;
+    margin-bottom:30px;
+    line-height:1.6;
+}
+
+.buttons{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+}
+
+.btn{
+    padding:12px 24px;
+    border:none;
+    border-radius:8px;
+    font-weight:600;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+.cancel{
+    background:#e2e8f0;
+    color:#334155;
+}
+
+.delete{
+    background:#dc2626;
+    color:#fff;
+}
+
+.delete:hover{
+    background:#b91c1c;
+}
+</style>
+
+<div class="delete-card">
+
+    <h2>Delete Job Post</h2>
+
+    <p>
+        Are you sure you want to delete
+        <strong>"{{ job.title }}"</strong>?
+        <br><br>
+        This action cannot be undone.
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="buttons">
+            <a href="{% url 'job-list' %}" class="btn cancel">
+                Cancel
+            </a>
+
+            <button type="submit" class="btn delete">
+                Delete Job
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

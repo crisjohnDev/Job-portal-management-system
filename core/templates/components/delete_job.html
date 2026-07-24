@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Header Ribbon Controls -->
+<header class="content-header">
+    <div class="page-title">
+        <h2>Destructive Actions Panel</h2>
+    </div>
+    <div class="admin-profile">
+        <span>Welcome, <strong>Admin Portal</strong></span>
+        <div class="profile-badge">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+    </div>
+</header>
+
+<!-- Context Content Area -->
+<div class="dashboard-workspace" style="max-width: 700px; margin: 0 auto;">
+
+    <!-- Action Card -->
+    <div class="data-card" style="border-top: 4px solid var(--gov-red);">
+        <div class="data-card-header">
+            <h3 style="color: var(--gov-red);">Permanently Delete Job Post?</h3>
+        </div>
+        
+        <div style="padding: 24px;">
+            <!-- Caution Warning Box -->
+            <div style="background-color: #fef2f2; border-left: 4px solid var(--gov-red); padding: 16px; margin-bottom: 20px; border-radius: 0 6px 6px 0;">
+                <p style="color: #991b1b; font-weight: 600; font-size: 0.95rem;">
+                    Warning: This dynamic deployment action is irreversible!
+                </p>
+                <p style="color: #571c1c; font-size: 0.88rem; margin-top: 4px;">
+                    Executing this removal action will purge all metadata tracking metrics and historic applicant sub-records tied exclusively to this listing database row.
+                </p>
+            </div>
+
+            <p style="margin-bottom: 20px; color: var(--text-dark); font-size: 0.95rem;">
+                Please verify target registry metrics details prior to rendering system execution:
+            </p>
+
+            <!-- Verification Data Container -->
+            <div style="background-color: #f8fafc; border: 1px solid var(--border-gray); border-radius: 6px; padding: 20px; margin-bottom: 24px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 8px 0; font-weight: 600; color: var(--text-muted); width: 35%;">Origin Corporation:</td>
+                        <td style="padding: 8px 0; font-weight: 700; color: var(--text-dark);">{{ job.employer.company_name }}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; font-weight: 600; color: var(--text-muted);">Target Listing Job Title:</td>
+                        <td style="padding: 8px 0; font-weight: 700; color: var(--gov-red);">{{ job.title }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- System Action Footer -->
+            <form method="POST" style="display: flex; gap: 12px; justify-content: flex-end;">
+                {% csrf_token %}
+                <a href="{% url 'job-post-list' %}" style="text-decoration: none; color: var(--text-dark); font-weight: 600; font-size: 0.9rem; padding: 10px 20px; border: 1px solid var(--border-gray); border-radius: 6px; background: #ffffff; transition: background 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#ffffff'">
+                    Abort Operation
+                </a>
+                <button type="submit" style="cursor: pointer; color: white; font-weight: 600; font-size: 0.9rem; padding: 10px 24px; border: none; border-radius: 6px; background-color: var(--gov-red); transition: opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                    Confirm Permanent Purge
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

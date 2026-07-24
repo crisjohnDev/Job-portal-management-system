@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Content Control Bar Header -->
+<header class="content-header">
+    <div class="page-title">
+        <h2>Employer Profile</h2>
+    </div>
+
+    <div class="admin-profile">
+        <span>Welcome, <strong>Admin Portal</strong></span>
+        <div class="profile-badge">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        </div>
+    </div>
+</header>
+
+<div class="dashboard-workspace">
+
+    <!-- PROFILE DETAILED CARD -->
+    <div class="data-card">
+        
+        <!-- Entity Identity Header Section -->
+        <div style="display: flex; align-items: center; gap: 25px; margin-bottom: 35px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color, #e5e7eb);">
+            {% if employer.company_logo %}
+                <img src="{{ employer.company_logo.url }}"
+                     alt="{{ employer.company_name }} Logo"
+                     width="120"
+                     height="120"
+                     style="border-radius: 12px; object-fit: cover; border: 1px solid var(--border-color, #e5e7eb); background-color: #ffffff;">
+            {% else %}
+                <div style="width: 120px; height: 120px; border-radius: 12px; background-color: #f3f4f6; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color, #e5e7eb);">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                </div>
+            {% endif %}
+
+            <div>
+                <h2 style="margin: 0 0 8px 0; font-size: 1.5rem; color: var(--text-dark, #1f2937);">{{ employer.company_name }}</h2>
+                <p style="margin: 0; font-size: 0.95rem; color: var(--text-muted, #6b7280);">
+                    <strong>System Verification Status:</strong> 
+                    {% if employer.is_active %}
+                        <span class="badge-status active" style="margin-left: 5px;">Active</span>
+                    {% else %}
+                        <span class="badge-status" style="background-color: #fee2e2; color: #991b1b; margin-left: 5px;">Suspended</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <!-- System Meta Specifications Info Table -->
+        <div class="table-responsive" style="margin-bottom: 30px;">
+            <table class="table" style="width: 100%; border-collapse: collapse; text-align: left;">
+                <tbody>
+                    <tr style="border-bottom: 1px solid var(--border-color, #f3f4f6);">
+                        <th style="padding: 14px 16px; width: 25%; font-weight: 600; color: var(--text-dark, #374151);">System Username</th>
+                        <td style="padding: 14px 16px; color: var(--gov-blue-light, #0284c7); font-weight: 500;">{{ employer.employer.username }}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color, #f3f4f6);">
+                        <th style="padding: 14px 16px; font-weight: 600; color: var(--text-dark, #374151);">Official Email Address</th>
+                        <td style="padding: 14px 16px;">{{ employer.employer.email }}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color, #f3f4f6);">
+                        <th style="padding: 14px 16px; font-weight: 600; color: var(--text-dark, #374151);">Business Permit Registration No.</th>
+                        <td style="padding: 14px 16px; font-family: monospace; font-size: 0.95rem;">{{ employer.business_permit_no }}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color, #f3f4f6);">
+                        <th style="padding: 14px 16px; font-weight: 600; color: var(--text-dark, #374151);">Contact Hotline Number</th>
+                        <td style="padding: 14px 16px;">{{ employer.contact_no }}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color, #f3f4f6);">
+                        <th style="padding: 14px 16px; font-weight: 600; color: var(--text-dark, #374151);">Corporate Profile Summary</th>
+                        <td style="padding: 14px 16px; line-height: 1.6; color: var(--text-normal, #4b5563);">{{ employer.description|default:"No corporate summary details provided yet." }}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color, #f3f4f6);">
+                        <th style="padding: 14px 16px; font-weight: 600; color: var(--text-dark, #374151);">System Registration Timestamp</th>
+                        <td style="padding: 14px 16px; color: var(--text-muted, #6b7280);">{{ employer.created_at|date:"F d, Y" }} at {{ employer.created_at|date:"h:i A" }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Action Section Layout Controls -->
+        <div style="display: flex; gap: 15px; justify-content: flex-start; align-items: center;">
+            <a href="{% url 'employer-list' %}" class="btn btn-secondary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>Return to List</span>
+            </a>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

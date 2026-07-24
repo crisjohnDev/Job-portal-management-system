@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PESO Admin Portal - Government Sign In</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" >
+</head>
+<body>
+
+    <!-- Official Top Bar Marker -->
+    <div class="gov-top-bar">
+        An official website of the Republic of the Philippines. <span>Learn how to identify secure portals.</span>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="login-card">
+            
+            <div class="portal-header">
+
+                <div class="logo-container">
+
+                    <div class="logo-slot">
+                        <img src="{% static 'images/PESO.png' %}"
+                             alt="PESO Logo"
+                             class="peso-logo">
+                    </div>
+
+                    <div class="logo-divider"></div>
+
+                    <div class="logo-slot">
+                        <img src="{% static 'images/PIODURAN.png' %}"
+                             alt="Pio Duran Logo"
+                             class="pioduran-logo">
+                    </div>
+
+                </div>
+
+                <h2>PESO Admin Portal</h2>
+                <p class="subtitle">
+                    Public Employment Service Office Access Link
+                </p>
+
+            </div>
+            
+            <!-- Mandatory Government Data Protection Notice -->
+            <div class="privacy-notice">
+                <strong>SECURITY NOTICE:</strong> This system is restricted to authorized administrative personnel only. Unauthorized access attempts are monitored and prosecutable under the Data Privacy Act.
+            </div>
+            
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    
+                    <!-- Username Entry -->
+                    <div>
+                        <label class="field-label">Username</label>
+                        <div class="input-wrapper">
+                            <input type="text" name="username" placeholder="Enter administrative username" required autocomplete="off">
+                        </div>
+                    </div>
+                    
+                    <!-- Password Entry with clean Institutional Fish Eye Reveal -->
+                    <div>
+                        <label class="field-label">Password</label>
+                        <div class="input-wrapper password-container">
+                            <input type="password" name="password" placeholder="••••••••" required>
+                            
+                            <!-- Hidden Core Checkbox Driver -->
+                            <input type="checkbox" id="gov-eye-toggle">
+                            
+                            <!-- Plaintext input switchboard component -->
+                            <input type="text" class="text-fallback" placeholder="Password">
+                            
+                            <!-- High-Accuracy Micro CSS Fish Eye Lens Element -->
+                            <label for="gov-eye-toggle" class="fisheye-toggle" title="Verify Entry String"></label>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <button type="submit" class="btn-gov">Log In</button>
+            </form>
+
+            {% comment %} <div class="form-footer">
+                <a href="#">Forgot Credential Keys?</a>
+                <a href="#">Help Desk Support</a>
+            </div> {% endcomment %}
+        </div>
+    </div>
+
+</body>
+</html>

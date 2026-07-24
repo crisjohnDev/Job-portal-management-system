@@ -1,0 +1,519 @@
+{% extends 'home_base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* --- Expanded Landscape Registration Workspace Container --- */
+    .form-workspace-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        width: 100%;
+        max-width: 950px;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        text-align: left;
+        margin: 100px auto 40px auto;
+    }
+
+    .form-workspace-card h2 {
+        color: var(--gov-blue);
+        font-size: 1.8rem;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .form-workspace-card p {
+        color: #4b5563;
+        font-size: 0.95rem;
+        margin-bottom: 32px;
+    }
+
+    /* --- Visual Step Progress Tracker Indicators --- */
+    .step-indicator-bar {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 32px;
+        position: relative;
+    }
+
+    .step-indicator-bar::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #e5e7eb;
+        z-index: 1;
+        transform: translateY(-50%);
+    }
+
+    .step-node {
+        position: relative;
+        z-index: 2;
+        background: #ffffff;
+        padding: 6px 20px;
+        border-radius: 20px;
+        border: 2px solid #e5e7eb;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #9ca3af;
+        transition: all 0.3s ease;
+    }
+
+    .step-node.active {
+        border-color: var(--gov-blue);
+        color: var(--gov-blue);
+        background: #eff6ff;
+    }
+
+    .step-node.completed {
+        border-color: var(--gov-red);
+        color: #ffffff;
+        background: var(--gov-red);
+    }
+
+    /* --- Workspace Form Panels & Horizontal Grid Matrix --- */
+    .form-step-panel {
+        display: none;
+    }
+
+    .form-step-panel.active {
+        display: block;
+    }
+
+    .field-row {
+        display: flex;
+        gap: 24px;
+        margin-bottom: 24px;
+    }
+
+    .field-row .field-group {
+        flex: 1;
+        margin-bottom: 0;
+    }
+
+    .field-group {
+        margin-bottom: 24px;
+        position: relative;
+    }
+
+    .field-group label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--gov-blue);
+        margin-bottom: 6px;
+    }
+
+    .field-group input[type="text"],
+    .field-group input[type="email"],
+    .field-group input[type="password"],
+    .field-group input[type="file"],
+    .field-group textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        color: var(--text-dark);
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .password-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .password-wrapper input {
+        padding-right: 46px !important;
+    }
+
+    .toggle-password-btn {
+        position: absolute;
+        right: 14px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #64748b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .toggle-password-btn:hover {
+        color: var(--gov-blue);
+    }
+
+    .field-group textarea {
+        resize: vertical;
+        min-height: 120px;
+        font-family: inherit;
+    }
+
+    .field-group input:focus,
+    .field-group textarea:focus {
+        border-color: var(--gov-blue-light);
+        box-shadow: 0 0 0 3px rgba(12, 35, 64, 0.15);
+    }
+
+    /* Dynamic Password Checklist Component Layout */
+    .password-checklist {
+        margin-top: 10px;
+        padding: 12px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        list-style: none;
+        display: none;
+    }
+
+    .checklist-item {
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: color 0.2s ease;
+    }
+
+    .checklist-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    .rule-invalid {
+        color: #64748b; /* Neutral dark grey while unmet */
+    }
+
+    .rule-valid {
+        color: #16a34a; /* Crisp validation green */
+    }
+
+    /* --- Footer Navigation Flow Controls --- */
+    .flow-control-footer {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 32px;
+        gap: 16px;
+    }
+
+    .btn-flow {
+        padding: 12px 28px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        border-radius: 6px;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+    }
+
+    .btn-flow-back {
+        background-color: #e2e8f0;
+        color: var(--text-dark);
+    }
+
+    .btn-flow-back:hover {
+        background-color: #cbd5e1;
+    }
+
+    .btn-flow-next, .btn-flow-submit {
+        background-color: var(--gov-blue);
+        color: #ffffff;
+        margin-left: auto;
+    }
+
+    .btn-flow-next:hover {
+        background-color: var(--gov-blue-light);
+    }
+
+    .btn-flow-submit {
+        background-color: var(--gov-red);
+    }
+
+    .btn-flow-submit:hover {
+        background-color: #a30000;
+    }
+
+    .alert{
+    padding:12px 18px;
+    margin-bottom:15px;
+    border-radius:6px;
+    font-weight:600;
+}
+
+.alert-success{
+    background:#dcfce7;
+    color:#166534;
+    border:1px solid #22c55e;
+}
+
+.alert-error{
+    background:#fee2e2;
+    color:#991b1b;
+    border:1px solid #ef4444;
+}
+
+.alert-warning{
+    background:#fef3c7;
+    color:#92400e;
+    border:1px solid #f59e0b;
+}
+
+.alert-info{
+    background:#dbeafe;
+    color:#1e40af;
+    border:1px solid #3b82f6;
+}
+
+    @media (max-width: 768px) {
+        .field-row {
+            flex-direction: column;
+            gap: 24px;
+        }
+    }
+</style>
+
+<div class="form-workspace-card">
+    <h2>Employer Registration</h2>
+    <p>Partner with PESO Pio Duran to post jobs and search qualified candidates.</p>
+
+    <div class="step-indicator-bar">
+        <div class="step-node active" id="indicator-1">Step 1: Credentials</div>
+        <div class="step-node" id="indicator-2">Step 2: Profile Details</div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if 'registration' in message.tags %}
+                <div class="alert alert-{{ message.level_tag }}">
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <form id="registrationForm" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- STAGE PANEL 1: ACCOUNT DETAILS -->
+        <div class="form-step-panel active" id="step-panel-1">
+            <div class="field-row">
+                <div class="field-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter portal username" required>
+                </div>
+                <div class="field-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="info@company.gov" required>
+                </div>
+                <div class="field-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" name="password" placeholder="Create security password" required>
+                        <button type="button" id="togglePassword" class="toggle-password-btn" aria-label="Toggle visibility">
+                            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <!-- Broken down Requirements Checklist UI block -->
+                    <ul id="passwordChecklist" class="password-checklist">
+                        <li id="rule-length" class="checklist-item rule-invalid">• At least 8 characters long</li>
+                        <li id="rule-uppercase" class="checklist-item rule-invalid">• At least one uppercase letter (A-Z)</li>
+                        <li id="rule-lowercase" class="checklist-item rule-invalid">• At least one lowercase letter (a-z)</li>
+                        <li id="rule-number" class="checklist-item rule-invalid">• At least one digit (0-9)</li>
+                        <li id="rule-special" class="checklist-item rule-invalid">• At least one special character (@$!%*?&amp;)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE PANEL 2: INSTITUTION PROFILE -->
+        <div class="form-step-panel" id="step-panel-2">
+            <div class="field-row">
+                <div class="field-group">
+                    <label for="company_name">Company Name</label>
+                    <input type="text" id="company_name" name="company_name" placeholder="Registered commercial entity name">
+                </div>
+                <div class="field-group">
+                    <label for="permit_no">Business Permit No.</label>
+                    <input type="text" id="permit_no" name="business_permit_no" placeholder="e.g., BP-2026-XXXXX">
+                </div>
+            </div>
+
+            <div class="field-row">
+                <div class="field-group">
+                    <label for="contact_no">Contact No.</label>
+                    <input type="text" id="contact_no" name="contact_no" placeholder="Landline or verified corporate mobile line">
+                </div>
+                <div class="field-group">
+                    <label for="company_logo">Company Logo</label>
+                    <input type="file" id="company_logo" name="company_logo" accept="image/*">
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label for="company_description">Company Description</label>
+                <textarea id="company_description" name="description" placeholder="Briefly describe your company's industry core, operations, and organizational mission..."></textarea>
+            </div>
+        </div>
+
+        <div class="flow-control-footer">
+            <button type="button" class="btn-flow btn-flow-back" id="btnBack" style="display: none;" onclick="navigateStep(-1)">Back</button>
+            <button type="button" class="btn-flow btn-flow-next" id="btnNext" onclick="navigateStep(1)">Next Step</button>
+            <button type="submit" class="btn-flow btn-flow-submit" id="btnSubmit" style="display: none;">Complete Registration</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    let activeStep = 1;
+    const totalSteps = 2;
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const passwordInput = document.getElementById("password");
+        const togglePasswordBtn = document.getElementById("togglePassword");
+        const eyeIcon = document.getElementById("eyeIcon");
+        const checklist = document.getElementById("passwordChecklist");
+
+        // Object mapping for granular requirements verification
+        const rules = {
+            length: document.getElementById("rule-length"),
+            uppercase: document.getElementById("rule-uppercase"),
+            lowercase: document.getElementById("rule-lowercase"),
+            number: document.getElementById("rule-number"),
+            special: document.getElementById("rule-special")
+        };
+
+        togglePasswordBtn.addEventListener("click", function() {
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                eyeIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                `;
+            } else {
+                passwordInput.type = "password";
+                eyeIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                `;
+            }
+        });
+
+        // REAL-TIME CHECKLIST PARSER
+        passwordInput.addEventListener("input", function() {
+            const val = passwordInput.value;
+            
+            if (val.length === 0) {
+                checklist.style.display = "none";
+                passwordInput.style.borderColor = "#cbd5e1";
+                passwordInput.style.boxShadow = "none";
+                return;
+            }
+
+            checklist.style.display = "block";
+
+            // Individual criteria evaluations
+            const conditions = {
+                length: val.length >= 8,
+                uppercase: /[A-Z]/.test(val),
+                lowercase: /[a-z]/.test(val),
+                number: /\d/.test(val),
+                special: /[@$!%*?&]/.test(val)
+            };
+
+            let allValid = true;
+
+            // Loop and render state check components for each row
+            for (let key in conditions) {
+                if (conditions[key]) {
+                    rules[key].className = "checklist-item rule-valid";
+                    rules[key].innerHTML = `✓ ${rules[key].textContent.replace(/[✓•]\s*/, '')}`;
+                } else {
+                    rules[key].className = "checklist-item rule-invalid";
+                    rules[key].innerHTML = `• ${rules[key].textContent.replace(/[✓•]\s*/, '')}`;
+                    allValid = false;
+                }
+            }
+
+            // Update parent box styles dynamically based on total pass result
+            if (allValid) {
+                passwordInput.style.borderColor = "#16a34a";
+                passwordInput.style.boxShadow = "0 0 0 3px rgba(22, 163, 74, 0.15)";
+            } else {
+                passwordInput.style.borderColor = "#dc2626";
+                passwordInput.style.boxShadow = "0 0 0 3px rgba(220, 38, 38, 0.15)";
+            }
+        });
+    });
+
+    function validatePasswordRules(value) {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        return passwordRegex.test(value);
+    }
+
+    function navigateStep(direction) {
+        if (direction === 1 && !validateCurrentStep()) {
+            return;
+        }
+
+        activeStep += direction;
+        if (activeStep < 1) activeStep = 1;
+        if (activeStep > totalSteps) activeStep = totalSteps;
+
+        renderStepUI();
+    }
+
+    function validateCurrentStep() {
+        const currentPanel = document.getElementById(`step-panel-${activeStep}`);
+        const inputs = currentPanel.querySelectorAll('input[required]');
+        
+        for (let input of inputs) {
+            if (!input.value.trim()) {
+                alert("Please accurately complete all field variables inside this step block.");
+                return false;
+            }
+        }
+
+        if (activeStep === 1) {
+            const passwordInput = document.getElementById("password");
+            if (!validatePasswordRules(passwordInput.value)) {
+                passwordInput.focus();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function renderStepUI() {
+        for (let i = 1; i <= totalSteps; i++) {
+            document.getElementById(`step-panel-${i}`).classList.toggle('active', i === activeStep);
+            
+            const node = document.getElementById(`indicator-1`);
+            const node2 = document.getElementById(`indicator-2`);
+            
+            if(activeStep === 1) {
+                node.className = "step-node active";
+                node2.className = "step-node";
+            } else if(activeStep === 2) {
+                node.className = "step-node completed";
+                node2.className = "step-node active";
+            }
+        }
+
+        document.getElementById('btnBack').style.display = activeStep === 1 ? 'none' : 'inline-block';
+        document.getElementById('btnNext').style.display = activeStep === totalSteps ? 'none' : 'inline-block';
+        document.getElementById('btnSubmit').style.display = activeStep === totalSteps ? 'inline-block' : 'none';
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Chart.js Dependency -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Content Control Bar Header -->
+<header class="content-header">
+    <div class="page-title">
+        <h2>System Reports</h2>
+    </div>
+
+    <div class="admin-profile">
+        <span>Welcome, <strong>Admin Portal</strong></span>
+        <div class="profile-badge">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        </div>
+    </div>
+</header>
+
+<div class="dashboard-workspace">
+
+    <!-- SUMMARY CARDS GRID -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total Employers</div>
+            <div class="stat-value">{{ total_employers }}</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Active Employers</div>
+            <div class="stat-value" style="color: var(--success-green);">{{ active_employers }}</div>
+        </div>
+
+        <div class="stat-card accent">
+            <div class="stat-label">Suspended Employers</div>
+            <div class="stat-value" style="color: var(--gov-red);">{{ suspended_employers }}</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Total Applicants</div>
+            <div class="stat-value">{{ total_applicants }}</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Total Job Posts</div>
+            <div class="stat-value">{{ total_jobs }}</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Approved Jobs</div>
+            <div class="stat-value" style="color: var(--success-green);">{{ approved_jobs }}</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Pending Jobs</div>
+            <div class="stat-value" style="color: #d97706;">{{ pending_jobs }}</div>
+        </div>
+
+        <div class="stat-card accent">
+            <div class="stat-label">Rejected Jobs</div>
+            <div class="stat-value" style="color: var(--gov-red);">{{ rejected_jobs }}</div>
+        </div>
+    </div>
+
+    <!-- GRAPHICAL DATA LAYOUT -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin-bottom: 30px;">
+        <div class="data-card">
+            <div class="data-card-header">
+                <h3>Job Status Allocation</h3>
+            </div>
+            <div style="padding: 20px; position: relative; height: 300px; display: flex; justify-content: center;">
+                <canvas id="jobChart"></canvas>
+            </div>
+        </div>
+
+        <div class="data-card">
+            <div class="data-card-header">
+                <h3>Employer Distribution</h3>
+            </div>
+            <div style="padding: 20px; position: relative; height: 300px; display: flex; justify-content: center;">
+                <canvas id="employerChart"></canvas>
+            </div>
+        </div>
+
+        <div class="data-card">
+            <div class="data-card-header">
+                <h3>Overall System Metrics</h3>
+            </div>
+            <div style="padding: 20px; position: relative; height: 300px;">
+                <canvas id="overallChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- EMPLOYER DATA TABLES -->
+    <div class="data-card" style="margin-bottom: 30px;">
+        <div class="data-card-header">
+            <h3>Employer Report</h3>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Business Permit No.</th>
+                        <th>Contact Number</th>
+                        <th>System Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employer in employers %}
+                    <tr>
+                        <td><strong>{{ employer.company_name }}</strong></td>
+                        <td>{{ employer.business_permit_no }}</td>
+                        <td>{{ employer.contact_no }}</td>
+                        <td>
+                            {% if employer.is_active %}
+                                <span class="badge-status active">Active</span>
+                            {% else %}
+                                <span class="badge-status" style="background-color: #fee2e2; color: #991b1b;">Suspended</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 30px 0;">No employer instances logged in system database.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- APPLICANT DATA TABLES -->
+    <div class="data-card" style="margin-bottom: 30px;">
+        <div class="data-card-header">
+            <h3>Applicant Report</h3>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Email Address</th>
+                        <th>Phone Account</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for applicant in applicants %}
+                    <tr>
+                        <td><strong>{{ applicant.first_name }} {{ applicant.middle_name }} {{ applicant.last_name }}</strong></td>
+                        <td>{{ applicant.email }}</td>
+                        <td>{{ applicant.phone_number }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 30px 0;">No active job seekers logged in system database.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- JOBS DATA TABLES -->
+    <div class="data-card">
+        <div class="data-card-header">
+            <h3>Job Posts Report</h3>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Job Title</th>
+                        <th>Remuneration Rate</th>
+                        <th>Deployment Location</th>
+                        <th>Review Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for job in jobs %}
+                    <tr>
+                        <td>{{ job.employer.company_name }}</td>
+                        <td><strong>{{ job.title }}</strong></td>
+                        <td style="font-weight: 500; color: var(--gov-blue);">₱{{ job.salary }}</td>
+                        <td>{{ job.location }}</td>
+                        <td>
+                            {% if job.status == 'approved' or job.get_status_display|lower == 'approved' %}
+                                <span class="badge-status active">Approved</span>
+                            {% elif job.status == 'pending' or job.get_status_display|lower == 'pending' %}
+                                <span class="badge-status" style="background-color: #fef3c7; color: #92400e;">Pending</span>
+                            {% else %}
+                                <span class="badge-status" style="background-color: #fee2e2; color: #991b1b;">{{ job.get_status_display }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 30px 0;">No job advertisements logged in system database.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- DATA INTEGRATION SCRIPT -->
+<script>
+const primaryBlue = '#0c2340';
+const accentRed = '#8b0000';
+const activeGreen = '#10b981';
+const pendingAmber = '#d97706';
+
+new Chart(document.getElementById('jobChart'), {
+    type: 'pie',
+    data: {
+        labels: ['Approved', 'Pending', 'Rejected'],
+        datasets: [{
+            data: [{{ approved_jobs }}, {{ pending_jobs }}, {{ rejected_jobs }}],
+            backgroundColor: [activeGreen, pendingAmber, accentRed],
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
+
+new Chart(document.getElementById('employerChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Active', 'Suspended'],
+        datasets: [{
+            data: [{{ active_employers }}, {{ suspended_employers }}],
+            backgroundColor: [activeGreen, accentRed],
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '70%'
+    }
+});
+
+new Chart(document.getElementById('overallChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Employers', 'Applicants', 'Job Posts'],
+        datasets: [{
+            data: [{{ total_employers }}, {{ total_applicants }}, {{ total_jobs }}],
+            backgroundColor: [primaryBlue, '#4b5563', '#3b82f6'],
+            borderRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: { color: '#f3f4f6' }
+            },
+            x: {
+                grid: { display: false }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

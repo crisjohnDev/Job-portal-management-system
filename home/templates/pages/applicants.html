@@ -1,0 +1,263 @@
+{% extends 'employer_base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* --- Table Layout & Elements --- */
+    .applicants-container {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+    }
+
+    .applicants-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 0.95rem;
+    }
+
+    .applicants-table th {
+        background-color: #f8fafc;
+        color: #64748b;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        padding: 16px 24px;
+        border-bottom: 2px solid #edf2f7;
+    }
+
+    .applicants-table td {
+        padding: 18px 24px;
+        border-bottom: 1px solid #e2e8f0;
+        vertical-align: middle;
+    }
+
+    .applicants-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* --- Applicant Profile Info --- */
+    .applicant-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .applicant-name {
+        font-weight: 600;
+        color: var(--text-dark);
+        font-size: 1rem;
+    }
+
+    .applicant-email {
+        font-size: 0.85rem;
+        color: #64748b;
+    }
+
+    .job-title-tag {
+        font-weight: 500;
+        color: var(--gov-blue);
+        background-color: #eff6ff;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        display: inline-block;
+    }
+
+    /* --- Context Status Badges --- */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+    }
+
+    .status-reviewing { background-color: #fef3c7; color: #d97706; }
+    .status-shortlisted { background-color: #e0f2fe; color: #0369a1; }
+    .status-accepted { background-color: #dcfce7; color: #15803d; }
+    .status-rejected { background-color: #fee2e2; color: #b91c1c; }
+
+    /* --- Action Workflow Controls --- */
+    .action-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .btn-action {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 1px solid transparent;
+        background: none;
+    }
+
+    .btn-review { border-color: #d97706; color: #d97706; }
+    .btn-review:hover { background-color: #fffbeb; }
+
+    .btn-shortlist { border-color: #0284c7; color: #0284c7; }
+    .btn-shortlist:hover { background-color: #f0f9ff; }
+
+    .btn-accept { background-color: #16a34a; color: #ffffff; }
+    .btn-accept:hover { background-color: #15803d; }
+
+    .btn-reject { background-color: #dc2626; color: #ffffff; }
+    .btn-reject:hover { background-color: #b91c1c; }
+
+    .btn-resume {
+        border-color: #cbd5e1;
+        color: #475569;
+    }
+    .btn-resume:hover {
+        background-color: #f1f5f9;
+        border-color: #94a3b8;
+    }
+
+    /* Empty state card styling */
+    .empty-state {
+        text-align: center;
+        padding: 48px 24px;
+        color: #64748b;
+    }
+</style>
+
+<div class="applicants-container">
+    
+    <!-- HEADER BLOCK -->
+    <div class="dashboard-header">
+        <div>
+            <h1>Manage Applicants</h1>
+            <p style="color: #64748b; margin-top: 4px;">Review profiles, shortlist candidate selections, and update hiring statuses.</p>
+        </div>
+        
+        <!-- Optional: Display total counter dynamically if parsed by context -->
+        <div class="company-badge">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <span>Active Candidates</span>
+        </div>
+    </div>
+
+    <!-- MAIN DATA INTERFACE PANEL -->
+    <div class="table-responsive">
+        <table class="applicants-table">
+            <thead>
+                <tr>
+                    <th>Candidate</th>
+                    <th>Target Position</th>
+                    <th>Applied Date</th>
+                    <th>Current Status</th>
+                    <th>Actions & Status Updates</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if applications %}
+                    {% for application in applications %}
+                    <tr>
+                        <!-- Candidate Identity Details -->
+                        <td>
+                            <div class="applicant-info">
+                                <span class="applicant-name">{{ application.applicant.first_name }} {{ application.applicant.last_name }}</span>
+                                <span class="applicant-email">{{ application.applicant.email }}</span>
+                            </div>
+                        </td>
+
+                        <!-- Targeted Job Role -->
+                        <td>
+                            <span class="job-title-tag">
+                                {{ application.job.title }}
+                            </span>
+                        </td>
+
+                        <!-- Submission Timestamp -->
+                        <td>
+                            {{ application.applied_at|date:"M d, Y" }}
+                        </td>
+
+                        <!-- Conditional Status Badging Layer -->
+                        <td>
+                            {% if application.status == 'reviewing' %}
+                                <span class="status-badge status-reviewing">Reviewing</span>
+                            {% elif application.status == 'shortlisted' %}
+                                <span class="status-badge status-shortlisted">Shortlisted</span>
+                            {% elif application.status == 'accepted' %}
+                                <span class="status-badge status-accepted">Accepted</span>
+                            {% elif application.status == 'rejected' %}
+                                <span class="status-badge status-rejected">Rejected</span>
+                            {% else %}
+                                <span class="status-badge status-reviewing">Pending</span>
+                            {% endif %}
+                        </td>
+
+                        <!-- Operational State Adjustments Form Controls -->
+                        <td>
+                            <div class="action-group">
+                                <!-- View Resume Action -->
+                                {% if applicant.resume %}
+                                    <a href="{{ applicant.resume.url }}" target="_blank" class="btn-action btn-resume" title="View Resume File">
+                                        Resume
+                                    </a>
+                                {% endif %}
+
+                                <!-- Status Alteration Forms passing state variables back to view via standard POST methods -->
+                                <form action="{% url 'update-applicant-status' application.id %}" method="POST" style="display:inline; margin:0;">
+                                    {% csrf_token %}
+                                    
+                                    {% if applicant.status != 'reviewing' %}
+                                        <button type="submit" name="status" value="reviewing" class="btn-action btn-review">Review</button>
+                                    {% endif %}
+                                    
+                                    {% if applicant.status != 'shortlisted' %}
+                                        <button type="submit" name="status" value="shortlisted" class="btn-action btn-shortlist">Shortlist</button>
+                                    {% endif %}
+                                    
+                                    {% if applicant.status != 'accepted' %}
+                                        <button type="submit" name="status" value="accepted" class="btn-action btn-accept">Accept</button>
+                                    {% endif %}
+                                    
+                                    {% if applicant.status != 'rejected' %}
+                                        <button type="submit" name="status" value="rejected" class="btn-action btn-reject">Reject</button>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <!-- Displayed safe empty layout if data context array evaluates null -->
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <p style="font-size: 1.1rem; font-weight: 500; margin-bottom: 4px;">No candidates found</p>
+                                <p style="font-size: 0.875rem;">Applications for your posted job positions will appear here.</p>
+                            </div>
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

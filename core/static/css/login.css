@@ -1,0 +1,331 @@
+        :root {
+            --gov-blue: #0c2340;     /* Official Institutional Navy Blue */
+            --gov-red: #8b0000;      /* Secondary Accent Red */
+            --border-gray: #ccd1d9;
+            --bg-light: #f4f6f9;
+            --text-dark: #1f2937;
+            --text-muted: #4b5563;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        /* --- Official Government Top Banner --- */
+        .gov-top-bar {
+            background-color: #e5e7eb;
+            border-bottom: 1px solid #d1d5db;
+            padding: 6px 20px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            letter-spacing: 0.03em;
+        }
+
+        .gov-top-bar span {
+            font-weight: 700;
+            color: #111827;
+        }
+
+        /* Main Container Centralized */
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: #ffffff;
+            border-top: 5px solid var(--gov-blue);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 460px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 35px 30px;
+            border-left: 1px solid #e5e7eb;
+            border-right: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        /* Institutional Double Logo Header */
+        .portal-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        /* Unified block for the logos */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Forces matching physical frame boundaries */
+        .logo-slot {
+            width: 90px;
+            height: 90px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .logo-slot img {
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,.12));
+        }
+
+        /* --- EXPLICIT VISUAL EQUALIZATION --- 
+           Tune these heights independently to override hidden whitespace in your image files. */
+        .peso-logo {
+            height: 105px;
+            width: auto;
+        }
+
+        .pioduran-logo {
+            height: 75px;
+            width: auto;
+        }
+
+        .logo-divider {
+            width: 1px;
+            height: 55px;
+            background: #d1d5db;
+        }
+
+        h2 {
+            font-size: 1.3rem;
+            color: var(--gov-blue);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        p.subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* Institutional Forms & Fisheye Matrix Elements */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-bottom: 20px;
+            perspective: 800px;
+        }
+
+        .field-label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--gov-blue);
+            margin-bottom: 6px;
+            letter-spacing: 0.02em;
+        }
+
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+            transform-origin: center;
+            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+                        box-shadow 0.4s ease;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 12px 45px 12px 14px;
+            background: #ffffff;
+            border: 1px solid var(--border-gray);
+            border-radius: 4px;
+            outline: none;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+        /* --- Government Fish-Eye Magnifying Focus Mechanics --- */
+        .form-group .input-wrapper:hover,
+        .form-group .input-wrapper:focus-within {
+            transform: scale(1.04) translateZ(10px);
+            z-index: 5;
+        }
+
+        .form-group .input-wrapper:focus-within input {
+            border-color: var(--gov-blue);
+            box-shadow: 0 4px 12px rgba(12, 35, 64, 0.12);
+            background-color: #fafbfd;
+        }
+
+        /* Opposite element dynamic micro-scaling */
+        .form-group:focus-within .input-wrapper:not(:focus-within) {
+            transform: scale(0.97) translateZ(-5px);
+            opacity: 0.85;
+        }
+
+        /* --- Pure CSS Password Layer Swapping --- */
+        .password-container {
+            position: relative;
+        }
+
+        #gov-eye-toggle {
+            display: none;
+        }
+
+        .text-fallback {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #gov-eye-toggle:checked ~ .text-fallback {
+            opacity: 1;
+            pointer-events: auto;
+            border-color: var(--gov-blue) !important;
+        }
+
+        /* --- Official Fish-Eye Lens Toggle Custom Element --- */
+        .fisheye-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+            width: 18px;
+            height: 18px;
+            background: #ffffff;
+            border: 2px solid var(--text-muted);
+            border-radius: 70% 15% 70% 15%; 
+            cursor: pointer;
+            z-index: 3;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Lens Pupil */
+        .fisheye-toggle::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            transition: all 0.25s ease;
+            transform: rotate(-45deg);
+        }
+
+        /* High Reflection Node */
+        .fisheye-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 3px;
+            height: 3px;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 50%;
+        }
+
+        /* Hover Magnification States */
+        .fisheye-toggle:hover {
+            transform: translateY(-50%) rotate(45deg) scale(1.2);
+            border-color: var(--gov-blue);
+        }
+
+        .fisheye-toggle:hover::before {
+            width: 8px;
+            height: 8px;
+            background: var(--gov-blue);
+        }
+
+        /* Checked / Verification Display Changes */
+        #gov-eye-toggle:checked ~ .fisheye-toggle {
+            border-color: var(--gov-red);
+            background: var(--gov-red);
+        }
+
+        #gov-eye-toggle:checked ~ .fisheye-toggle::before {
+            width: 4px;
+            height: 4px;
+            background: #ffffff;
+        }
+
+        /* Mandatory Institutional Compliance Text Block */
+        .privacy-notice {
+            background-color: #fef2f2;
+            border: 1px solid #fee2e2;
+            color: #991b1b;
+            padding: 10px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        /* Official Action Button */
+        .btn-gov {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--gov-blue);
+            border: 1px solid var(--gov-blue);
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        .btn-gov:hover {
+            background-color: #11335c;
+        }
+
+        .btn-gov:active {
+            transform: translateY(1px);
+        }
+
+        /* Standard Institutional Footer Links */
+        .form-footer {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.78rem;
+        }
+
+        .form-footer a {
+            color: var(--gov-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+            color: var(--gov-red);
+        }

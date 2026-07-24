@@ -1,0 +1,351 @@
+{% extends 'employer_base.html' %}
+
+{% block content %}
+
+<style>
+    /* Modern UI Variables & Reset Hints */
+    :root {
+        --primary-dark: #0c2340;
+        --accent-blue: #2563eb;
+        --accent-blue-hover: #1d4ed8;
+        --bg-surface: #ffffff;
+        --bg-body: #f8fafc;
+        --border-color: #e2e8f0;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+    }
+
+    .page-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 10px;
+    }
+
+    /* Page Header Styles */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+        gap: 20px;
+    }
+
+    .page-header-title h1 {
+        color: var(--primary-dark);
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        margin: 0 0 4px 0;
+    }
+
+    .page-header-title p {
+        color: var(--text-muted);
+        margin: 0;
+        font-size: 14px;
+    }
+
+    .add-btn {
+        background: var(--accent-blue);
+        color: #ffffff;
+        text-decoration: none;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 15px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        transition: all 0.25s ease;
+    }
+
+    .add-btn:hover {
+        background: var(--accent-blue-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+    }
+
+    /* Modern Bento Grid Layout */
+    .job-bento-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+        gap: 24px;
+    }
+
+    .job-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .job-card:hover {
+        transform: translateY(-4px);
+        border-color: #cbd5e1;
+        box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+    }
+
+    /* Card Header Zone */
+    .card-header-zone {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .job-title {
+        color: var(--primary-dark);
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.4;
+        margin: 0;
+    }
+
+    /* Modern Badges */
+    .badge {
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .fulltime { background: #dcfce7; color: #15803d; }
+    .parttime { background: #dbeafe; color: #1d4ed8; }
+    .contract { background: #fef3c7; color: #b45309; }
+
+    /* Info Context Meta-chips */
+    .meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .meta-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--text-muted);
+        background: #f1f5f9;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-weight: 500;
+    }
+
+    .meta-chip.salary {
+        background: #f0fdf4;
+        color: #16a34a;
+        font-weight: 600;
+    }
+
+    /* Details Sections */
+    .details-section {
+        margin-bottom: 16px;
+    }
+
+    .section-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-muted);
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+    .details-text {
+        font-size: 14px;
+        color: #475569;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    /* Card Footer Action Area */
+    .card-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+        padding-top: 16px;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .action-btn {
+        flex: 1;
+        text-align: center;
+        text-decoration: none;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .edit-btn {
+        background: #f1f5f9;
+        color: var(--primary-dark);
+        border: 1px solid var(--border-color);
+    }
+
+    .edit-btn:hover {
+        background: #e2e8f0;
+        color: #000000;
+    }
+
+    .delete-btn {
+        background: #fef2f2;
+        color: #dc2626;
+        border: 1px solid #fee2e2;
+    }
+
+    .delete-btn:hover {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    /* Empty State Container */
+    .empty-container {
+        grid-column: 1 / -1;
+        background: var(--bg-surface);
+        border: 2px dashed var(--border-color);
+        border-radius: 16px;
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-container svg {
+        color: var(--text-muted);
+        margin-bottom: 16px;
+        opacity: 0.7;
+    }
+
+    .empty-container h3 {
+        color: var(--primary-dark);
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0 0 8px 0;
+    }
+
+    .empty-container p {
+        color: var(--text-muted);
+        font-size: 14px;
+        margin: 0;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+        .job-bento-grid {
+            grid-template-columns: 1fr;
+        }
+        .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .add-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="page-container">
+    <div class="page-header">
+        <div class="page-header-title">
+            <h1>Job Posts</h1>
+            <p>Manage and track your active career listings</p>
+        </div>
+
+        <a href="{% url 'job-post' %}" class="add-btn">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+            Add Job Post
+        </a>
+    </div>
+
+    <div class="job-bento-grid">
+        {% for job in jobs %}
+        <div class="job-card">
+            <div>
+                <!-- Top Header Row inside Card -->
+                <div class="card-header-zone">
+                    <h2 class="job-title">{{ job.title }}</h2>
+                    {% if job.job_type == "Full Time" %}
+                        <span class="badge fulltime">{{ job.job_type }}</span>
+                    {% elif job.job_type == "Part Time" %}
+                        <span class="badge parttime">{{ job.job_type }}</span>
+                    {% else %}
+                        <span class="badge contract">{{ job.job_type }}</span>
+                    {% endif %}
+                </div>
+
+                <!-- Meta Context Chips Area -->
+                <div class="meta-row">
+                    <div class="meta-chip salary">
+                        <span>₱{{ job.salary }}</span>
+                    </div>
+                    <div class="meta-chip">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/></svg>
+                        <span>{{ job.location }}</span>
+                    </div>
+                    <div class="meta-chip">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"/></svg>
+                        <span>{{ job.vacancies }} Openings</span>
+                    </div>
+                    <div class="meta-chip">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z"/></svg>
+                        <span>Ends: {{ job.deadline }}</span>
+                    </div>
+                </div>
+
+                <!-- Structured Dynamic Content Sections -->
+                <div class="details-section">
+                    <div class="section-label">Status</div>
+                    <p class="details-text">{{ job.status|truncatewords:20 }}</p>
+                </div>
+                <div class="details-section">
+                    <div class="section-label">Description</div>
+                    <p class="details-text">{{ job.description|truncatewords:20 }}</p>
+                </div>
+
+                <div class="details-section">
+                    <div class="section-label">Key Qualifications</div>
+                    <p class="details-text">{{ job.qualifications|truncatewords:15 }}</p>
+                </div>
+            </div>
+
+            <!-- Context Action Control Center -->
+            <div class="card-actions">
+                <a href="{% url "update-job" job.id %}" class="action-btn edit-btn">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/></svg>
+                    Update
+                </a>
+                <a href="{% url 'employer-delete-job' job.id %}" class="action-btn delete-btn">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/></svg>
+                    Delete
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-container">
+            <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>
+            <h3>No Active Job Posts</h3>
+            <p>Get started by clicking the button above to add your first career opportunity.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

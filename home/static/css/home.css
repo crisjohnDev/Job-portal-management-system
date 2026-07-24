@@ -1,0 +1,229 @@
+        :root {
+            --gov-blue: #0c2340;     /* Institutional Navy */
+            --gov-blue-light: #1a365d;
+            --gov-red: #8b0000;      /* Accent Red */
+            --text-light: #ffffff;
+            --text-dark: #1f2937;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* --- STICKY TRANSPARENT HEADER --- */
+        .site-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(12, 35, 64, 0.9); /* Semi-transparent Institutional Navy */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 12px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Double Logo Configuration */
+        .brand-logos {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logos .logo-frame {
+            width: 48px;
+            height: 48px;
+            background: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .brand-logos .logo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .brand-text h1 {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-left: 4px;
+        }
+
+        /* Navigation Menu Links */
+        .navigation-menu {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            list-style: none;
+        }
+
+        .navigation-menu a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .navigation-menu a:hover {
+            color: var(--text-light);
+        }
+
+        .navigation-menu a.active {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        /* Action Buttons on Header */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .btn-login {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 8px 18px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-login:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- HERO SPLASH WORKSPACE --- */
+        .hero-viewport {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            /* Replace the URL below with your local path or web path asset when ready */
+            background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Dark Dynamic Overlay Mask */
+        .hero-viewport::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(12, 35, 64, 0.9) 0%, rgba(26, 54, 93, 0.6) 100%);
+            z-index: 1;
+        }
+
+        /* Centralized Layout Context Box */
+        .hero-workspace-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 800px;
+            padding: 0 20px;
+            margin-top: 60px; /* Offset to clear fixed navbar visual weight */
+        }
+
+        .hero-workspace-content h2 {
+            color: var(--text-light);
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .hero-workspace-content p {
+            color: #e2e8f0;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 36px;
+            font-weight: 400;
+        }
+
+        /* Main Workspace Controls Buttons Group */
+        .cta-button-group {
+            display: inline-flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background-color: var(--gov-red);
+            color: var(--text-light);
+            border: 1px solid var(--gov-red);
+        }
+
+        .btn-primary:hover {
+            background-color: #a30000;
+            border-color: #a30000;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 2px solid var(--text-light);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+        }
+
+        /* Responsive Breakpoints */
+        @media(max-width: 992px) {
+            .site-header {
+                padding: 12px 20px;
+            }
+            .hero-workspace-content h2 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media(max-width: 768px) {
+            .navigation-menu {
+                display: none; /* Can be targeted with JS burger layouts later */
+            }
+        }

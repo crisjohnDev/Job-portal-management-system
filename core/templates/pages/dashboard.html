@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Content Control Bar Header -->
+<header class="content-header">
+    <div class="page-title">
+        <h2>System Overview</h2>
+    </div>
+
+    <div class="admin-profile">
+        <span>Welcome, <strong>Admin Portal</strong></span>
+        <div class="profile-badge">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        </div>
+    </div>
+</header>
+
+<div class="dashboard-workspace">
+
+    <!-- OVERVIEW STATS GRID -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total Employers</div>
+            <div class="stat-value">{{ total_employers }}</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Total Applicants</div>
+            <div class="stat-value">{{ active_applicants }}</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Approved Job Posts</div>
+            <div class="stat-value" style="color: var(--success-green);">{{ open_jobs }}</div>
+        </div>
+
+        <div class="stat-card accent">
+            <div class="stat-label">Pending Job Reviews</div>
+            <div class="stat-value" style="color: #d97706;">{{ pending_reviews }}</div>
+        </div>
+    </div>
+
+    <!-- RECENT ACTIVITY MONITOR -->
+    <div class="data-card">
+        <div class="data-card-header">
+            <h3>Recent Activities</h3>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Entity / Item</th>
+                        <th>Category</th>
+                        <th>Activity Date</th>
+                        <th>Current Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% if not recent_employers and not recent_applicants and not recent_jobs %}
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 40px 0;">
+                            No recent operational activities recorded today.
+                        </td>
+                    </tr>
+                    {% endif %}
+
+                    <!-- Recent Employers Loop -->
+                    {% for employer in recent_employers %}
+                    <tr>
+                        <td><strong>{{ employer.company_name }}</strong></td>
+                        <td style="color: var(--gov-blue-light); font-weight: 500;">Employer</td>
+                        <td style="color: var(--text-muted);">{{ employer.created_at|date:"M d, Y" }}</td>
+                        <td>
+                            {% if employer.is_active %}
+                                <span class="badge-status active">Active</span>
+                            {% else %}
+                                <span class="badge-status" style="background-color: #fee2e2; color: #991b1b;">Suspended</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    <!-- Recent Applicants Loop -->
+                    {% for applicant in recent_applicants %}
+                    <tr>
+                        <td><strong>{{ applicant.first_name }} {{ applicant.last_name }}</strong></td>
+                        <td style="color: var(--gov-blue-light); font-weight: 500;">Applicant</td>
+                        <td style="color: var(--text-muted);">{{ applicant.user.date_joined|date:"M d, Y" }}</td>
+                        <td>
+                            <span class="badge-status" style="background-color: #e0f2fe; color: #0369a1;">Registered</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    <!-- Recent Job Posts Loop -->
+                    {% for job in recent_jobs %}
+                    <tr>
+                        <td><strong>{{ job.title }}</strong></td>
+                        <td style="color: var(--gov-blue-light); font-weight: 500;">Job Post</td>
+                        <td style="color: var(--text-muted);">{{ job.created_at|date:"M d, Y" }}</td>
+                        <td>
+                            {% if job.status == "approved" or job.status == "Approved" %}
+                                <span class="badge-status active">Approved</span>
+                            {% elif job.status == "pending" or job.status == "Pending" %}
+                                <span class="badge-status" style="background-color: #fef3c7; color: #92400e;">Pending</span>
+                            {% else %}
+                                <span class="badge-status" style="background-color: #fee2e2; color: #991b1b;">{{ job.status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

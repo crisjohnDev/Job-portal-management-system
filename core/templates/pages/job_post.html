@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Header Ribbon Controls -->
+<header class="content-header">
+    <div class="page-title">
+        <h2>List of Job Posts</h2>
+    </div>
+    <div class="admin-profile">
+        <span>Welcome, <strong>Admin Portal</strong></span>
+        <div class="profile-badge">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+    </div>
+</header>
+
+<!-- Context Content Area -->
+<div class="dashboard-workspace">
+
+    <!-- Sub-Header Management Control Panel Row -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; gap: 16px; flex-wrap: wrap;">
+        <div style="position: relative; flex: 1; max-width: 400px;">
+            <input type="text" placeholder="Search company name or permit number..." 
+                   style="width: 100%; padding: 10px 16px; border: 1px solid var(--border-gray); border-radius: 6px; font-size: 0.9rem; outline: none; transition: border-color 0.2s;"
+                   onfocus="this.style.borderColor='var(--gov-blue-light)'" 
+                   onblur="this.style.borderColor='var(--border-gray)'">
+        </div>
+    </div>
+    
+    <!-- Data Table Card Container -->
+    <div class="data-card">
+        <div class="data-card-header">
+            <h3>Job Applications Matrix</h3>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Business Permit No.</th>
+                        <th>Contact No.</th>
+                        <th>Job Title</th>
+                        <th>Status</th>
+                        <th style="text-align: right;">System Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in jobs %}
+                    <tr>
+                        <td>
+                            <div style="font-weight: 700; color: var(--text-dark);">{{ i.employer.company_name }}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Registered: {{ i.created_at|date:"Y-m-d" }}</div>
+                        </td>
+                        <td>
+                            <code style="font-family: monospace; font-size: 0.9rem; background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">{{ i.employer.business_permit_no }}</code>
+                        </td>
+                        <td>{{ i.employer.contact_no }}</td>
+                        <td>
+                            <div style="font-weight: 600; color: var(--gov-blue-light)">{{ i.title }}</div>
+                        </td>
+                        <td>
+                            {% if i.status|lower == 'approved' or i.status|lower == 'active' %}
+                                <span class="badge-status active">{{ i.status }}</span>
+                            {% else %}
+                                <span class="badge-status">{{ i.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: right;">
+                            <div style="display: inline-flex; gap: 8px; justify-content: flex-end;">
+                                <a href="{% url 'view-job' i.id %}" title="View Profile" style="color: var(--gov-blue); text-decoration: none; font-weight: 600; font-size: 0.85rem; padding: 6px 12px; border: 1px solid var(--gov-blue); border-radius: 4px; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#e2e8f0'" onmouseout="this.style.backgroundColor='transparent'">View</a>
+                                
+                                {% if i.status|lower != 'approved' %}
+                                <a href="{% url "approved-job" i.id %}" title="Approve Job Post" style="color: #065f46; text-decoration: none; font-weight: 600; font-size: 0.85rem; padding: 6px 12px; border: 1px solid #065f46; border-radius: 4px; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#d1fae5'" onmouseout="this.style.backgroundColor='transparent'">Approve</a>
+                                {% endif %}
+                                
+                                <form method="POST"
+                                    action="{% url 'delete-job' i.id %}"
+                                    style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit"
+                                            title="Delete Permanently"
+                                            onclick="return confirm('Are you sure you want to permanently delete this job post? This action cannot be undone.')"
+                                            style="color: var(--gov-red);
+                                                background: transparent;
+                                                text-decoration: none;
+                                                font-weight: 600;
+                                                font-size: 0.85rem;
+                                                padding: 6px 12px;
+                                                border: 1px solid var(--gov-red);
+                                                border-radius: 4px;
+                                                cursor: pointer;
+                                                transition: all 0.2s;"
+                                            onmouseover="this.style.backgroundColor='#fef2f2'"
+                                            onmouseout="this.style.backgroundColor='transparent'">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-muted);">
+                            No job posts found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+</div>
+
+<!-- Simple Script Injection to handle base.html sidebar highlight dynamically -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const links = document.querySelectorAll('.sidebar-menu-item a');
+        links.forEach(link => {
+            if (link.getAttribute('href') === window.location.pathname || link.href === window.location.href) {
+                link.parentElement.classList.add('active');
+            }
+        });
+    });
+</script>
+{% endblock %}

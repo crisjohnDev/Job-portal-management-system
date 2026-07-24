@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Header Ribbon Controls -->
+<header class="content-header">
+    <div class="page-title">
+        <h2>Authorize Job Publication</h2>
+    </div>
+    <div class="admin-profile">
+        <span>Welcome, <strong>Admin Portal</strong></span>
+        <div class="profile-badge">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+    </div>
+</header>
+
+<!-- Context Content Area -->
+<div class="dashboard-workspace" style="max-width: 700px; margin: 0 auto;">
+
+    <!-- Action Card -->
+    <div class="data-card" style="border-top: 4px solid var(--success-green);">
+        <div class="data-card-header">
+            <h3>Confirm Job Post Approval</h3>
+        </div>
+        
+        <div style="padding: 24px;">
+            <p style="margin-bottom: 20px; color: var(--text-dark); line-height: 1.5;">
+                You are about to authorize and publish the following job listing to the dynamic public portal stream. Applicants will be permitted to submit applications immediately upon execution.
+            </p>
+
+            <!-- Verification Info Table -->
+            <div style="background-color: #f8fafc; border: 1px solid var(--border-gray); border-radius: 6px; padding: 20px; margin-bottom: 24px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 8px 0; font-weight: 600; color: var(--text-muted); width: 35%;">Company Name:</td>
+                        <td style="padding: 8px 0; font-weight: 700; color: var(--text-dark);">{{ job.employer.company_name }}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; font-weight: 600; color: var(--text-muted);">Job Title:</td>
+                        <td style="padding: 8px 0; font-weight: 700; color: var(--gov-blue-light);">{{ job.title }}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; font-weight: 600; color: var(--text-muted);">Permit Number:</td>
+                        <td style="padding: 8px 0;"><code style="font-family: monospace; background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">{{ job.employer.business_permit_no }}</code></td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Execution Controls Form -->
+            <form method="POST" style="display: flex; gap: 12px; justify-content: flex-end;">
+                {% csrf_token %}
+                <a href="{% url 'job-post-list' %}" style="text-decoration: none; color: var(--text-dark); font-weight: 600; font-size: 0.9rem; padding: 10px 20px; border: 1px solid var(--border-gray); border-radius: 6px; background: #ffffff; transition: background 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#ffffff'">
+                    Cancel & Return
+                </a>
+                <button type="submit" style="cursor: pointer; color: white; font-weight: 600; font-size: 0.9rem; padding: 10px 24px; border: none; border-radius: 6px; background-color: var(--success-green); transition: opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                    Confirm & Publish Post
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

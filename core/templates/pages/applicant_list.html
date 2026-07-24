@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Content Control Bar Header -->
+<header class="content-header">
+    <div class="page-title">
+        <h2>Applicants</h2>
+    </div>
+
+    <div class="admin-profile">
+        <span>Welcome, <strong>Admin Portal</strong></span>
+        <div class="profile-badge">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        </div>
+    </div>
+</header>
+
+<div class="dashboard-workspace">
+
+    <!-- DATA CARD CONTAINER -->
+    <div class="data-card">
+        <div class="data-card-header">
+            <h3>Registered Applicants</h3>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Username</th>
+                        <th>Email Address</th>
+                        <th>Phone Number</th>
+                        <th>Date Joined</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for applicant in applicants %}
+                    <tr>
+                        <td>
+                            <strong>
+                                {{ applicant.first_name }}
+                                {% if applicant.middle_name %}{{ applicant.middle_name }}{% endif %}
+                                {{ applicant.last_name }}
+                            </strong>
+                        </td>
+                        <td style="color: var(--gov-blue-light); font-weight: 500;">
+                            {{ applicant.user.username }}
+                        </td>
+                        <td>
+                            {{ applicant.email }}
+                        </td>
+                        <td>
+                            {{ applicant.phone_number }}
+                        </td>
+                        <td style="color: var(--text-muted);">
+                            {{ applicant.user.date_joined|date:"F d, Y" }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 40px 0;">
+                            No active job seeker profiles logged in system database.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
