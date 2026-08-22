@@ -3,20 +3,58 @@
 
 {% block content %}
 <style>
-    /* --- Table Layout & Elements --- */
+    /* --- Container & Layout --- */
     .applicants-container {
         display: flex;
         flex-direction: column;
         gap: 24px;
     }
 
+    /* --- Page Header Block --- */
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.65rem;
+        font-weight: 800;
+        color: var(--text-dark);
+        letter-spacing: -0.02em;
+    }
+
+    .company-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background-color: var(--gov-green-surface);
+        color: var(--gov-green);
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        border: 1px solid rgba(5, 150, 105, 0.2);
+    }
+
+    .company-badge svg {
+        width: 18px;
+        height: 18px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+    }
+
+    /* --- Data Table Styling --- */
     .table-responsive {
         width: 100%;
         overflow-x: auto;
         background: #ffffff;
         border: 1px solid #e2e8f0;
         border-radius: 12px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+        box-shadow: 0 4px 6px -1px rgba(6, 78, 59, 0.03);
     }
 
     .applicants-table {
@@ -28,18 +66,18 @@
 
     .applicants-table th {
         background-color: #f8fafc;
-        color: #64748b;
+        color: #475569;
         font-weight: 700;
         text-transform: uppercase;
         font-size: 0.75rem;
         letter-spacing: 0.05em;
         padding: 16px 24px;
-        border-bottom: 2px solid #edf2f7;
+        border-bottom: 2px solid #e2e8f0;
     }
 
     .applicants-table td {
         padding: 18px 24px;
-        border-bottom: 1px solid #e2e8f0;
+        border-bottom: 1px solid #f1f5f9;
         vertical-align: middle;
     }
 
@@ -47,17 +85,21 @@
         border-bottom: none;
     }
 
-    /* --- Applicant Profile Info --- */
+    .applicants-table tr:hover td {
+        background-color: #f8fafc;
+    }
+
+    /* --- Applicant Profile Details --- */
     .applicant-info {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 2px;
     }
 
     .applicant-name {
-        font-weight: 600;
+        font-weight: 700;
         color: var(--text-dark);
-        font-size: 1rem;
+        font-size: 0.975rem;
     }
 
     .applicant-email {
@@ -66,31 +108,32 @@
     }
 
     .job-title-tag {
-        font-weight: 500;
-        color: var(--gov-blue);
-        background-color: #eff6ff;
-        padding: 4px 10px;
+        font-weight: 600;
+        color: var(--gov-green);
+        background-color: var(--gov-green-surface);
+        padding: 4px 12px;
         border-radius: 6px;
         font-size: 0.85rem;
         display: inline-block;
+        border: 1px solid rgba(5, 150, 105, 0.15);
     }
 
-    /* --- Context Status Badges --- */
+    /* --- Status Badges --- */
     .status-badge {
         display: inline-flex;
         align-items: center;
-        padding: 6px 12px;
+        padding: 4px 12px;
         border-radius: 50px;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.025em;
     }
 
-    .status-reviewing { background-color: #fef3c7; color: #d97706; }
+    .status-reviewing { background-color: #fef3c7; color: #b45309; }
     .status-shortlisted { background-color: #e0f2fe; color: #0369a1; }
-    .status-accepted { background-color: #dcfce7; color: #15803d; }
-    .status-rejected { background-color: #fee2e2; color: #b91c1c; }
+    .status-accepted { background-color: var(--gov-green-surface); color: var(--gov-green); }
+    .status-rejected { background-color: #fee2e2; color: var(--gov-red); }
 
     /* --- Action Workflow Controls --- */
     .action-group {
@@ -98,6 +141,12 @@
         align-items: center;
         gap: 8px;
         flex-wrap: wrap;
+    }
+
+    .action-form {
+        display: inline-flex;
+        gap: 6px;
+        margin: 0;
     }
 
     .btn-action {
@@ -112,20 +161,20 @@
         cursor: pointer;
         transition: all 0.2s ease;
         border: 1px solid transparent;
-        background: none;
+        background: transparent;
     }
 
-    .btn-review { border-color: #d97706; color: #d97706; }
+    .btn-review { border-color: #f59e0b; color: #b45309; }
     .btn-review:hover { background-color: #fffbeb; }
 
     .btn-shortlist { border-color: #0284c7; color: #0284c7; }
     .btn-shortlist:hover { background-color: #f0f9ff; }
 
-    .btn-accept { background-color: #16a34a; color: #ffffff; }
-    .btn-accept:hover { background-color: #15803d; }
+    .btn-accept { background-color: var(--gov-green); color: #ffffff; }
+    .btn-accept:hover { background-color: var(--gov-green-light); }
 
-    .btn-reject { background-color: #dc2626; color: #ffffff; }
-    .btn-reject:hover { background-color: #b91c1c; }
+    .btn-reject { background-color: var(--gov-red); color: #ffffff; }
+    .btn-reject:hover { background-color: #991b1b; }
 
     .btn-resume {
         border-color: #cbd5e1;
@@ -134,12 +183,13 @@
     .btn-resume:hover {
         background-color: #f1f5f9;
         border-color: #94a3b8;
+        color: var(--text-dark);
     }
 
-    /* Empty state card styling */
+    /* --- Empty State Design --- */
     .empty-state {
         text-align: center;
-        padding: 48px 24px;
+        padding: 56px 24px;
         color: #64748b;
     }
 </style>
@@ -150,10 +200,9 @@
     <div class="dashboard-header">
         <div>
             <h1>Manage Applicants</h1>
-            <p style="color: #64748b; margin-top: 4px;">Review profiles, shortlist candidate selections, and update hiring statuses.</p>
+            <p style="color: #64748b; margin-top: 4px;">Review profiles, shortlist candidates, and update recruitment statuses.</p>
         </div>
         
-        <!-- Optional: Display total counter dynamically if parsed by context -->
         <div class="company-badge">
             <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
             <span>Active Candidates</span>
@@ -196,7 +245,7 @@
                             {{ application.applied_at|date:"M d, Y" }}
                         </td>
 
-                        <!-- Conditional Status Badging Layer -->
+                        <!-- Status Badges -->
                         <td>
                             {% if application.status == 'reviewing' %}
                                 <span class="status-badge status-reviewing">Reviewing</span>
@@ -211,33 +260,33 @@
                             {% endif %}
                         </td>
 
-                        <!-- Operational State Adjustments Form Controls -->
+                        <!-- Workflow Form Controls -->
                         <td>
                             <div class="action-group">
                                 <!-- View Resume Action -->
-                                {% if applicant.resume %}
-                                    <a href="{{ applicant.resume.url }}" target="_blank" class="btn-action btn-resume" title="View Resume File">
+                                {% if application.applicant.resume %}
+                                    <a href="{{ application.applicant.resume.url }}" target="_blank" class="btn-action btn-resume" title="View Resume File">
                                         Resume
                                     </a>
                                 {% endif %}
 
-                                <!-- Status Alteration Forms passing state variables back to view via standard POST methods -->
-                                <form action="{% url 'update-applicant-status' application.id %}" method="POST" style="display:inline; margin:0;">
+                                <!-- Status Alteration Form -->
+                                <form action="{% url 'update-applicant-status' application.id %}" method="POST" class="action-form">
                                     {% csrf_token %}
                                     
-                                    {% if applicant.status != 'reviewing' %}
+                                    {% if application.status != 'reviewing' %}
                                         <button type="submit" name="status" value="reviewing" class="btn-action btn-review">Review</button>
                                     {% endif %}
                                     
-                                    {% if applicant.status != 'shortlisted' %}
+                                    {% if application.status != 'shortlisted' %}
                                         <button type="submit" name="status" value="shortlisted" class="btn-action btn-shortlist">Shortlist</button>
                                     {% endif %}
                                     
-                                    {% if applicant.status != 'accepted' %}
+                                    {% if application.status != 'accepted' %}
                                         <button type="submit" name="status" value="accepted" class="btn-action btn-accept">Accept</button>
                                     {% endif %}
                                     
-                                    {% if applicant.status != 'rejected' %}
+                                    {% if application.status != 'rejected' %}
                                         <button type="submit" name="status" value="rejected" class="btn-action btn-reject">Reject</button>
                                     {% endif %}
                                 </form>
@@ -246,11 +295,10 @@
                     </tr>
                     {% endfor %}
                 {% else %}
-                    <!-- Displayed safe empty layout if data context array evaluates null -->
                     <tr>
                         <td colspan="5">
                             <div class="empty-state">
-                                <p style="font-size: 1.1rem; font-weight: 500; margin-bottom: 4px;">No candidates found</p>
+                                <p style="font-size: 1.1rem; font-weight: 600; margin-bottom: 4px; color: var(--text-dark);">No candidates found</p>
                                 <p style="font-size: 0.875rem;">Applications for your posted job positions will appear here.</p>
                             </div>
                         </td>

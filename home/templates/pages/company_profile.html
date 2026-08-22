@@ -5,31 +5,31 @@
 
 <style>
     /* 
-       This wrapper handles the absolute centering alignment of the base template 
-       and pushes the white card below the sticky header.
+       Flow wrapper allowing normal content height extension so the base footer stays below
     */
     .job-page-wrapper {
         width: 100%;
-        min-height: 100vh;
-        padding: 120px 20px 60px 20px;
+        min-height: calc(100vh - 120px);
+        padding: 120px 20px 80px 20px;
         display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        overflow-y: auto;
-        position: absolute;
-        top: 0;
-        left: 0;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        position: relative;
         z-index: 5;
+        box-sizing: border-box;
     }
 
     .company-profile {
         width: 100%;
         max-width: 950px;
         background: #ffffff;
+        border: 1px solid #e2e8f0;
         padding: 40px;
-        border-radius: 12px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        border-radius: 0px; /* Sharp edges */
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
         text-align: left;
+        color: #0f172a;
     }
 
     .company-header {
@@ -43,16 +43,16 @@
     .company-logo {
         width: 140px;
         height: 140px;
-        border-radius: 12px;
+        border-radius: 0px; /* Sharp edges */
         object-fit: cover;
         border: 1px solid #cbd5e1;
         background: #f8fafc;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
 
     .company-info h1 {
         margin: 0 0 12px 0;
-        color: var(--gov-blue);
+        color: var(--card-green, #059669);
         font-size: 2.2rem;
         font-weight: 800;
         line-height: 1.2;
@@ -79,7 +79,7 @@
     }
 
     .company-meta-item strong {
-        color: var(--text-dark);
+        color: #0f172a;
         font-weight: 600;
     }
 
@@ -89,7 +89,7 @@
     }
 
     .description h2, .positions-section-title {
-        color: var(--gov-blue-light);
+        color: var(--card-green, #059669);
         font-size: 1.35rem;
         font-weight: 700;
         margin-bottom: 12px;
@@ -119,7 +119,7 @@
     .job-card {
         border: 1px solid #e2e8f0;
         padding: 24px;
-        border-radius: 8px;
+        border-radius: 0px; /* Sharp edges */
         background: #f8fafc;
         display: flex;
         justify-content: space-between;
@@ -130,11 +130,11 @@
 
     .job-card:hover {
         border-color: #cbd5e1;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
     .job-card-details h3 {
-        color: var(--gov-blue);
+        color: var(--card-green, #059669);
         font-size: 1.2rem;
         font-weight: 700;
         margin-bottom: 8px;
@@ -164,19 +164,19 @@
         align-items: center;
         gap: 6px;
         padding: 10px 20px;
-        background: var(--gov-red);
+        background: var(--card-green, #059669);
         color: #ffffff;
         text-decoration: none;
-        border-radius: 6px;
+        border-radius: 0px; /* Sharp edges */
         font-weight: 600;
         font-size: 0.9rem;
         transition: background-color 0.2s;
         flex-shrink: 0;
-        box-shadow: 0 2px 4px rgba(139, 0, 0, 0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .view-btn:hover {
-        background: #a30000;
+        background: var(--card-green-hover, #047857);
     }
 
     .empty-state {
@@ -210,9 +210,8 @@
             {% if company.company_logo %}
                 <img src="{{ company.company_logo.url }}" class="company-logo" alt="{{ company.company_name }} Logo">
             {% else %}
-                <!-- Fallback empty logo state using built-in design styles if no image uploaded -->
                 <div class="company-logo" style="display:flex; align-items:center; justify-content:center; background:#f1f5f9; color:#94a3b8;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
                 </div>
             {% endif %}
 
@@ -220,21 +219,18 @@
                 <h1>{{ company.company_name }}</h1>
 
                 <div class="company-meta-list">
-                    <!-- Phone Contact SVG -->
                     <div class="company-meta-item">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                         <span><strong>Contact:</strong> {{ company.contact_no }}</span>
                     </div>
 
-                    <!-- Business Permit Badge SVG -->
                     <div class="company-meta-item">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
                         <span><strong>Business Permit:</strong> {{ company.business_permit_no }}</span>
                     </div>
 
-                    <!-- Calendar Registration SVG -->
                     <div class="company-meta-item">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
                         <span><strong>Member since:</strong> {{ company.created_at|date:"F Y" }}</span>
                     </div>
                 </div>
@@ -257,13 +253,11 @@
                         <h3>{{ job.title }}</h3>
                         
                         <div class="job-card-meta">
-                            <!-- Location SVG Icon -->
                             <span>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
                                 {{ job.location }}
                             </span>
                             
-                            <!-- Currency Peso SVG Icon -->
                             <span>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                                 ₱{{ job.salary }}/month
@@ -273,7 +267,6 @@
 
                     <a href="{% url 'job_details' job.id %}" class="view-btn">
                         View Details
-                        <!-- External link indicator arrow SVG -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                     </a>
                 </div>

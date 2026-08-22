@@ -2,6 +2,204 @@
 {% load static %}
 
 {% block content %}
+<style>
+    /* Scoped Clean Light Theme Dashboard Styles */
+    .content-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 32px;
+        background: #ffffff;
+        border-bottom: 1px solid #e2e8f0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+
+    .page-title h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #0f172a;
+        letter-spacing: -0.02em;
+    }
+
+    .admin-profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #64748b;
+        font-size: 0.9rem;
+    }
+
+    .admin-profile strong {
+        color: #0f172a;
+    }
+
+    .profile-badge {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .profile-badge svg {
+        width: 20px;
+        height: 20px;
+        stroke: #059669;
+        fill: none;
+    }
+
+    .dashboard-workspace {
+        padding: 32px;
+        background-color: #f8fafc;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        min-height: calc(100vh - 87px);
+    }
+
+    /* Stats Cards Grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+    }
+
+    .stat-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 22px 24px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .stat-card.accent {
+        border-left: 4px solid #f59e0b;
+    }
+
+    .stat-label {
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #64748b;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    /* Data Section Card & Table */
+    .data-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .data-card-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #e2e8f0;
+        background: #ffffff;
+    }
+
+    .data-card-header h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 0.9rem;
+    }
+
+    th {
+        background: #f8fafc;
+        color: #475569;
+        padding: 14px 24px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    td {
+        padding: 16px 24px;
+        border-bottom: 1px solid #f1f5f9;
+        color: #1e293b;
+        vertical-align: middle;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tr:hover td {
+        background-color: #f8fafc;
+    }
+
+    /* Badges */
+    .badge-status {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+    .badge-status.active, .badge-status.approved {
+        background: #d1fae5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+    }
+
+    .badge-status.pending {
+        background: #fef3c7;
+        color: #92400e;
+        border: 1px solid #fde68a;
+    }
+
+    .badge-status.registered {
+        background: #e0f2fe;
+        color: #075985;
+        border: 1px solid #bae6fd;
+    }
+
+    .badge-status.suspended, .badge-status.rejected {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fca5a5;
+    }
+
+    .category-tag {
+        color: #059669;
+        font-weight: 600;
+    }
+</style>
+
 <!-- Content Control Bar Header -->
 <header class="content-header">
     <div class="page-title">
@@ -35,7 +233,7 @@
 
         <div class="stat-card">
             <div class="stat-label">Approved Job Posts</div>
-            <div class="stat-value" style="color: var(--success-green);">{{ open_jobs }}</div>
+            <div class="stat-value" style="color: #059669;">{{ open_jobs }}</div>
         </div>
 
         <div class="stat-card accent">
@@ -64,7 +262,7 @@
                 <tbody>
                     {% if not recent_employers and not recent_applicants and not recent_jobs %}
                     <tr>
-                        <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 40px 0;">
+                        <td colspan="4" style="text-align: center; color: #64748b; padding: 40px 0;">
                             No recent operational activities recorded today.
                         </td>
                     </tr>
@@ -74,13 +272,13 @@
                     {% for employer in recent_employers %}
                     <tr>
                         <td><strong>{{ employer.company_name }}</strong></td>
-                        <td style="color: var(--gov-blue-light); font-weight: 500;">Employer</td>
-                        <td style="color: var(--text-muted);">{{ employer.created_at|date:"M d, Y" }}</td>
+                        <td class="category-tag">Employer</td>
+                        <td style="color: #64748b;">{{ employer.created_at|date:"M d, Y" }}</td>
                         <td>
                             {% if employer.is_active %}
                                 <span class="badge-status active">Active</span>
                             {% else %}
-                                <span class="badge-status" style="background-color: #fee2e2; color: #991b1b;">Suspended</span>
+                                <span class="badge-status suspended">Suspended</span>
                             {% endif %}
                         </td>
                     </tr>
@@ -90,10 +288,10 @@
                     {% for applicant in recent_applicants %}
                     <tr>
                         <td><strong>{{ applicant.first_name }} {{ applicant.last_name }}</strong></td>
-                        <td style="color: var(--gov-blue-light); font-weight: 500;">Applicant</td>
-                        <td style="color: var(--text-muted);">{{ applicant.user.date_joined|date:"M d, Y" }}</td>
+                        <td class="category-tag">Applicant</td>
+                        <td style="color: #64748b;">{{ applicant.user.date_joined|date:"M d, Y" }}</td>
                         <td>
-                            <span class="badge-status" style="background-color: #e0f2fe; color: #0369a1;">Registered</span>
+                            <span class="badge-status registered">Registered</span>
                         </td>
                     </tr>
                     {% endfor %}
@@ -102,15 +300,15 @@
                     {% for job in recent_jobs %}
                     <tr>
                         <td><strong>{{ job.title }}</strong></td>
-                        <td style="color: var(--gov-blue-light); font-weight: 500;">Job Post</td>
-                        <td style="color: var(--text-muted);">{{ job.created_at|date:"M d, Y" }}</td>
+                        <td class="category-tag">Job Post</td>
+                        <td style="color: #64748b;">{{ job.created_at|date:"M d, Y" }}</td>
                         <td>
                             {% if job.status == "approved" or job.status == "Approved" %}
-                                <span class="badge-status active">Approved</span>
+                                <span class="badge-status approved">Approved</span>
                             {% elif job.status == "pending" or job.status == "Pending" %}
-                                <span class="badge-status" style="background-color: #fef3c7; color: #92400e;">Pending</span>
+                                <span class="badge-status pending">Pending</span>
                             {% else %}
-                                <span class="badge-status" style="background-color: #fee2e2; color: #991b1b;">{{ job.status }}</span>
+                                <span class="badge-status suspended">{{ job.status }}</span>
                             {% endif %}
                         </td>
                     </tr>

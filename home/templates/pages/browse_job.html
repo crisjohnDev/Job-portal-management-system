@@ -6,8 +6,8 @@
     /* --- BROWSE JOBS LAYOUT WORKSPACE --- */
     .browse-container {
         width: 100%;
-        max-width: 800px; /* Reduced width for an optimal single-column look */
-        margin: 120px auto 40px auto; /* Clears the absolute header positioning */
+        max-width: 1100px; /* Expanded width for two-column grid */
+        margin: 120px auto 40px auto;
         padding: 0 20px;
         z-index: 10;
         position: relative;
@@ -15,17 +15,27 @@
         height: calc(100vh - 160px);
     }
 
-    /* Scrollable column behavior */
-    .main-search-column {
-        overflow-y: auto;
-        padding-right: 8px;
+    .browse-grid {
+        display: grid;
+        grid-template-columns: 280px 1fr; /* Sidebar width + Main content area */
+        gap: 24px;
         height: 100%;
     }
 
-    /* Custom Scrollbar styling for sleek appearance */
-    .main-search-column::-webkit-scrollbar {
-        width: 6px;
+    /* Scrollable behavior for both columns */
+    .sidebar-column,
+    .main-search-column {
+        overflow-y: auto;
+        padding-right: 6px;
+        height: 100%;
     }
+
+    /* Custom Scrollbar */
+    .sidebar-column::-webkit-scrollbar,
+    .main-search-column::-webkit-scrollbar {
+        width: 5px;
+    }
+    .sidebar-column::-webkit-scrollbar-thumb,
     .main-search-column::-webkit-scrollbar-thumb {
         background-color: rgba(255, 255, 255, 0.2);
         border-radius: 4px;
@@ -33,12 +43,70 @@
 
     /* Typography & Headers */
     .section-title {
-        color: var(--text-light);
+        color: var(--text-main, #ffffff);
         font-size: 1.8rem;
         font-weight: 700;
         margin-bottom: 20px;
-        border-bottom: 2px solid var(--gov-red);
+        border-bottom: 2px solid var(--card-green, #059669);
         padding-bottom: 8px;
+    }
+
+    /* --- SIDEBAR CARD FOR COMPANIES --- */
+    .companies-card {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        padding: 20px;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .companies-card-header {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--text-sub, #a7f3d0);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 10px;
+    }
+
+    .company-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        list-style: none;
+    }
+
+    .company-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 14px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+        font-size: 0.88rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition-smooth, all 0.25s ease);
+        user-select: none;
+    }
+
+    .company-item:hover,
+    .company-item.active {
+        background: var(--card-green, #059669);
+        border-color: #34d399;
+        color: #ffffff;
+    }
+
+    .company-item .badge-count {
+        font-size: 0.75rem;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 2px 8px;
+        border-radius: 99px;
     }
 
     /* --- SEARCH COMPONENT --- */
@@ -53,42 +121,42 @@
         font-size: 1rem;
         background: rgba(255, 255, 255, 0.95);
         border: 1px solid transparent;
-        border-radius: 6px;
-        color: var(--text-dark);
+        border-radius: 8px;
+        color: #011409;
         outline: none;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         transition: all 0.2s ease;
     }
 
     .search-input:focus {
-        border-color: #3b82f6;
-        box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+        border-color: #34d399;
+        box-shadow: 0 4px 20px rgba(52, 211, 153, 0.4);
     }
 
     /* --- JOB POST CARDS --- */
     .job-card {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.08);
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
         padding: 20px;
         margin-bottom: 16px;
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        color: var(--text-light);
+        color: var(--text-main, #ffffff);
     }
 
     .job-card:hover {
         transform: translateY(-2px);
-        background: rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.14);
         border-color: rgba(255, 255, 255, 0.3);
         box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
 
     .job-title {
-        font-size: 1.3rem;
+        font-size: 1.25rem;
         font-weight: 600;
-        color: #60a5fa; /* Accessible lighter blue text over dark background */
-        margin-bottom: 6px;
+        color: #a7f3d0;
+        margin-bottom: 4px;
     }
 
     .job-company {
@@ -114,7 +182,7 @@
     }
 
     .job-description {
-        font-size: 0.95rem;
+        font-size: 0.92rem;
         line-height: 1.5;
         color: #e2e8f0;
         margin-bottom: 16px;
@@ -126,18 +194,18 @@
 
     .btn-apply {
         display: inline-block;
-        background-color: var(--gov-red);
-        color: var(--text-light);
+        background-color: var(--card-green, #059669);
+        color: #ffffff;
         padding: 8px 16px;
-        font-size: 0.9rem;
+        font-size: 0.88rem;
         font-weight: 600;
         text-decoration: none;
-        border-radius: 4px;
+        border-radius: 6px;
         transition: background-color 0.2s;
     }
 
     .btn-apply:hover {
-        background-color: #a30000;
+        background-color: var(--card-green-hover, #047857);
     }
 
     /* Empty state display text */
@@ -155,6 +223,10 @@
             height: auto;
             margin-top: 100px;
         }
+        .browse-grid {
+            grid-template-columns: 1fr; /* Stack sidebar on top for smaller screens */
+        }
+        .sidebar-column,
         .main-search-column {
             overflow-y: visible;
             height: auto;
@@ -164,65 +236,99 @@
 
 <div class="browse-container">
     
-    <!-- MAIN LIVE SEARCH & JOB VACANCIES LIST -->
-    <main class="main-search-column">
-        <h2 class="section-title">Job Vacancies in Pioduran</h2>
+    <div class="browse-grid">
         
-        <!-- Live Search Field Input -->
-        <div class="search-box-wrapper">
-            <input type="text" id="liveSearch" class="search-input" placeholder="Search by job title, company, skills, or tags...">
-        </div>
+        <!-- SIDEBAR COLUMN: COMPANY FILTER CARD -->
+        <aside class="sidebar-column">
+            <div class="companies-card">
+                <div class="companies-card-header">Companies</div>
+                <div class="company-list" id="companyList">
+                    <div class="company-item active" data-company="all">
+                        <span>All Companies</span>
+                        <span class="badge-count">{{ job|length }}</span>
+                    </div>
 
-        <!-- Dynamic Target Postings Container -->
-        <div id="jobPostingsList">
-
-            {% for i in job %}
-            
-            <!-- Dynamic Job Post Card -->
-            <div class="job-card" data-searchable="{{ i.title|lower }} {{ i.employer.company_name|lower }} {{ i.location|lower }} {{ i.description|lower }}">
-                <div class="job-title">{{ i.title }}</div>
-                <div class="job-company">{{ i.employer.company_name }}</div>
-                <div class="job-meta-details">
-                    <span class="meta-item">{{ i.location }}</span>
-                    <span class="meta-item">{{ i.job_type }}</span>
-                    <span class="meta-item">₱ {{ i.salary }} / month</span>
+                    {% regroup job by employer.company_name as company_group %}
+                    {% for company in company_group %}
+                        {% if company.grouper %}
+                            <div class="company-item" data-company="{{ company.grouper|lower }}">
+                                <span>{{ company.grouper }}</span>
+                                <span class="badge-count">{{ company.list|length }}</span>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
-                <p class="job-description">
-                    {{ i.description }}
-                </p>
-                <a href="{% url 'job_details' i.id %}" class="btn-apply">View Details</a>
             </div>
-            {% empty %}
-            <!-- Fallback Empty UI Element when database context is empty -->
-            <div class="no-results" style="display: block;">
-                No job vacancies match your current search terms. Please check back later or modify your keyword queries.
-            </div>
-            {% endfor %}
+        </aside>
 
-            <!-- Dynamic No Results Message for JavaScript filter operations -->
-            <div id="noResultsMessage" class="no-results">
-                No job vacancies match your current search terms. Please check back later or modify your keyword queries.
+        <!-- MAIN COLUMN: LIVE SEARCH & JOB POSTINGS -->
+        <main class="main-search-column">
+            <h2 class="section-title">Job Vacancies in Pioduran</h2>
+            
+            <!-- Live Search Field Input -->
+            <div class="search-box-wrapper">
+                <input type="text" id="liveSearch" class="search-input" placeholder="Search by job title, company, skills, or tags...">
             </div>
-        </div>
-    </main>
+
+            <!-- Dynamic Target Postings Container -->
+            <div id="jobPostingsList">
+
+                {% for i in job %}
+                <div class="job-card" 
+                     data-company="{{ i.employer.company_name|default:''|lower }}" 
+                     data-searchable="{{ i.title|lower }} {{ i.employer.company_name|default:''|lower }} {{ i.location|lower }} {{ i.description|lower }}">
+                    <div class="job-title">{{ i.title }}</div>
+                    <div class="job-company">{{ i.employer.company_name }}</div>
+                    <div class="job-meta-details">
+                        <span class="meta-item">{{ i.location }}</span>
+                        <span class="meta-item">{{ i.job_type }}</span>
+                        <span class="meta-item">
+                            {{ i.salary_display }}{% if i.salary %} / month{% endif %}
+                        </span>
+                    </div>
+                    <p class="job-description">
+                        {{ i.description }}
+                    </p>
+                    <a href="{% url 'job_details' i.id %}" class="btn-apply">View Details</a>
+                </div>
+                {% empty %}
+                <div class="no-results" style="display: block;">
+                    No job vacancies match your current search terms. Please check back later or modify your keyword queries.
+                </div>
+                {% endfor %}
+
+                <div id="noResultsMessage" class="no-results">
+                    No job vacancies match your current search terms. Please check back later or modify your keyword queries.
+                </div>
+            </div>
+        </main>
+
+    </div>
 
 </div>
 
-<!-- COMPONENT LIVE SEARCH INTERFACESCRIPT -->
+<!-- COMPONENT LIVE SEARCH & SIDEBAR FILTER SCRIPT -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const searchInput = document.getElementById("liveSearch");
         const jobCards = document.querySelectorAll(".job-card");
         const noResultsMessage = document.getElementById("noResultsMessage");
+        const companyItems = document.querySelectorAll(".company-item");
+        
+        let selectedCompany = "all";
 
-        searchInput.addEventListener("input", function(e) {
-            const queryValue = e.target.value.toLowerCase().trim();
+        function filterJobs() {
+            const queryValue = searchInput.value.toLowerCase().trim();
             let visibleCardsCount = 0;
 
             jobCards.forEach(card => {
-                const searchableMetadata = card.getAttribute("data-searchable");
-                
-                if (searchableMetadata.includes(queryValue)) {
+                const searchableMetadata = card.getAttribute("data-searchable") || "";
+                const cardCompany = card.getAttribute("data-company") || "";
+
+                const matchesSearch = searchableMetadata.includes(queryValue);
+                const matchesCompany = (selectedCompany === "all") || (cardCompany === selectedCompany);
+
+                if (matchesSearch && matchesCompany) {
                     card.style.display = "block";
                     visibleCardsCount++;
                 } else {
@@ -230,12 +336,25 @@
                 }
             });
 
-            // Handle empty state visibility control logic
             if (visibleCardsCount === 0 && jobCards.length > 0) {
                 noResultsMessage.style.display = "block";
             } else {
                 noResultsMessage.style.display = "none";
             }
+        }
+
+        // Search Input Event
+        searchInput.addEventListener("input", filterJobs);
+
+        // Company Item Click Event
+        companyItems.forEach(item => {
+            item.addEventListener("click", function() {
+                companyItems.forEach(c => c.classList.remove("active"));
+                this.classList.add("active");
+                
+                selectedCompany = this.getAttribute("data-company");
+                filterJobs();
+            });
         });
     });
 </script>

@@ -4,34 +4,34 @@
 {% block content %}
 
 <style>
+/* --- Layout Flow & Document Positioning --- */
 .applications-wrapper {
     width: 100%;
-    min-height: 100vh;
-    padding: 120px 20px 50px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 5;
-    overflow: auto;
+    min-height: calc(100vh - 140px);
+    padding: 40px 20px 80px 20px; /* Provides bottom spacing so content doesn't cover footer */
+    position: relative; /* Standard flow relative to base header and footer */
+    z-index: 1;
 }
 
 .applications-container {
     max-width: 1200px;
-    margin: auto;
-    background: #fff;
+    margin: 0 auto;
+    background: #ffffff;
     border-radius: 12px;
     padding: 35px;
-    box-shadow: 0 15px 40px rgba(0,0,0,.2);
+    box-shadow: 0 15px 40px rgba(6, 78, 59, 0.08);
+    border: 1px solid #e2e8f0;
 }
 
 .page-title {
-    color: #0c2340;
-    font-size: 2rem;
-    font-weight: bold;
+    color: #064e3b;
+    font-size: 1.85rem;
+    font-weight: 800;
     margin-bottom: 25px;
+    letter-spacing: -0.01em;
 }
 
-/* --- TABLE ARCHITECTURE --- */
+/* --- Table Architecture --- */
 .table-responsive {
     width: 100%;
     overflow-x: auto;
@@ -47,17 +47,19 @@
 }
 
 .app-table th {
-    background-color: #0c2340;
-    color: white;
+    background-color: #064e3b;
+    color: #ffffff;
     padding: 14px 18px;
     font-weight: 600;
     letter-spacing: 0.03em;
+    font-size: 0.85rem;
+    text-transform: uppercase;
 }
 
 .app-table td {
     padding: 16px 18px;
     border-bottom: 1px solid #e2e8f0;
-    color: var(--text-dark);
+    color: #0f172a;
     vertical-align: middle;
 }
 
@@ -65,16 +67,17 @@
     background-color: #f8fafc;
 }
 
-/* Meta details layout inside cells */
+/* Meta Details & High Contrast Cell Elements */
 .cell-flex {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     white-space: nowrap;
+    color: #1e293b; /* High-contrast crisp text */
 }
 
 .cell-flex svg {
-    color: #64748b;
+    color: #059669; /* Theme green icon accents */
     flex-shrink: 0;
 }
 
@@ -85,20 +88,20 @@
     margin-top: 2px;
 }
 
-/* --- DROPDOWN SUB-ROW --- */
+/* --- Dropdown Sub-Row --- */
 .detail-row {
     background-color: #f8fafc;
 }
 
 .detail-row td {
-    padding: 0; /* Keeps layout tight until opened */
+    padding: 0;
     border-bottom: 1px solid #e2e8f0;
 }
 
 .details-dropdown-content {
     display: none;
     padding: 25px 30px;
-    border-left: 4px solid #0c2340;
+    border-left: 4px solid #059669;
 }
 
 .details-grid {
@@ -108,42 +111,44 @@
 }
 
 .details-section h4 {
-    color: #0c2340;
+    color: #064e3b;
     margin-bottom: 8px;
-    font-size: 1rem;
-    border-bottom: 1px solid #e2e8f0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-bottom: 1px solid #cbd5e1;
     padding-bottom: 4px;
 }
 
 .details-section p {
     font-size: 0.9rem;
     line-height: 1.5;
-    color: #475569;
+    color: #334155;
 }
 
-/* --- BADGES & BUTTONS --- */
+/* --- Badges & Action Controls --- */
 .status {
     display: inline-block;
     padding: 6px 14px;
     border-radius: 20px;
-    color: white;
-    font-weight: bold;
-    font-size: 0.85rem;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.8rem;
     text-align: center;
     white-space: nowrap;
+    text-transform: capitalize;
 }
 
 .pending { background: #f59e0b; }
 .reviewing { background: #3b82f6; }
 .shortlisted { background: #10b981; }
-.accepted { background: #16a34a; }
+.accepted { background: #059669; }
 .rejected { background: #dc2626; }
 
 .btn-toggle {
     background: transparent;
-    border: 1px solid #0c2340;
-    color: #0c2340;
-    padding: 6px 12px;
+    border: 1px solid #059669;
+    color: #059669;
+    padding: 6px 14px;
     border-radius: 6px;
     font-weight: 600;
     cursor: pointer;
@@ -156,8 +161,8 @@
 }
 
 .btn-toggle:hover {
-    background: #0c2340;
-    color: white;
+    background: #059669;
+    color: #ffffff;
 }
 
 .btn-toggle svg {
@@ -165,23 +170,26 @@
 }
 
 .btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     margin-top: 15px;
     text-decoration: none;
-    background: #8b0000;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 6px;
-    transition: .2s;
+    background: #059669;
+    color: #ffffff;
+    padding: 10px 22px;
+    border-radius: 99px;
+    font-weight: 600;
+    transition: background 0.2s;
 }
 
 .btn:hover {
-    background: #a30000;
+    background: #047857;
 }
 
 .empty {
     text-align: center;
-    padding: 60px;
+    padding: 60px 20px;
     color: #64748b;
 }
 </style>
@@ -208,12 +216,13 @@
                     <!-- Main Summary Row -->
                     <tr class="main-row">
                         <td>
-                            <strong style="color: #0c2340; font-size: 1rem;">{{ application.job.title }}</strong>
+                            <strong style="color: #064e3b; font-size: 1rem;">{{ application.job.title }}</strong>
                             <span class="company-sub">{{ application.job.employer.company_name }}</span>
                         </td>
                         <td>
+                            <!-- High Contrast Location Text -->
                             <span class="cell-flex">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                                 {{ application.job.location }}
                             </span>
                         </td>
@@ -224,8 +233,18 @@
                                     {{ application.job.get_job_type_display }}
                                 </span>
                                 <span class="cell-flex" style="font-size: 0.85rem; color: #475569;">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                                    ₱{{ application.job.salary }}
+                                    <svg width="14" height="14"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                    </svg>
+
+                                    {{ application.job.salary_display }}
                                 </span>
                             </div>
                         </td>
@@ -247,7 +266,7 @@
                             </span>
                         </td>
                         <td>
-                            <button class="btn-toggle" onclick="toggleRow('details-{{ forloop.counter }}', this)">
+                            <button type="button" class="btn-toggle" onclick="toggleRow('details-{{ forloop.counter }}', this)">
                                 <span>Details</span>
                                 <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                             </button>

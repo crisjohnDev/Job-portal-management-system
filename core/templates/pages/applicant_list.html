@@ -2,6 +2,135 @@
 {% load static %}
 
 {% block content %}
+<style>
+    /* Scoped Clean Light Theme Applicants Management Styles */
+    .content-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 32px;
+        background: #ffffff;
+        border-bottom: 1px solid #e2e8f0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+
+    .page-title h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #0f172a;
+        letter-spacing: -0.02em;
+    }
+
+    .admin-profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #64748b;
+        font-size: 0.9rem;
+    }
+
+    .admin-profile strong {
+        color: #0f172a;
+    }
+
+    .profile-badge {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .profile-badge svg {
+        width: 20px;
+        height: 20px;
+        stroke: #059669;
+        fill: none;
+    }
+
+    .dashboard-workspace {
+        padding: 32px;
+        background-color: #f8fafc;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        min-height: calc(100vh - 87px);
+    }
+
+    /* Data Table Card Structure */
+    .data-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .data-card-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #e2e8f0;
+        background: #ffffff;
+    }
+
+    .data-card-header h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 0.9rem;
+    }
+
+    th {
+        background: #f8fafc;
+        color: #475569;
+        padding: 14px 24px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    td {
+        padding: 16px 24px;
+        border-bottom: 1px solid #f1f5f9;
+        color: #1e293b;
+        vertical-align: middle;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tr:hover td {
+        background-color: #f8fafc;
+    }
+
+    .applicant-username {
+        color: #2563eb;
+        font-weight: 600;
+        font-size: 0.88rem;
+    }
+
+    .date-joined {
+        color: #64748b;
+        font-size: 0.88rem;
+    }
+</style>
+
 <!-- Content Control Bar Header -->
 <header class="content-header">
     <div class="page-title">
@@ -43,28 +172,28 @@
                     {% for applicant in applicants %}
                     <tr>
                         <td>
-                            <strong>
+                            <strong style="color: #0f172a;">
                                 {{ applicant.first_name }}
                                 {% if applicant.middle_name %}{{ applicant.middle_name }}{% endif %}
                                 {{ applicant.last_name }}
                             </strong>
                         </td>
-                        <td style="color: var(--gov-blue-light); font-weight: 500;">
+                        <td class="applicant-username">
                             {{ applicant.user.username }}
                         </td>
-                        <td>
+                        <td style="color: #334155;">
                             {{ applicant.email }}
                         </td>
-                        <td>
+                        <td style="color: #334155;">
                             {{ applicant.phone_number }}
                         </td>
-                        <td style="color: var(--text-muted);">
+                        <td class="date-joined">
                             {{ applicant.user.date_joined|date:"F d, Y" }}
                         </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 40px 0;">
+                        <td colspan="5" style="text-align: center; color: #64748b; padding: 40px 0;">
                             No active job seeker profiles logged in system database.
                         </td>
                     </tr>

@@ -1,87 +1,90 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/PIODURAN.png' %}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'images/PIODURAN.png' %}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/PIODURAN.png' %}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PESO Pio Duran - Find Jobs</title>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/PIODURAN.png' %}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'images/PIODURAN.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/PIODURAN.png' %}">
+
+    <!-- Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
+        /* =========================================================
+           VARIABLES & THEME CONFIGURATION (GREEN PALETTE)
+        ========================================================= */
         :root {
-            --gov-blue: #0c2340;     /* Institutional Navy */
-            --gov-blue-light: #1a365d;
-            --gov-red: #8b0000;      /* Accent Red */
-            --text-light: #ffffff;
-            --text-dark: #1f2937;
+            --bg-dark-green: #021a0d;
+            --bg-green-gradient: linear-gradient(100deg, #011409 0%, #032b16 45%, rgba(3, 43, 22, 0.45) 100%);
+            --card-green: #059669;
+            --card-green-hover: #047857;
+            --stat-card-bg: rgba(2, 36, 18, 0.85);
+            --stat-card-border: rgba(255, 255, 255, 0.08);
+            
+            --text-main: #ffffff;
+            --text-sub: #a7f3d0;
+            --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+            --transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * {
+        /* =========================================================
+           GLOBAL RESET
+        ========================================================= */
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
         }
 
-        body, html {
-            min-height: 100%; /* Changed from height: 100% to allow stretching */
+        html, body {
+            min-height: 100%;
             width: 100%;
             overflow-x: hidden;
-            background-color: #f8fafc; /* Optional: adds a clean background for long scrolled content */
+            background-color: #011409;
+            font-family: var(--font-main);
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* --- STICKY TRANSPARENT HEADER --- */
+        /* =========================================================
+           SITE HEADER
+        ========================================================= */
         .site-header {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             z-index: 1000;
-            background: rgba(12, 35, 64, 0.9); /* Semi-transparent Institutional Navy */
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
-            padding: 12px 40px;
+            padding: 24px 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        /* Double Logo Configuration */
-        .brand-logos {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .brand-logos .logo-frame {
-            width: 48px;
-            height: 48px;
-            background: #ffffff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .brand-logos .logo-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
+        /* BRANDING */
         .brand-text h1 {
-            color: var(--text-light);
-            font-size: 1.1rem;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            margin-left: 4px;
+            color: var(--text-main);
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
         }
 
-        /* Navigation Menu Links */
+        .brand-text a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* NAVIGATION */
         .navigation-menu {
             display: flex;
             align-items: center;
@@ -90,262 +93,464 @@
         }
 
         .navigation-menu a {
-            color: #cbd5e1;
+            color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             font-weight: 500;
-            transition: color 0.2s ease;
+            transition: var(--transition-smooth);
         }
 
-        .navigation-menu a:hover {
-            color: var(--text-light);
-        }
-
+        .navigation-menu a:hover,
         .navigation-menu a.active {
-            color: #3b82f6;
+            color: #ffffff;
+        }
+
+        /* LOGIN / LOGOUT BUTTON SPECIFIC STYLES */
+        .navigation-menu .nav-auth-btn {
+            padding: 7px 18px;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #ffffff;
             font-weight: 600;
         }
 
-        /* Action Buttons on Header */
-        .header-actions {
+        .navigation-menu .nav-auth-btn:hover {
+            background: #059669;
+            border-color: #34d399;
+            color: #ffffff;
+        }
+
+        /* SEARCH BAR IN HEADER */
+        .header-search {
+            position: relative;
             display: flex;
             align-items: center;
-            gap: 14px;
         }
 
-        .btn-login {
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 600;
-            padding: 8px 18px;
-            border-radius: 6px;
-            transition: background-color 0.2s;
+        .header-search input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 8px 36px 8px 16px;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 0.82rem;
+            outline: none;
+            width: 160px;
+            transition: var(--transition-smooth);
         }
 
-        .btn-login:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+        .header-search input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
 
-        /* --- HERO SPLASH WORKSPACE --- */
-        .hero-viewport {
-            position: relative;
-            min-height: 100vh; /* Changed from height to min-height */
-            width: 100%;
-            background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+        .header-search input:focus {
+            width: 200px;
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .header-search button {
+            position: absolute;
+            right: 8px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 120px 20px 60px 20px; /* Added padding top/bottom so content doesn't get hidden behind the header */
         }
 
-        /* Dark Dynamic Overlay Mask */
-        .hero-viewport::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+        /* =========================================================
+           HERO & LANDING CONTAINER
+        ========================================================= */
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(12, 35, 64, 0.9) 0%, rgba(26, 54, 93, 0.6) 100%);
+            background-image: url("{% static 'images/bg.jpg' %}");
+            background-size: cover;
+            background-position: center right;
+            background-repeat: no-repeat;
+            padding: 140px 60px 60px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex: 1;
+        }
+
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: var(--bg-green-gradient);
             z-index: 1;
         }
 
-        /* Centralized Layout Context Box */
-        .hero-workspace-content {
+        .hero-content-wrapper {
             position: relative;
             z-index: 10;
-            text-align: center;
-            max-width: 800px;
-            padding: 0 20px;
-            margin-top: 60px; /* Offset to clear fixed navbar visual weight */
+            max-width: 620px;
+            margin-top: 20px;
         }
 
-        .hero-workspace-content h2 {
-            color: var(--text-light);
-            font-size: 3.5rem;
-            font-weight: 800;
+        .hero-content-wrapper h2 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            line-height: 1.25;
             letter-spacing: -0.02em;
-            line-height: 1.2;
-            margin-bottom: 16px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            margin-bottom: 28px;
+            color: #ffffff;
         }
 
-        .hero-workspace-content p {
-            color: #e2e8f0;
-            font-size: 1.2rem;
-            line-height: 1.6;
-            margin-bottom: 36px;
-            font-weight: 400;
+        /* HERO CTA BUTTONS */
+        .hero-actions {
+            display: flex;
+            gap: 14px;
         }
 
-        /* Main Workspace Controls Buttons Group */
-        .cta-button-group {
-            display: inline-flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary, .btn-secondary {
-            padding: 14px 28px;
-            font-size: 1rem;
+        .btn-pill-white {
+            background: #ffffff;
+            color: #011409;
+            padding: 10px 24px;
+            border-radius: 99px;
             font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
+            font-size: 0.88rem;
             text-decoration: none;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            transition: var(--transition-smooth);
+            border: 1px solid #ffffff;
         }
 
-        .btn-primary {
-            background-color: var(--gov-red);
-            color: var(--text-light);
-            border: 1px solid var(--gov-red);
+        .btn-pill-white:hover {
+            background: #f1f5f9;
+            transform: translateY(-2px);
         }
 
-        .btn-primary:hover {
-            background-color: #a30000;
-            border-color: #a30000;
-            transform: translateY(-1px);
+        .btn-pill-outline {
+            background: transparent;
+            color: #ffffff;
+            padding: 10px 24px;
+            border-radius: 99px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            text-decoration: none;
+            border: 1.5px solid #ffffff;
+            transition: var(--transition-smooth);
         }
 
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--text-light);
-            border: 2px solid var(--text-light);
+        .btn-pill-outline:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
         }
 
-        .btn-secondary:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            transform: translateY(-1px);
+        /* =========================================================
+           FEATURED JOBS CARDS
+        ========================================================= */
+        .featured-jobs-wrapper {
+            position: relative;
+            z-index: 10;
+            margin-top: 50px;
         }
 
-        /* Responsive Breakpoints */
-        @media(max-width: 992px) {
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #ffffff;
+        }
+
+        .jobs-scroll-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .job-card {
+            background: var(--card-green);
+            border-radius: 12px;
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 130px;
+            transition: var(--transition-smooth);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        .job-card:hover {
+            background: var(--card-green-hover);
+            transform: translateY(-3px);
+        }
+
+        .job-card h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .job-card p {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 16px;
+        }
+
+        .job-card .btn-view-job {
+            background: #ffffff;
+            color: #011409;
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 99px;
+            text-align: center;
+            align-self: flex-start;
+            transition: var(--transition-smooth);
+        }
+
+        .job-card .btn-view-job:hover {
+            background: #f8fafc;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* =========================================================
+           PORTAL STATISTICS SECTION
+        ========================================================= */
+        .stats-wrapper {
+            position: relative;
+            z-index: 10;
+            margin-top: 40px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: var(--stat-card-bg);
+            border: 1px solid var(--stat-card-border);
+            border-radius: 14px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(12px);
+        }
+
+        .stat-card .stat-num {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1;
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-top: 4px;
+            line-height: 1.2;
+        }
+
+        .stat-card .arrow-icon {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 1.2rem;
+        }
+
+        /* =========================================================
+           FOOTER STYLES
+        ========================================================= */
+        .site-footer {
+            background-color: #010d06;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            z-index: 10;
+            padding: 40px 60px 24px 60px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-brand h3 {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .footer-brand p {
+            color: #a7f3d0;
+            line-height: 1.5;
+            max-width: 360px;
+            font-size: 0.82rem;
+        }
+
+        .footer-col h4 {
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-col ul a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: var(--transition-smooth);
+        }
+
+        .footer-col ul a:hover {
+            color: #34d399;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* =========================================================
+           RESPONSIVE BREAKPOINTS
+        ========================================================= */
+        @media (max-width: 992px) {
             .site-header {
-                padding: 12px 20px;
+                padding: 20px 30px;
             }
-            .hero-workspace-content h2 {
-                font-size: 2.5rem;
+            .hero-section {
+                padding: 120px 30px 40px 30px;
+            }
+            .navigation-menu {
+                display: none;
+            }
+            .hero-content-wrapper h2 {
+                font-size: 1.8rem;
+            }
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            .site-footer {
+                padding: 30px 30px 20px 30px;
             }
         }
 
-        @media(max-width: 768px) {
-            .navigation-menu {
-                display: none; /* Can be targeted with JS burger layouts later */
+        @media (max-width: 600px) {
+            .hero-actions {
+                flex-direction: column;
+            }
+            .btn-pill-white, .btn-pill-outline {
+                text-align: center;
+            }
+            .jobs-scroll-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
             }
         }
     </style>
 </head>
+
 <body>
 
-    <!-- APPLICATION HEADER REGION -->
+    <!-- SITE HEADER -->
     <header class="site-header">
         
-        <!-- Double Branding Entity Slots -->
-        <div class="brand-logos">
-            <div class="logo-frame">
-                <!-- Primary Agency Badge -->
-                <img src="{% static 'images/PESO.png' %}" alt="PESO Logo" style="height: 115px;">
-            </div>
-            <div class="logo-frame">
-                <!-- Secondary Municipal/Gov Badge -->
-                <img src="{% static 'images/PIODURAN.png' %}" alt="Pioduran Logo">
-            </div>
-            <div class="brand-text">
-                <h1>PESO Pio Duran</h1>
-            </div>
+        <div class="brand-text">
+            <a href="{% url 'home' %}"><h1>Pio Duran Job Portal </h1></a>
         </div>
 
-        <!-- Global Navigation Items -->
         <nav>
             <ul class="navigation-menu">
-
-                <li>
-                    <a href="{% url 'home' %}">
-                        Home
-                    </a>
-                </li>
-
+                <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a></li>
+                
                 {% if not request.user.is_authenticated %}
-
-                    <li>
-                        <a href="{% url 'applicant-registration' %}">
-                            Register Applicant
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{% url 'employee-registration' %}">
-                            Register Employer
-                        </a>
-                    </li>
-
+                    <li><a href="{% url 'applicant-registration' %}">Register Applicant</a></li>
+                    <li><a href="{% url 'employee-registration' %}">Register Employer</a></li>
+                    <li><a href="{% url 'login-user' %}" class="nav-auth-btn">Log In</a></li>
                 {% elif request.user.role == "applicant" %}
-
-                    <li>
-                        <a href="{% url 'browse-job' %}">
-                            Browse Jobs
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{% url 'my-applications' %}">
-                            My Applications
-                        </a>
-                    </li>
-
+                    <li><a href="{% url 'browse-job' %}">Browse Jobs</a></li>
+                    <li><a href="{% url 'my-applications' %}">My Applications</a></li>
+                    <li><a href="{% url 'logout_user' %}" class="nav-auth-btn">Log Out</a></li>
                 {% elif request.user.role == "employer" %}
-
-                    <li>
-                        <a href="{% url 'employer-dashboard' %}">
-                            Dashboard
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{% url 'job-list' %}">
-                            My Jobs
-                        </a>
-                    </li>
-
+                    <li><a href="{% url 'employer-dashboard' %}">Dashboard</a></li>
+                    <li><a href="{% url 'job-list' %}">My Jobs</a></li>
+                    <li><a href="{% url 'logout_user' %}" class="nav-auth-btn">Log Out</a></li>
                 {% endif %}
-
             </ul>
         </nav>
 
-        <!-- Access Rights Control Block -->
-        <div class="header-actions">
-
-        {% if request.user.is_authenticated %}
-
-            <span style="color:white;font-weight:bold;">
-                Welcome, {{ request.user.username }}
-            </span>
-
-            <a href="{% url 'logout_user' %}" class="btn-login">
-                Logout
-            </a>
-
-        {% else %}
-
-            <a href="{% url 'login-user' %}" class="btn-login">
-                Login
-            </a>
-
-        {% endif %}
-
+        <div class="header-search">
+            <input type="text" placeholder="Search...">
+            <button type="button">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
         </div>
+
     </header>
 
-    <!-- CONTENT DISPLAY WORKSPACE AREA -->
-    <section class="hero-viewport">
-        {% block content %} {% endblock %}
+    <!-- HERO MAIN SECTION -->
+    <section class="hero-section">
+
+        {% block content %}
+        <!-- CHILD TEMPLATE CONTENT CAN OVERRIDE OR INJECT EXTRA DATA HERE -->
+        {% endblock %}
+
     </section>
+
+    <!-- SITE FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>PESO Pio Duran</h3>
+                <p>Public Employment Service Office — Connecting job seekers with local opportunities and empowering businesses in Pio Duran, Albay.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'applicant-registration' %}">Applicant Portal</a></li>
+                    <li><a href="{% url 'employee-registration' %}">Employer Portal</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Support & Contact</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">LGU Pio Duran</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; {% now "Y" %} Public Employment Service Office - Pio Duran. All rights reserved.</p>
+            <p>Designed for Municipal Employment Services</p>
+        </div>
+    </footer>
 
 </body>
 </html>

@@ -37,7 +37,7 @@ def logout_view(request):
     logout(request)
     return redirect('peso-login')
 
-@login_required
+@login_required(login_url="login_user")
 def peso_dashboard(request):
 
     context = {
@@ -53,12 +53,12 @@ def peso_dashboard(request):
 
     return render(request, "pages/dashboard.html", context)
 
-@login_required
+@login_required(login_url="login_user")
 def employer_list(request):
     employer = Employer.objects.all()
     return render(request, 'pages/employers.html', {"employer": employer})
 
-@login_required
+@login_required(login_url="login_user")
 def employer_detail(request, id):
     employer = get_object_or_404(Employer, id=id)
 
@@ -66,7 +66,7 @@ def employer_detail(request, id):
         "employer": employer
     })
 
-@login_required
+@login_required(login_url="login_user")
 def suspend_employer(request, id):
     employer = get_object_or_404(Employer, id=id)
 
@@ -80,7 +80,7 @@ def suspend_employer(request, id):
 
     return redirect("employer-list")
 
-@login_required
+@login_required(login_url="login_user")
 def delete_employer(request, id):
     employer = get_object_or_404(Employer, id=id)
 
@@ -94,12 +94,12 @@ def delete_employer(request, id):
 
     return redirect("employer-list")
 
-@login_required
+@login_required(login_url="login_user")
 def job_list(request):
     jobs = JobPost.objects.all()
     return render(request, "pages/job_post.html", {"jobs":jobs})
 
-@login_required
+@login_required(login_url="login_user")
 def view_job(request, id):
     job = get_object_or_404(JobPost, id=id)
 
@@ -107,7 +107,7 @@ def view_job(request, id):
         "job": job
     })
 
-@login_required
+@login_required(login_url="login_user")
 def approve_job(request, id):
     job = get_object_or_404(JobPost, id=id)
 
@@ -128,7 +128,7 @@ def approve_job(request, id):
         "job": job
     })
 
-@login_required
+@login_required(login_url="login_user")
 @require_POST
 def delete_job(request, id):
     job = get_object_or_404(JobPost, id=id)
@@ -145,7 +145,7 @@ def delete_job(request, id):
 
     return redirect("job-list") 
 
-@login_required
+@login_required(login_url="login_user")
 def applicant_list(request):
     applicants = Applicant.objects.select_related("user").all()
 
@@ -153,7 +153,7 @@ def applicant_list(request):
         "applicants": applicants
     })
 
-@login_required
+@login_required(login_url="login_user")
 def reports(request):
     context = {
         "total_employers": Employer.objects.count(),

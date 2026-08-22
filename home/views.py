@@ -23,7 +23,52 @@ from datetime import timedelta
 #     return HttpResponse(result)
 
 def home_view(request):
-    return render(request, 'pages/home_view.html')
+
+    # ==========================================
+    # FEATURED JOBS
+    # Most applicants first
+    # ==========================================
+
+    featured_jobs = (
+        JobPost.objects
+        .filter(status="approved")
+        .annotate(
+            application_count=Count("applications")
+        )
+        .order_by(
+            "-application_count",
+            "-created_at"
+        )[:5]
+    )
+
+    # ==========================================
+    # PORTAL STATISTICS
+    # ==========================================
+
+    registered_applicants = Applicant.objects.count()
+
+    active_job_vacancies = JobPost.objects.filter(
+        status="approved"
+    ).count()
+
+    successful_placements = JobApplication.objects.filter(
+        status="accepted"
+    ).count()
+
+    # ==========================================
+    # RENDER HOME PAGE
+    # ==========================================
+
+    return render(
+        request,
+        "pages/home_view.html",
+        {
+            "featured_jobs": featured_jobs,
+            "registered_applicants": registered_applicants,
+            "active_job_vacancies": active_job_vacancies,
+            "successful_placements": successful_placements,
+        }
+    )
 
 def employee_registration(request):
     if request.method == "POST":
@@ -111,29 +156,87 @@ def employee_registration(request):
     return render(request, "pages/register_employer.html")
 
 def applicant_registration(request):
+
     if request.method == "POST":
 
+        username = request.POST.get("username", "").strip()
+        email = request.POST.get("email", "").strip()
+        phone_number = request.POST.get("phone_number", "").strip()
+        password = request.POST.get("password", "")
+
+        # ==========================================
+        # CHECK EXISTING USERNAME
+        # ==========================================
+
+        if User.objects.filter(username=username).exists():
+            return render(
+                request,
+                "pages/register_applicant.html",
+                {
+                    "error": "Username already exists. Please choose another username."
+                }
+            )
+
+        # ==========================================
+        # CHECK EXISTING EMAIL
+        # ==========================================
+
+        if email and User.objects.filter(email=email).exists():
+            return render(
+                request,
+                "pages/register_applicant.html",
+                {
+                    "error": "Email address is already registered. Please use another email."
+                }
+            )
+
+        # ==========================================
+        # CHECK EXISTING PHONE NUMBER
+        # ==========================================
+
+        if phone_number and Applicant.objects.filter(
+            phone_number=phone_number
+        ).exists():
+            return render(
+                request,
+                "pages/register_applicant.html",
+                {
+                    "error": "Phone number is already registered. Please use another phone number."
+                }
+            )
+
+        # ==========================================
+        # CREATE USER
+        # ==========================================
+
         user = User.objects.create_user(
-            username=request.POST.get("username"),
-            email=request.POST.get("email"),
-            password=request.POST.get("password"),
+            username=username,
+            email=email,
+            password=password,
             role="applicant",
         )
+
+        # ==========================================
+        # CREATE APPLICANT
+        # ==========================================
 
         Applicant.objects.create(
             user=user,
             first_name=request.POST.get("first_name"),
             last_name=request.POST.get("last_name"),
             middle_name=request.POST.get("middle_name"),
-            email=request.POST.get("email"),
-            phone_number=request.POST.get("phone_number"),
+            email=email,
+            phone_number=phone_number,
             resume=request.FILES.get("resume"),
             cover_letter=request.FILES.get("cover_letter"),
         )
 
         return redirect("login-user")
 
-    return render(request, "pages/register_applicant.html")
+    return render(
+        request,
+        "pages/register_applicant.html"
+    )
 
 
 def login_user(request):
@@ -159,7 +262,7 @@ def logout_user(request):
     logout(request)
     return redirect('login-user')
 
-@login_required
+@login_required(login_url="login_user")
 def employer_dashboard(request):
     employer = request.user.employer
 
@@ -233,14 +336,14 @@ def employer_dashboard(request):
         context
     )
 
-# @login_required
+# @login_required(login_url="login_user")
 def browse_job(request):
     job = JobPost.objects.filter(
         status="approved"
     ).order_by("-created_at")
     return render(request, 'pages/browse_job.html', {"job":job})
 
-@login_required
+@login_required(login_url="login_user")
 def job_list(request):
     employer = request.user.employer
 
@@ -252,18 +355,28 @@ def job_list(request):
         "jobs": jobs
     })
 
-@login_required
+@login_required(login_url="login_user")
 def post_job(request):
-    employer = get_object_or_404(Employer, employer=request.user)
+    employer = get_object_or_404(
+        Employer,
+        employer=request.user
+    )
 
     if request.method == "POST":
+
+        salary = request.POST.get("salary")
+
+        # Convert empty salary to None
+        if not salary:
+            salary = None
+
         JobPost.objects.create(
             employer=employer,
             title=request.POST.get("title"),
             description=request.POST.get("description"),
             qualifications=request.POST.get("qualifications"),
             responsibilities=request.POST.get("responsibilities"),
-            salary=request.POST.get("salary"),
+            salary=salary,
             location=request.POST.get("location"),
             job_type=request.POST.get("job_type"),
             vacancies=request.POST.get("vacancies"),
@@ -272,9 +385,12 @@ def post_job(request):
 
         return redirect("job-list")
 
-    return render(request, "components/job_post_form.html")
+    return render(
+        request,
+        "components/job_post_form.html"
+    )
 
-@login_required
+@login_required(login_url="login_user")
 def update_job(request, id):
     employer = get_object_or_404(Employer, employer=request.user)
 
@@ -307,7 +423,7 @@ def update_job(request, id):
         }
     )
 
-@login_required
+@login_required(login_url="login_user")
 def employer_delete_job(request, id):
     employer = get_object_or_404(Employer, employer=request.user)
 
@@ -347,7 +463,7 @@ def company_profile(request, id):
     })
 
 
-@login_required
+@login_required(login_url="login_user")
 def apply_job(request, id):
     print(request.user)
     print(request.user.role)
@@ -373,7 +489,7 @@ def apply_job(request, id):
         "applicant": applicant,
     })
 
-@login_required
+@login_required(login_url="login_user")
 def my_applications(request):
     applications = JobApplication.objects.filter(
         applicant=request.user.applicant_profile
@@ -383,7 +499,7 @@ def my_applications(request):
         "applications": applications
     })
 
-@login_required
+@login_required(login_url="login_user")
 def applicants(request):
     employer = request.user.employer
 
@@ -399,7 +515,7 @@ def applicants(request):
         "applications": applications
     })
 
-@login_required
+@login_required(login_url="login_user")
 def update_applicant_status(request, id):
     application = get_object_or_404(JobApplication, id=id)
 

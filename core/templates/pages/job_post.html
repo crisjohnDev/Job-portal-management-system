@@ -2,6 +2,235 @@
 {% load static %}
 
 {% block content %}
+<style>
+    /* Scoped Clean Light Theme Job Posts Management Styles */
+    .content-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 32px;
+        background: #ffffff;
+        border-bottom: 1px solid #e2e8f0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+
+    .page-title h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #0f172a;
+        letter-spacing: -0.02em;
+    }
+
+    .admin-profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #64748b;
+        font-size: 0.9rem;
+    }
+
+    .admin-profile strong {
+        color: #0f172a;
+    }
+
+    .profile-badge {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .profile-badge svg {
+        width: 20px;
+        height: 20px;
+        stroke: #059669;
+        fill: none;
+    }
+
+    .dashboard-workspace {
+        padding: 32px;
+        background-color: #f8fafc;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        min-height: calc(100vh - 87px);
+    }
+
+    /* Control Panel & Search Bar */
+    .control-panel {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .search-wrapper {
+        position: relative;
+        flex: 1;
+        max-width: 400px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 10px 16px;
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        color: #0f172a;
+        outline: none;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+
+    .search-input:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    /* Data Table Card Structure */
+    .data-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .data-card-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #e2e8f0;
+        background: #ffffff;
+    }
+
+    .data-card-header h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin: 0;
+    }
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 0.9rem;
+    }
+
+    th {
+        background: #f8fafc;
+        color: #475569;
+        padding: 14px 24px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    td {
+        padding: 16px 24px;
+        border-bottom: 1px solid #f1f5f9;
+        color: #1e293b;
+        vertical-align: middle;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tr:hover td {
+        background-color: #f8fafc;
+    }
+
+    .permit-code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.85rem;
+        background: #f1f5f9;
+        color: #334155;
+        padding: 3px 8px;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+    }
+
+    /* Status Badges */
+    .badge-status {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: capitalize;
+        background: #f1f5f9;
+        color: #475569;
+        border: 1px solid #cbd5e1;
+    }
+
+    .badge-status.active {
+        background: #d1fae5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+    }
+
+    /* Action Buttons */
+    .btn-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 14px;
+        font-size: 0.825rem;
+        font-weight: 600;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+    .btn-action-view {
+        color: #2563eb;
+        background-color: #eff6ff;
+        border: 1px solid #bfdbfe;
+    }
+
+    .btn-action-view:hover {
+        background-color: #dbeafe;
+        color: #1d4ed8;
+    }
+
+    .btn-action-approve {
+        color: #059669;
+        background-color: #ecfdf5;
+        border: 1px solid #a7f3d0;
+    }
+
+    .btn-action-approve:hover {
+        background-color: #d1fae5;
+        color: #047857;
+    }
+
+    .btn-action-delete {
+        color: #dc2626;
+        background-color: #fef2f2;
+        border: 1px solid #fecaca;
+    }
+
+    .btn-action-delete:hover {
+        background-color: #fee2e2;
+        color: #b91c1c;
+    }
+</style>
+
 <!-- Header Ribbon Controls -->
 <header class="content-header">
     <div class="page-title">
@@ -10,7 +239,9 @@
     <div class="admin-profile">
         <span>Welcome, <strong>Admin Portal</strong></span>
         <div class="profile-badge">
-            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
         </div>
     </div>
 </header>
@@ -19,12 +250,11 @@
 <div class="dashboard-workspace">
 
     <!-- Sub-Header Management Control Panel Row -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; gap: 16px; flex-wrap: wrap;">
-        <div style="position: relative; flex: 1; max-width: 400px;">
-            <input type="text" placeholder="Search company name or permit number..." 
-                   style="width: 100%; padding: 10px 16px; border: 1px solid var(--border-gray); border-radius: 6px; font-size: 0.9rem; outline: none; transition: border-color 0.2s;"
-                   onfocus="this.style.borderColor='var(--gov-blue-light)'" 
-                   onblur="this.style.borderColor='var(--border-gray)'">
+    <div class="control-panel">
+        <div class="search-wrapper">
+            <input type="text" 
+                   placeholder="Search company name or permit number..." 
+                   class="search-input">
         </div>
     </div>
     
@@ -49,15 +279,15 @@
                     {% for i in jobs %}
                     <tr>
                         <td>
-                            <div style="font-weight: 700; color: var(--text-dark);">{{ i.employer.company_name }}</div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted);">Registered: {{ i.created_at|date:"Y-m-d" }}</div>
+                            <div style="font-weight: 700; color: #0f172a;">{{ i.employer.company_name }}</div>
+                            <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">Registered: {{ i.created_at|date:"Y-m-d" }}</div>
                         </td>
                         <td>
-                            <code style="font-family: monospace; font-size: 0.9rem; background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">{{ i.employer.business_permit_no }}</code>
+                            <code class="permit-code">{{ i.employer.business_permit_no }}</code>
                         </td>
-                        <td>{{ i.employer.contact_no }}</td>
+                        <td style="color: #334155;">{{ i.employer.contact_no }}</td>
                         <td>
-                            <div style="font-weight: 600; color: var(--gov-blue-light)">{{ i.title }}</div>
+                            <div style="font-weight: 600; color: #2563eb;">{{ i.title }}</div>
                         </td>
                         <td>
                             {% if i.status|lower == 'approved' or i.status|lower == 'active' %}
@@ -68,31 +298,20 @@
                         </td>
                         <td style="text-align: right;">
                             <div style="display: inline-flex; gap: 8px; justify-content: flex-end;">
-                                <a href="{% url 'view-job' i.id %}" title="View Profile" style="color: var(--gov-blue); text-decoration: none; font-weight: 600; font-size: 0.85rem; padding: 6px 12px; border: 1px solid var(--gov-blue); border-radius: 4px; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#e2e8f0'" onmouseout="this.style.backgroundColor='transparent'">View</a>
+                                <a href="{% url 'view-job' i.id %}" title="View Profile" class="btn-action btn-action-view">View</a>
                                 
                                 {% if i.status|lower != 'approved' %}
-                                <a href="{% url "approved-job" i.id %}" title="Approve Job Post" style="color: #065f46; text-decoration: none; font-weight: 600; font-size: 0.85rem; padding: 6px 12px; border: 1px solid #065f46; border-radius: 4px; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#d1fae5'" onmouseout="this.style.backgroundColor='transparent'">Approve</a>
+                                <a href="{% url 'approved-job' i.id %}" title="Approve Job Post" class="btn-action btn-action-approve">Approve</a>
                                 {% endif %}
                                 
                                 <form method="POST"
-                                    action="{% url 'delete-job' i.id %}"
-                                    style="display:inline;">
+                                      action="{% url 'delete-job' i.id %}"
+                                      style="display:inline;">
                                     {% csrf_token %}
                                     <button type="submit"
                                             title="Delete Permanently"
                                             onclick="return confirm('Are you sure you want to permanently delete this job post? This action cannot be undone.')"
-                                            style="color: var(--gov-red);
-                                                background: transparent;
-                                                text-decoration: none;
-                                                font-weight: 600;
-                                                font-size: 0.85rem;
-                                                padding: 6px 12px;
-                                                border: 1px solid var(--gov-red);
-                                                border-radius: 4px;
-                                                cursor: pointer;
-                                                transition: all 0.2s;"
-                                            onmouseover="this.style.backgroundColor='#fef2f2'"
-                                            onmouseout="this.style.backgroundColor='transparent'">
+                                            class="btn-action btn-action-delete">
                                         Delete
                                     </button>
                                 </form>
@@ -101,8 +320,8 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-muted);">
-                            No job posts found.
+                        <td colspan="6" style="text-align: center; padding: 40px 0; color: #64748b;">
+                            No job posts found in the system database.
                         </td>
                     </tr>
                     {% endfor %}
@@ -113,7 +332,7 @@
     
 </div>
 
-<!-- Simple Script Injection to handle base.html sidebar highlight dynamically -->
+<!-- Dynamic Active Link Handler Script -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const links = document.querySelectorAll('.sidebar-menu-item a');

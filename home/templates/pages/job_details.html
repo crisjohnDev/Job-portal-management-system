@@ -4,50 +4,57 @@
 {% block content %}
 
 <style>
-    /* 
-       This wrapper neutralizes the absolute positioning of the base header 
-       and forces proper spacing so the card is never covered.
-    */
+    /* Fixed Layout Wrapper: Integrates naturally into home_base flex flow */
     .job-page-wrapper {
         width: 100%;
-        min-height: 100vh;
-        padding: 120px 20px 60px 20px; /* clears the header */
+        max-width: 850px;
+        margin: 20px auto 40px auto; /* Centered with vertical breathing room */
         display: flex;
         justify-content: center;
         align-items: flex-start;
-        overflow-y: auto;
-        position: absolute;
-        top: 0;
-        left: 0;
+        position: relative;
         z-index: 5;
     }
 
     .job-container {
         width: 100%;
-        max-width: 850px;
         background: #ffffff;
-        border-radius: 12px;
+        border-radius: 16px;
         padding: 40px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         text-align: left;
     }
 
     /* Typography Hierarchy */
     .job-title {
-        color: var(--gov-blue);
+        color: #011409;
         font-size: 2.2rem;
         font-weight: 800;
         line-height: 1.2;
         margin-bottom: 6px;
+        letter-spacing: -0.02em;
     }
 
     .company {
         color: #64748b;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         font-weight: 600;
         margin-bottom: 24px;
         text-transform: uppercase;
         letter-spacing: 0.03em;
+    }
+
+    .company-link {
+        color: #059669;
+        text-decoration: none;
+        font-weight: 700;
+        transition: color 0.2s ease;
+    }
+
+    .company-link:hover {
+        color: #047857;
+        text-decoration: underline;
     }
 
     /* Meta Badges */
@@ -61,20 +68,20 @@
     }
 
     .meta span {
-        background: #f1f5f9;
-        color: var(--text-dark);
+        background: #f0fdf4;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
         padding: 6px 14px;
         border-radius: 20px;
         font-size: 0.88rem;
-        font-weight: 500;
+        font-weight: 600;
         display: inline-flex;
         align-items: center;
         gap: 8px;
     }
 
-    /* Custom SVG styling within elements */
     .meta span svg {
-        color: #64748b;
+        color: #059669;
         flex-shrink: 0;
     }
 
@@ -84,15 +91,17 @@
     }
 
     .section h3 {
-        color: var(--gov-blue-light);
-        font-size: 1.15rem;
+        color: #047857;
+        font-size: 1.1rem;
         font-weight: 700;
         margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
     }
 
     .section p {
         color: #334155;
-        font-size: 1rem;
+        font-size: 0.98rem;
         line-height: 1.6;
     }
 
@@ -114,46 +123,37 @@
         background: #64748b;
         color: #ffffff;
         text-decoration: none;
-        border-radius: 6px;
+        border-radius: 99px;
         font-weight: 600;
         font-size: 0.95rem;
-        transition: background-color 0.2s;
+        transition: all 0.2s ease;
     }
 
     .back-btn:hover {
         background: #475569;
+        transform: translateY(-1px);
     }
 
     .apply-btn {
         display: inline-flex;
         align-items: center;
         padding: 12px 36px;
-        background: var(--gov-red);
+        background: #059669;
         color: #ffffff;
         text-decoration: none;
-        border-radius: 6px;
-        font-weight: 600;
+        border: none;
+        border-radius: 99px;
+        font-weight: 700;
         font-size: 0.95rem;
-        transition: background-color 0.2s, transform 0.1s;
-        box-shadow: 0 4px 6px -1px rgba(139, 0, 0, 0.2);
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
     }
 
-    .apply-btn:hover {
-        background: #a30000;
+    .apply-btn:hover:not([disabled]) {
+        background: #047857;
         transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(5, 150, 105, 0.4);
     }
-
-.company-link{
-    color:#2563eb;
-    text-decoration:none;
-    font-weight:700;
-    transition:.2s;
-}
-
-.company-link:hover{
-    color:#1d4ed8;
-    text-decoration:underline;
-}
 </style>
 
 <div class="job-page-wrapper">
@@ -182,8 +182,24 @@
             
             <!-- Salary SVG Icon -->
             <span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                ₱{{ job.salary }}/month
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="12" x2="12" y1="2" y2="22"/>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+
+                {% if job.salary %}
+                    {{ job.salary_display }}/month
+                {% else %}
+                    Salary not specified
+                {% endif %}
             </span>
             
             <!-- Calendar SVG Icon -->
@@ -222,7 +238,6 @@
         <!-- Persistent Action Buttons Footer -->
         <div class="action-footer">
             <a href="{% url 'browse-job' %}" class="back-btn">
-                <!-- Arrow Back SVG Icon -->
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="5" y1="12" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
                 Back to Browse
             </a>
@@ -234,7 +249,7 @@
                         Apply Now
                     </a>
                 {% else %}
-                    <button class="apply-btn" disabled style="opacity:.6; cursor:not-allowed;">
+                    <button class="apply-btn" disabled style="opacity:.6; cursor:not-allowed; background-color: #64748b; box-shadow: none;">
                         Employers cannot apply
                     </button>
                 {% endif %}

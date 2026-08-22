@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/PIODURAN.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/PIODURAN.png' %}">
     <link rel="icon" type="image/png" sizes="192x192" href="{% static 'images/PIODURAN.png' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/PIODURAN.png' %}">
     <meta charset="UTF-8">
@@ -15,12 +15,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* --- Root Theme Variables --- */
+        /* --- Formal Green Theme Variables --- */
         :root {
-            --gov-blue: #0c2340;
-            --gov-blue-light: #1d4ed8;
+            --gov-green: #064e3b;          /* Primary Deep Forest Green */
+            --gov-green-light: #059669;    /* Bright Accent Green */
+            --gov-green-surface: #ecfdf5;  /* Subtle Green Tint */
             --gov-red: #b91c1c;
-            --text-dark: #1e293b;
+            --text-dark: #0f172a;
             --bg-canvas: #f8fafc;
             --sidebar-width: 260px;
         }
@@ -42,7 +43,7 @@
         /* --- Top Header Navigation Layer --- */
         .portal-navbar {
             height: 70px;
-            background-color: var(--gov-blue);
+            background-color: var(--gov-green);
             color: #ffffff;
             display: flex;
             align-items: center;
@@ -53,7 +54,7 @@
             left: 0;
             right: 0;
             z-index: 50;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(6, 78, 59, 0.15);
         }
 
         .portal-brand {
@@ -62,7 +63,6 @@
             gap: 12px;
         }
 
-        /* Target custom rules for the branding logo */
         .portal-logo {
             height: 40px;
             width: auto;
@@ -84,7 +84,7 @@
             text-transform: uppercase;
         }
 
-        /* --- Dashboard Core Layout Matrix --- */
+        /* --- Dashboard Core Layout --- */
         .dashboard-container {
             display: flex;
             min-height: calc(100vh - 70px);
@@ -92,7 +92,7 @@
             width: 100%;
         }
 
-        /* --- Fixed Sidebar Structural System --- */
+        /* --- Fixed Sidebar --- */
         .dashboard-sidebar {
             width: var(--sidebar-width);
             background-color: #ffffff;
@@ -138,24 +138,24 @@
         }
 
         .sidebar-link:hover {
-            background-color: #f1f5f9;
-            color: var(--gov-blue-light);
+            background-color: var(--gov-green-surface);
+            color: var(--gov-green-light);
         }
 
         .sidebar-link:hover svg {
-            color: var(--gov-blue-light);
+            color: var(--gov-green-light);
         }
 
         .sidebar-link.active {
-            background-color: #eff6ff;
-            color: var(--gov-blue-light);
-            border-left: 4px solid var(--gov-blue-light);
+            background-color: var(--gov-green-surface);
+            color: var(--gov-green);
+            border-left: 4px solid var(--gov-green-light);
             border-radius: 0 8px 8px 0;
             padding-left: 12px;
         }
 
         .sidebar-link.active svg {
-            color: var(--gov-blue-light);
+            color: var(--gov-green);
         }
 
         .sidebar-link.logout-link {
@@ -170,7 +170,7 @@
             background-color: #fef2f2;
         }
 
-        /* --- Workspace Stage Context View Canvas --- */
+        /* --- Main Workspace Viewport --- */
         .dashboard-main {
             flex: 1;
             margin-left: var(--sidebar-width);
@@ -179,100 +179,7 @@
             width: calc(100% - var(--sidebar-width));
         }
 
-        /* --- Panel Elements Header --- */
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-            gap: 16px;
-        }
-
-        .dashboard-header h1 {
-            color: var(--gov-blue);
-            font-size: 1.75rem;
-            font-weight: 800;
-            letter-spacing: -0.025em;
-        }
-
-        .company-badge {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: #ffffff;
-            padding: 8px 16px;
-            border-radius: 30px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            flex-shrink: 0;
-        }
-
-        .company-badge svg {
-            width: 18px;
-            height: 18px;
-            color: var(--gov-blue);
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-        }
-
-        .company-badge span {
-            font-weight: 700;
-            font-size: 0.9rem;
-            color: var(--text-dark);
-        }
-
-        /* --- Bento Metrics Architecture Grid --- */
-        .metrics-bento-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-
-        .bento-card {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
-        }
-
-        .bento-card-title {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 8px;
-        }
-
-        .bento-card-value {
-            font-size: 2.25rem;
-            font-weight: 800;
-            color: var(--gov-blue);
-            letter-spacing: -0.025em;
-        }
-
-        /* --- Canvas Content Sections --- */
-        .content-panel-block {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 32px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
-        }
-
-        .content-panel-block h3 {
-            color: var(--gov-blue);
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            border-bottom: 2px solid #f1f5f9;
-            padding-bottom: 12px;
-        }
-
-        /* --- Responsive Viewports Customizations --- */
+        /* --- Responsive Styling --- */
         @media (max-width: 768px) {
             .dashboard-container {
                 flex-direction: column;
@@ -292,10 +199,6 @@
                 width: 100%;
                 padding: 24px 16px;
             }
-            .dashboard-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
         }
     </style>
 </head>
@@ -304,8 +207,6 @@
     <!-- PORTAL STATIC TOP GLOBAL HEADER BAR -->
     <nav class="portal-navbar">
         <div class="portal-brand">
-            <!-- Add dynamic template link syntax if using a static file framework like Django -->
-            <!-- <img src="{% static 'images/logo.png' %}" alt="PESO Logo" class="portal-logo"> -->
             <img src="{% static 'images/PESO.png' %}" alt="PESO Logo" class="portal-logo">
             <h2>PESO Job Placement Portal</h2>
             <span>Employer Center</span>
@@ -316,42 +217,30 @@
         <!-- STICKY SIDE NAVIGATION BAR -->
         <aside class="dashboard-sidebar">
             <div class="sidebar-menu">
-                <a href="{% url 'employer-dashboard' %}" class="sidebar-link">
-                    <!-- Home Icon -->
+                <a href="{% url 'employer-dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'employer-dashboard' %}active{% endif %}">
                     <svg viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                     </svg>
                     Home
                 </a>
                 
-                <a href="{% url 'job-list' %}" class="sidebar-link">
-                    <!-- Job Post Icon -->
+                <a href="{% url 'job-list' %}" class="sidebar-link {% if request.resolver_match.url_name == 'job-list' %}active{% endif %}">
                     <svg viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
                     </svg>
                     Job Post
                 </a>
                 
-                <a href="{% url 'applicants' %}" class="sidebar-link">
-                    <!-- Applicants Icon -->
+                <a href="{% url 'applicants' %}" class="sidebar-link {% if request.resolver_match.url_name == 'applicants' %}active{% endif %}">
                     <svg viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                     </svg>
                     Applicants
                 </a>
-                
-                {% comment %} <a href="#" class="sidebar-link">
-                    <!-- Notification Icon -->
-                    <svg viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-                    </svg>
-                    Notification
-                </a> {% endcomment %}
             </div>
 
             <div class="sidebar-footer">
                 <a href="{% url 'logout_user' %}" class="sidebar-link logout-link">
-                    <!-- Logout Icon -->
                     <svg viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                     </svg>

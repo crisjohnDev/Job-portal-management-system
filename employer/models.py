@@ -41,7 +41,12 @@ class JobPost(models.Model):
     qualifications = models.TextField()
     responsibilities = models.TextField(blank=True)
 
-    salary = models.DecimalField(max_digits=10, decimal_places=2)
+    salary = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True
+    )
 
     location = models.CharField(max_length=255)
 
@@ -55,7 +60,6 @@ class JobPost(models.Model):
 
     deadline = models.DateField()
 
-    # Approval Status
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
@@ -67,12 +71,21 @@ class JobPost(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    approved_at = models.DateTimeField(null=True, blank=True)
+    approved_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    @property
+    def salary_display(self):
+        if self.salary is None:
+            return "Salary not specified"
+
+        return f"₱{self.salary:,.2f}"
 
     def __str__(self):
         return f"{self.title} ({self.status})"
-
-
+    
 class JobApplication(models.Model):
 
     STATUS_CHOICES = (

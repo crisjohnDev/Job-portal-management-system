@@ -3,215 +3,237 @@
 {% block content %}
 
 <style>
+    /* --- Form Card Container --- */
+    .form-card {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px -5px rgba(6, 78, 59, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        overflow: hidden;
+    }
 
-.form-card{
-    max-width:1000px;
-    margin:auto;
-    background:#fff;
-    border:1px solid #e2e8f0;
-    border-radius:12px;
-    box-shadow:0 5px 15px rgba(0,0,0,.05);
-    overflow:hidden;
-}
+    /* --- Form Header Accent --- */
+    .form-header {
+        background-color: var(--gov-green);
+        color: #ffffff;
+        padding: 28px 36px;
+        border-bottom: 3px solid var(--gov-green-light);
+    }
 
-.form-header{
-    background:#0c2340;
-    color:#fff;
-    padding:25px 35px;
-}
+    .form-header h1 {
+        font-size: 1.65rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+    }
 
-.form-header h1{
-    font-size:28px;
-    font-weight:800;
-}
+    .form-header p {
+        margin-top: 6px;
+        color: var(--gov-green-surface);
+        font-size: 0.95rem;
+        opacity: 0.9;
+    }
 
-.form-header p{
-    margin-top:5px;
-    color:#cbd5e1;
-}
+    /* --- Form Layout & Grid --- */
+    .form-body {
+        padding: 36px;
+    }
 
-.form-body{
-    padding:35px;
-}
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
 
-.form-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:22px;
-}
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
 
-.form-group{
-    display:flex;
-    flex-direction:column;
-}
+    .form-group.full {
+        grid-column: 1 / -1;
+    }
 
-.form-group.full{
-    grid-column:1/-1;
-}
+    label {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--text-dark);
+        font-size: 0.9rem;
+    }
 
-label{
-    font-weight:600;
-    margin-bottom:8px;
-    color:#334155;
-}
+    /* --- Form Controls & Focus States --- */
+    input,
+    select,
+    textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        color: var(--text-dark);
+        background-color: #ffffff;
+        transition: all 0.2s ease-in-out;
+        font-family: inherit;
+    }
 
-input,
-select,
-textarea{
-    width:100%;
-    padding:12px 14px;
-    border:1px solid #cbd5e1;
-    border-radius:8px;
-    font-size:15px;
-    transition:.3s;
-    font-family:inherit;
-}
+    textarea {
+        resize: vertical;
+        min-height: 130px;
+    }
 
-textarea{
-    resize:vertical;
-    min-height:140px;
-}
+    input:focus,
+    select:focus,
+    textarea:focus {
+        outline: none;
+        border-color: var(--gov-green-light);
+        box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.15);
+    }
 
-input:focus,
-select:focus,
-textarea:focus{
-    outline:none;
-    border-color:#2563eb;
-    box-shadow:0 0 0 3px rgba(37,99,235,.15);
-}
+    .required {
+        color: var(--gov-red);
+        font-weight: 700;
+    }
 
-.required{
-    color:#dc2626;
-}
+    /* --- Action Controls --- */
+    .form-footer {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 16px;
+        margin-top: 36px;
+        padding-top: 24px;
+        border-top: 1px solid #f1f5f9;
+    }
 
-.form-footer{
-    display:flex;
-    justify-content:flex-end;
-    gap:15px;
-    margin-top:35px;
-}
+    .btn {
+        text-decoration: none;
+        padding: 12px 28px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
 
-.btn{
-    text-decoration:none;
-    padding:12px 24px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    font-size:15px;
-    font-weight:600;
-}
+    .btn-primary {
+        background-color: var(--gov-green);
+        color: #ffffff;
+    }
 
-.btn-primary{
-    background:#2563eb;
-    color:white;
-}
+    .btn-primary:hover {
+        background-color: var(--gov-green-light);
+        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+    }
 
-.btn-primary:hover{
-    background:#1d4ed8;
-}
+    .btn-secondary {
+        background-color: #f1f5f9;
+        color: #475569;
+        border: 1px solid #cbd5e1;
+    }
 
-.btn-secondary{
-    background:#e2e8f0;
-    color:#334155;
-}
+    .btn-secondary:hover {
+        background-color: #e2e8f0;
+        color: var(--text-dark);
+    }
 
-.btn-secondary:hover{
-    background:#cbd5e1;
-}
+    /* --- Mobile Responsiveness --- */
+    @media (max-width: 768px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
 
-@media(max-width:768px){
+        .form-body {
+            padding: 24px 20px;
+        }
 
-.form-grid{
-    grid-template-columns:1fr;
-}
+        .form-header {
+            padding: 20px;
+        }
 
-}
+        .form-footer {
+            flex-direction: column-reverse;
+            gap: 12px;
+        }
 
+        .btn {
+            width: 100%;
+        }
+    }
 </style>
 
 <div class="form-card">
 
     <div class="form-header">
-
         {% if job %}
             <h1>Edit Job Post</h1>
-            <p>Update the information of this job posting.</p>
+            <p>Update the details and requirements of this posting.</p>
         {% else %}
             <h1>Create Job Post</h1>
             <p>Fill in the details below to publish a new job opportunity.</p>
         {% endif %}
-
     </div>
 
     <div class="form-body">
 
         <form method="POST">
-
             {% csrf_token %}
 
             <div class="form-grid">
 
                 <div class="form-group full">
-                    <label>Job Title <span class="required">*</span></label>
+                    <label for="title">Job Title <span class="required">*</span></label>
                     <input type="text"
+                           id="title"
                            name="title"
                            value="{{ job.title|default:'' }}"
-                           placeholder="e.g. Software Developer"
+                           placeholder="e.g. Administrative Officer"
                            required>
                 </div>
 
                 <div class="form-group">
-                    <label>Salary <span class="required">*</span></label>
-                    <input type="number"
-                           name="salary"
-                           value="{{ job.salary|default:'' }}"
-                           placeholder="25000"
-                           >
+                    <label for="salary">Salary (PHP) <span>Optional</span></label>
+
+                    <input
+                        type="number"
+                        id="salary"
+                        name="salary"
+                        value="{{ job.salary|default:'' }}"
+                        placeholder="25000"
+                        min="0"
+                        step="0.01"
+                    >
                 </div>
 
                 <div class="form-group">
-                    <label>Location <span class="required">*</span></label>
+                    <label for="location">Location <span class="required">*</span></label>
                     <input type="text"
+                           id="location"
                            name="location"
                            value="{{ job.location|default:'' }}"
-                           placeholder="Purok, st. , Brgy , Pioduran, Albay"
+                           placeholder="Purok, Brgy, Pioduran, Albay"
                            required>
                 </div>
 
                 <div class="form-group">
-                    <label>Job Type <span class="required">*</span></label>
-
-                    <select name="job_type" required>
-
+                    <label for="job_type">Job Type <span class="required">*</span></label>
+                    <select id="job_type" name="job_type" required>
                         <option value="">Select Job Type</option>
-
-                        <option value="Full Time"
-                        {% if job.job_type == "Full Time" %}selected{% endif %}>
-                        Full Time
-                        </option>
-
-                        <option value="Part Time"
-                        {% if job.job_type == "Part Time" %}selected{% endif %}>
-                        Part Time
-                        </option>
-
-                        <option value="Contract"
-                        {% if job.job_type == "Contract" %}selected{% endif %}>
-                        Contract
-                        </option>
-
-                        <option value="Internship"
-                        {% if job.job_type == "Internship" %}selected{% endif %}>
-                        Internship
-                        </option>
-
+                        <option value="Full Time" {% if job.job_type == "Full Time" %}selected{% endif %}>Full Time</option>
+                        <option value="Part Time" {% if job.job_type == "Part Time" %}selected{% endif %}>Part Time</option>
+                        <option value="Contract" {% if job.job_type == "Contract" %}selected{% endif %}>Contract</option>
+                        <option value="Internship" {% if job.job_type == "Internship" %}selected{% endif %}>Internship</option>
                     </select>
-
                 </div>
 
                 <div class="form-group">
-                    <label>Vacancies <span class="required">*</span></label>
+                    <label for="vacancies">Vacancies <span class="required">*</span></label>
                     <input type="number"
+                           id="vacancies"
                            name="vacancies"
                            value="{{ job.vacancies|default:'' }}"
                            placeholder="5"
@@ -219,52 +241,50 @@ textarea:focus{
                 </div>
 
                 <div class="form-group full">
-                    <label>Application Deadline <span class="required">*</span></label>
+                    <label for="deadline">Application Deadline <span class="required">*</span></label>
                     <input type="date"
+                           id="deadline"
                            name="deadline"
                            value="{{ job.deadline|date:'Y-m-d' }}"
                            required>
                 </div>
 
                 <div class="form-group full">
-                    <label>Job Description <span class="required">*</span></label>
-                    <textarea name="description"
-                              placeholder="Describe the job..."
+                    <label for="description">Job Description <span class="required">*</span></label>
+                    <textarea id="description"
+                              name="description"
+                              placeholder="Provide a overview of the position..."
                               required>{{ job.description|default:'' }}</textarea>
                 </div>
 
                 <div class="form-group full">
-                    <label>Qualifications <span class="required">*</span></label>
-                    <textarea name="qualifications"
-                              placeholder="List qualifications..."
+                    <label for="qualifications">Qualifications <span class="required">*</span></label>
+                    <textarea id="qualifications"
+                              name="qualifications"
+                              placeholder="List key requirements, education, and skills..."
                               required>{{ job.qualifications|default:'' }}</textarea>
                 </div>
 
                 <div class="form-group full">
-                    <label>Responsibilities <span class="required">*</span></label>
-                    <textarea name="responsibilities"
-                              placeholder="List responsibilities..."
-                              >{{ job.responsibilities|default:'' }}</textarea>
+                    <label for="responsibilities">Responsibilities</label>
+                    <textarea id="responsibilities"
+                              name="responsibilities"
+                              placeholder="List primary duties and key functions...">{{ job.responsibilities|default:'' }}</textarea>
                 </div>
 
             </div>
 
             <div class="form-footer">
-
                 <a href="{% url 'job-list' %}" class="btn btn-secondary">
                     Cancel
                 </a>
-
                 <button type="submit" class="btn btn-primary">
-
                     {% if job %}
                         Update Job
                     {% else %}
                         Publish Job
                     {% endif %}
-
                 </button>
-
             </div>
 
         </form>
