@@ -1,0 +1,144 @@
+        <!-- MAIN TITLE & CALL TO ACTIONS -->
+        <div class="hero-content-wrapper">
+            <h2>Connecting job seekers and employers with local employment opportunities and career resources in the Municipality of Pio Duran</h2>
+            
+            <div class="hero-actions">
+                {% if request.user.role == "applicant" or not request.user.is_authenticated %}
+                    <a href="{% url 'browse-job' %}" class="btn-pill-white">Browse Jobs</a>
+                {% else %}
+                    <a href="{% url 'employer-dashboard' %}" class="btn-pill-white">Dashboard</a>
+                {% endif %}
+                <a href="#learn-more" class="btn-pill-outline">Learn More</a>
+            </div>
+        </div>
+
+        <div class="browse-container">
+            
+            <!-- MAIN LIVE SEARCH & JOB VACANCIES LIST -->
+            <main class="main-search-column">
+                <h2 class="section-title">Job Vacancies in Pioduran</h2>
+                
+                <!-- Live Search Field Input -->
+                <div class="search-box-wrapper">
+                    <input type="text" id="liveSearch" class="search-input" placeholder="Search by job title, company, skills, or tags...">
+                </div>
+
+                <!-- Dynamic Target Postings Container -->
+                <div id="jobPostingsList">
+
+                    {% for i in job %}
+                    
+                    <!-- Dynamic Job Post Card -->
+                    <div class="job-card" data-searchable="{{ i.title|lower }} {{ i.employer.company_name|lower }} {{ i.location|lower }} {{ i.description|lower }}">
+                        <div class="job-title">{{ i.title }}</div>
+                        <div class="job-company">{{ i.employer.company_name }}</div>
+                        <div class="job-meta-details">
+                            <span class="meta-item">📍 {{ i.location }}</span>
+                            <span class="meta-item">💼 {{ i.job_type }}</span>
+                            <span class="meta-item">₱ {{ i.salary }} / month</span>
+                        </div>
+                        <p class="job-description">
+                            {{ i.description }}
+                        </p>
+                        <a href="{% url 'job_details' i.id %}" class="btn-apply">View Details</a>
+                    </div>
+                    {% empty %}
+                    <!-- Fallback Empty UI Element when database context is empty -->
+                    <div class="no-results" style="display: block;">
+                        No job vacancies match your current search terms. Please check back later or modify your keyword queries.
+                    </div>
+                    {% endfor %}
+
+                    <!-- Dynamic No Results Message for JavaScript filter operations -->
+                    <div id="noResultsMessage" class="no-results">
+                        No job vacancies match your current search terms. Please check back later or modify your keyword queries.
+                    </div>
+                </div>
+            </main>
+
+        </div>
+
+        <!-- FEATURED JOB VACANCIES GRID -->
+        <div class="featured-jobs-wrapper">
+            <h3 class="section-title">Featured Job Vacancies</h3>
+            <div class="jobs-scroll-grid">
+                
+                <!-- CARD 1 -->
+                <div class="job-card">
+                    <div>
+                        <h4>Job Title</h4>
+                        <p>Location: Pio Duran, Albay</p>
+                    </div>
+                    <a href="{% url 'browse-job' %}" class="btn-view-job">View Job</a>
+                </div>
+
+                <!-- CARD 2 -->
+                <div class="job-card">
+                    <div>
+                        <h4>Company</h4>
+                        <p>Location: Pio Duran, Albay</p>
+                    </div>
+                    <a href="{% url 'browse-job' %}" class="btn-view-job">View Job</a>
+                </div>
+
+                <!-- CARD 3 -->
+                <div class="job-card">
+                    <div>
+                        <h4>Job Title</h4>
+                        <p>Job Type: Full-Time</p>
+                    </div>
+                    <a href="{% url 'browse-job' %}" class="btn-view-job">View Job</a>
+                </div>
+
+                <!-- CARD 4 -->
+                <div class="job-card">
+                    <div>
+                        <h4>Job Title</h4>
+                        <p>Job Type: Full-Time</p>
+                    </div>
+                    <a href="{% url 'browse-job' %}" class="btn-view-job">View Job</a>
+                </div>
+
+                <!-- CARD 5 -->
+                <div class="job-card">
+                    <div>
+                        <h4>Company</h4>
+                        <p>Job Type: Full-Time</p>
+                    </div>
+                    <a href="{% url 'browse-job' %}" class="btn-view-job">View Job</a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- PORTAL STATISTICS -->
+        <div class="stats-wrapper">
+            <h3 class="section-title">Portal Statistics</h3>
+            <div class="stats-grid">
+                
+                <div class="stat-card">
+                    <div>
+                        <div class="stat-num">125+</div>
+                        <div class="stat-label">Registered<br>Applicants</div>
+                    </div>
+                    <span class="arrow-icon">›</span>
+                </div>
+
+                <div class="stat-card">
+                    <div>
+                        <div class="stat-num">35+</div>
+                        <div class="stat-label">Active<br>Job Vacancies</div>
+                    </div>
+                    <span class="arrow-icon">›</span>
+                </div>
+
+                <div class="stat-card">
+                    <div>
+                        <div class="stat-num">72</div>
+                        <div class="stat-label">Successful<br>Placements</div>
+                    </div>
+                    <span class="arrow-icon">›</span>
+                </div>
+
+            </div>
+        </div>

@@ -8,6 +8,10 @@ from employer.models import Employer, JobPost, JobApplication
 from django.views.decorators.http import require_POST
 from applicant.models import Applicant
 from django.db.models import Count
+from django.core.mail import send_mail
+from django.conf import settings
+from django.utils import timezone
+
 def login_view(request):
     create_default_admin()
 
@@ -68,15 +72,137 @@ def employer_detail(request, id):
 
 @login_required(login_url="login_user")
 def suspend_employer(request, id):
+
     employer = get_object_or_404(Employer, id=id)
+
+    # =========================================================
+    # GET EMAIL FROM RELATED USER ACCOUNT
+    # =========================================================
+
+    employer_email = employer.employer.email
+
+    # =========================================================
+    # TOGGLE EMPLOYER STATUS
+    # =========================================================
 
     employer.is_active = not employer.is_active
     employer.save()
 
+    # =========================================================
+    # EMPLOYER ACTIVATED
+    # =========================================================
+
     if employer.is_active:
-        messages.success(request, f"{employer.company_name} has been activated.")
+
+        subject = "Your Employer Account Has Been Activated"
+
+        message = f"""
+Hello {employer.company_name},
+
+Good news!
+
+Your employer account has been successfully activated.
+
+You can now log in to your employer account and continue using the PESO system.
+
+Company:
+{employer.company_name}
+
+Your account is now active and you may access the employer features available to your account.
+
+Thank you.
+
+PESO Pio Duran
+Public Employment Service Office
+"""
+
+        if employer_email:
+
+            try:
+
+                send_mail(
+                    subject,
+                    message,
+                    None,
+                    [employer_email],
+                    fail_silently=False,
+                )
+
+                messages.success(
+                    request,
+                    f"{employer.company_name} has been activated and an activation email has been sent."
+                )
+
+            except Exception as e:
+
+                messages.warning(
+                    request,
+                    f"{employer.company_name} has been activated, but the activation email could not be sent."
+                )
+
+        else:
+
+            messages.success(
+                request,
+                f"{employer.company_name} has been activated."
+            )
+
+    # =========================================================
+    # EMPLOYER SUSPENDED
+    # =========================================================
+
     else:
-        messages.warning(request, f"{employer.company_name} has been suspended.")
+
+        subject = "Your Employer Account Has Been Suspended"
+
+        message = f"""
+Hello {employer.company_name},
+
+This is to inform you that your employer account has been suspended.
+
+Company:
+{employer.company_name}
+
+Your account is currently inactive and you will not be able to access the employer features of the PESO system while your account is suspended.
+
+If you believe this suspension was made in error or you need assistance, please contact the PESO Pio Duran office.
+
+Thank you.
+
+PESO Pio Duran
+Public Employment Service Office
+"""
+
+        if employer_email:
+
+            try:
+
+                send_mail(
+                    subject,
+                    message,
+                    None,
+                    [employer_email],
+                    fail_silently=False,
+                )
+
+                messages.warning(
+                    request,
+                    f"{employer.company_name} has been suspended and a suspension email has been sent."
+                )
+
+            except Exception as e:
+
+                messages.warning(
+                    request,
+                    f"{employer.company_name} has been suspended, but the suspension email could not be sent."
+                )
+
+        else:
+
+            messages.warning(
+                request,
+                f"{employer.company_name} has been suspended."
+            )
 
     return redirect("employer-list")
 
@@ -109,41 +235,198 @@ def view_job(request, id):
 
 @login_required(login_url="login_user")
 def approve_job(request, id):
+
     job = get_object_or_404(JobPost, id=id)
 
-    # Allow only admins
+    # =========================================================
+    # ALLOW ONLY ADMINS
+    # =========================================================
+
     if not request.user.is_superuser and request.user.role != "admin":
-        messages.error(request, "You are not authorized to approve job posts.")
+
+        messages.error(
+            request,
+            "You are not authorized to approve job posts."
+        )
+
         return redirect("job-post-list")
+
+
+    # =========================================================
+    # APPROVE JOB
+    # =========================================================
 
     if request.method == "POST":
-        job.status = "approved"      
-        job.is_approved = True      
+
+        job.status = "approved"
+        job.approved_at = timezone.now()
         job.save()
 
-        messages.success(request, "Job post has been approved and published.")
+
+        # =====================================================
+        # GET EMPLOYER EMAIL
+        # =====================================================
+
+        employer_email = job.employer.employer.email
+
+
+        # =====================================================
+        # SEND APPROVAL EMAIL
+        # =====================================================
+
+        if employer_email:
+
+            subject = "Your Job Post Has Been Approved"
+
+            message = f"""
+Hello {job.employer.company_name},
+
+Good news!
+
+Your job posting has been approved by the PESO Pio Duran administrator.
+
+JOB DETAILS
+----------------------------------------
+
+Job Title:
+{job.title}
+
+Job Type:
+{job.get_job_type_display()}
+
+Location:
+{job.location}
+
+Vacancies:
+{job.vacancies}
+
+Salary:
+{job.salary_display}
+
+Application Deadline:
+{job.deadline.strftime("%B %d, %Y")}
+
+----------------------------------------
+
+Your job post is now approved and published on the PESO system.
+
+Applicants can now view your job posting and submit applications.
+
+Please log in to your employer account to monitor your job posting and applications.
+
+Thank you for using the PESO Pio Duran Job Portal.
+
+PESO Pio Duran
+Public Employment Service Office
+"""
+
+
+            try:
+
+                send_mail(
+                    subject,
+                    message,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [employer_email],
+                    fail_silently=False,
+                )
+
+                messages.success(
+                    request,
+                    f"Job post '{job.title}' has been approved and published. "
+                    f"An approval email has been sent to the employer."
+                )
+
+            except Exception:
+
+                messages.warning(
+                    request,
+                    f"Job post '{job.title}' has been approved and published, "
+                    f"but the approval email could not be sent."
+                )
+
+        else:
+
+            messages.success(
+                request,
+                f"Job post '{job.title}' has been approved and published."
+            )
+
+
         return redirect("job-post-list")
 
-    return render(request, "components/approved_job.html", {
-        "job": job
-    })
+
+    # =========================================================
+    # APPROVAL CONFIRMATION PAGE
+    # =========================================================
+
+    return render(
+        request,
+        "components/approved_job.html",
+        {
+            "job": job
+        }
+    )
 
 @login_required(login_url="login_user")
 @require_POST
 def delete_job(request, id):
-    job = get_object_or_404(JobPost, id=id)
+
+    # =========================================================
+    # ADMIN ACCESS ONLY
+    # =========================================================
+
+    if not request.user.is_superuser and request.user.role != "admin":
+
+        messages.error(
+            request,
+            "You are not authorized to delete job posts."
+        )
+
+        return redirect("job-list")
+
+
+    # =========================================================
+    # GET JOB
+    # =========================================================
+
+    job = get_object_or_404(
+        JobPost.objects.select_related("employer"),
+        id=id
+    )
+
+
+    # =========================================================
+    # SAVE INFORMATION BEFORE DELETE
+    # =========================================================
 
     title = job.title
-    company = job.employer.company_name
+
+    company = (
+        job.employer.company_name
+        if job.employer
+        else "Unknown Company"
+    )
+
+
+    # =========================================================
+    # DELETE
+    # =========================================================
 
     job.delete()
+
+
+    # =========================================================
+    # SUCCESS MESSAGE
+    # =========================================================
 
     messages.success(
         request,
         f'"{title}" from {company} has been deleted successfully.'
     )
 
-    return redirect("job-list") 
+
+    return redirect("job-list")
 
 @login_required(login_url="login_user")
 def applicant_list(request):

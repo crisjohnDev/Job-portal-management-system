@@ -1,63 +1,755 @@
 {% extends 'base.html' %}
+
 {% load static %}
 
 {% block content %}
-<!-- Header Ribbon Controls -->
-<header class="content-header">
-    <div class="page-title">
+
+<style>
+
+/* =========================================================
+   AUTHORIZE JOB PUBLICATION PAGE
+========================================================= */
+
+.authorize-page {
+    width: 100%;
+    min-height: 100vh;
+    padding: 45px 40px 70px;
+    background-color: #f8fafc;
+}
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.authorize-header {
+    max-width: 900px;
+    margin: 0 auto 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.authorize-title h2 {
+    color: #0f172a;
+    font-size: 1.65rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+}
+
+.authorize-title p {
+    color: #64748b;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   ADMIN BADGE
+========================================================= */
+
+.admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #64748b;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.admin-profile strong {
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.profile-badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-badge svg {
+    width: 20px;
+    height: 20px;
+    stroke: #059669;
+    fill: none;
+}
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.authorize-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.authorize-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+}
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.authorize-card-header {
+    padding: 22px 26px;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f0fdf4;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.approval-icon {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #d1fae5;
+    border: 1px solid #a7f3d0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.approval-icon svg {
+    width: 23px;
+    height: 23px;
+    stroke: #059669;
+    fill: none;
+}
+
+.authorize-card-header h3 {
+    color: #065f46;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.authorize-card-header span {
+    display: block;
+    color: #047857;
+    font-size: 0.78rem;
+    margin-top: 3px;
+}
+
+/* =========================================================
+   CARD BODY
+========================================================= */
+
+.authorize-card-body {
+    padding: 28px;
+}
+
+.confirmation-message {
+    color: #334155;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    margin-bottom: 25px;
+}
+
+.confirmation-message strong {
+    color: #059669;
+}
+
+/* =========================================================
+   JOB INFORMATION
+========================================================= */
+
+.job-information {
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 28px;
+}
+
+.job-information-header {
+    padding: 13px 18px;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+
+.job-information-header h4 {
+    color: #475569;
+    font-size: 0.83rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.job-details {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.job-details tr:not(:last-child) {
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.job-details td {
+    padding: 15px 18px;
+    vertical-align: middle;
+}
+
+.job-details .label {
+    width: 35%;
+    color: #64748b;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.job-details .value {
+    color: #0f172a;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.job-details .job-title {
+    color: #059669;
+    font-weight: 700;
+}
+
+.permit-number {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 5px;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    color: #334155;
+    font-family: "Courier New", monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+}
+
+/* =========================================================
+   WARNING BOX
+========================================================= */
+
+.approval-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 15px 17px;
+    margin-bottom: 28px;
+    border-radius: 9px;
+    background: #fffbeb;
+    border: 1px solid #fef3c7;
+}
+
+.approval-warning svg {
+    width: 19px;
+    height: 19px;
+    flex-shrink: 0;
+    stroke: #d97706;
+    fill: none;
+    margin-top: 1px;
+}
+
+.approval-warning p {
+    color: #92400e;
+    font-size: 0.79rem;
+    line-height: 1.55;
+}
+
+.approval-warning strong {
+    color: #b45309;
+}
+
+/* =========================================================
+   ACTION BUTTONS & LOADING ANIMATION
+========================================================= */
+
+.authorize-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 5px;
+}
+
+.cancel-button,
+.publish-button {
+    min-height: 43px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.84rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.cancel-button {
+    color: #475569;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+}
+
+.cancel-button:hover {
+    color: #0f172a;
+    background: #e2e8f0;
+    border-color: #94a3b8;
+}
+
+.publish-button {
+    color: #ffffff;
+    background: #059669;
+    border: 1px solid #059669;
+    box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.2);
+}
+
+.publish-button:hover {
+    background: #047857;
+    border-color: #047857;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px -2px rgba(5, 150, 105, 0.3);
+}
+
+.publish-button svg,
+.cancel-button svg {
+    width: 17px;
+    height: 17px;
+    stroke: currentColor;
+    fill: none;
+}
+
+/* Spinner Animation */
+.spinner {
+    display: none;
+    width: 17px;
+    height: 17px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #ffffff;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.publish-button.is-loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.publish-button.is-loading .btn-icon {
+    display: none;
+}
+
+.publish-button.is-loading .spinner {
+    display: inline-block;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+    .authorize-page {
+        padding: 35px 25px 60px;
+    }
+
+    .authorize-header {
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 700px) {
+    .authorize-page {
+        padding: 25px 16px 50px;
+    }
+
+    .authorize-header {
+        display: block;
+        margin-bottom: 22px;
+    }
+
+    .authorize-title h2 {
+        font-size: 1.35rem;
+    }
+
+    .admin-profile {
+        margin-top: 15px;
+    }
+
+    .authorize-card-body {
+        padding: 20px;
+    }
+
+    .authorize-card-header {
+        padding: 18px 20px;
+    }
+
+    .job-details,
+    .job-details tbody,
+    .job-details tr,
+    .job-details td {
+        display: block;
+        width: 100%;
+    }
+
+    .job-details tr {
+        padding: 12px 0;
+    }
+
+    .job-details td {
+        padding: 4px 16px;
+    }
+
+    .job-details .label {
+        padding-bottom: 2px;
+        font-size: 0.74rem;
+    }
+
+    .job-details .value {
+        padding-top: 2px;
+    }
+
+    .authorize-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .cancel-button,
+    .publish-button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 420px) {
+    .authorize-card-header {
+        align-items: flex-start;
+    }
+
+    .approval-icon {
+        width: 39px;
+        height: 39px;
+    }
+
+    .approval-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .authorize-card-header h3 {
+        font-size: 0.95rem;
+    }
+}
+
+</style>
+
+<!-- =========================================================
+     PAGE
+========================================================= -->
+
+<div class="authorize-page">
+
+<!-- =====================================================
+     HEADER
+====================================================== -->
+
+<header class="authorize-header">
+
+    <div class="authorize-title">
+
         <h2>Authorize Job Publication</h2>
+
+        <p>
+            Review the job posting details before publishing it
+            to the public PESO job portal.
+        </p>
+
     </div>
+
     <div class="admin-profile">
-        <span>Welcome, <strong>Admin Portal</strong></span>
+
+        <span>
+            Welcome, <strong>Admin Portal</strong>
+        </span>
+
         <div class="profile-badge">
-            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+
+            <svg
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z">
+                </path>
+            </svg>
+
         </div>
+
     </div>
+
 </header>
 
-<!-- Context Content Area -->
-<div class="dashboard-workspace" style="max-width: 700px; margin: 0 auto;">
 
-    <!-- Action Card -->
-    <div class="data-card" style="border-top: 4px solid var(--success-green);">
-        <div class="data-card-header">
-            <h3>Confirm Job Post Approval</h3>
-        </div>
-        
-        <div style="padding: 24px;">
-            <p style="margin-bottom: 20px; color: var(--text-dark); line-height: 1.5;">
-                You are about to authorize and publish the following job listing to the dynamic public portal stream. Applicants will be permitted to submit applications immediately upon execution.
-            </p>
+<!-- =====================================================
+     CONTENT
+====================================================== -->
 
-            <!-- Verification Info Table -->
-            <div style="background-color: #f8fafc; border: 1px solid var(--border-gray); border-radius: 6px; padding: 20px; margin-bottom: 24px;">
-                <table style="width: 100%; border-collapse: collapse;">
-                    <tr>
-                        <td style="padding: 8px 0; font-weight: 600; color: var(--text-muted); width: 35%;">Company Name:</td>
-                        <td style="padding: 8px 0; font-weight: 700; color: var(--text-dark);">{{ job.employer.company_name }}</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 8px 0; font-weight: 600; color: var(--text-muted);">Job Title:</td>
-                        <td style="padding: 8px 0; font-weight: 700; color: var(--gov-blue-light);">{{ job.title }}</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 8px 0; font-weight: 600; color: var(--text-muted);">Permit Number:</td>
-                        <td style="padding: 8px 0;"><code style="font-family: monospace; background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">{{ job.employer.business_permit_no }}</code></td>
-                    </tr>
-                </table>
+<div class="authorize-container">
+
+    <div class="authorize-card">
+
+
+        <!-- =================================================
+             CARD HEADER
+        ================================================== -->
+
+        <div class="authorize-card-header">
+
+            <div class="approval-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14">
+                    </path>
+
+                    <polyline points="22 4 12 14.01 9 11.01">
+                    </polyline>
+                </svg>
+
             </div>
 
-            <!-- Execution Controls Form -->
-            <form method="POST" style="display: flex; gap: 12px; justify-content: flex-end;">
-                {% csrf_token %}
-                <a href="{% url 'job-post-list' %}" style="text-decoration: none; color: var(--text-dark); font-weight: 600; font-size: 0.9rem; padding: 10px 20px; border: 1px solid var(--border-gray); border-radius: 6px; background: #ffffff; transition: background 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#ffffff'">
-                    Cancel & Return
-                </a>
-                <button type="submit" style="cursor: pointer; color: white; font-weight: 600; font-size: 0.9rem; padding: 10px 24px; border: none; border-radius: 6px; background-color: var(--success-green); transition: opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
-                    Confirm & Publish Post
-                </button>
-            </form>
+            <div>
+
+                <h3>
+                    Confirm Job Post Approval
+                </h3>
+
+                <span>
+                    Administrative authorization required
+                </span>
+
+            </div>
+
         </div>
+
+
+        <!-- =================================================
+             CARD BODY
+        ================================================== -->
+
+        <div class="authorize-card-body">
+
+
+            <!-- Confirmation Message -->
+
+            <p class="confirmation-message">
+
+                You are about to authorize and publish this job
+                listing to the public PESO job portal.
+                Once published, <strong>applicants will be able
+                to view the position and submit applications
+                immediately.</strong>
+
+            </p>
+
+
+            <!-- =================================================
+                 JOB INFORMATION
+            ================================================== -->
+
+            <div class="job-information">
+
+                <div class="job-information-header">
+
+                    <h4>
+                        Job Posting Information
+                    </h4>
+
+                </div>
+
+                <table class="job-details">
+
+                    <tbody>
+
+                        <tr>
+
+                            <td class="label">
+                                Company Name
+                            </td>
+
+                            <td class="value">
+                                {{ job.employer.company_name }}
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td class="label">
+                                Job Title
+                            </td>
+
+                            <td class="value job-title">
+                                {{ job.title }}
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td class="label">
+                                Business Permit Number
+                            </td>
+
+                            <td class="value">
+
+                                <span class="permit-number">
+                                    {{ job.employer.business_permit_no }}
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- =================================================
+                 WARNING
+            ================================================== -->
+
+            <div class="approval-warning">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                    </path>
+
+                    <line x1="12" y1="9" x2="12" y2="13">
+                    </line>
+
+                    <line x1="12" y1="17" x2="12.01" y2="17">
+                    </line>
+                </svg>
+
+                <p>
+                    <strong>Important:</strong>
+                    Publishing this job post will make it visible
+                    on the public job portal. Make sure that the
+                    employer and job information above has been
+                    reviewed and verified before continuing.
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 FORM ACTIONS
+            ================================================== -->
+
+            <form method="POST" id="authorizeForm">
+
+                {% csrf_token %}
+
+                <div class="authorize-actions">
+
+                    <a
+                        href="{% url 'job-post-list' %}"
+                        class="cancel-button"
+                    >
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <line x1="18" y1="6" x2="6" y2="18">
+                            </line>
+
+                            <line x1="6" y1="6" x2="18" y2="18">
+                            </line>
+                        </svg>
+
+                        Cancel & Return
+
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="publish-button"
+                        id="publishBtn"
+                    >
+
+                        <span class="spinner"></span>
+
+                        <svg
+                            class="btn-icon"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <polyline points="20 6 9 17 4 12">
+                            </polyline>
+                        </svg>
+
+                        <span class="btn-text">Confirm & Publish Post</span>
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
     </div>
+
 </div>
+
+</div>
+
+<!-- =========================================================
+     SCRIPT FOR LOADING STATE
+========================================================= -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const authorizeForm = document.getElementById("authorizeForm");
+        const publishBtn = document.getElementById("publishBtn");
+        const btnText = publishBtn.querySelector(".btn-text");
+
+        authorizeForm.addEventListener("submit", function() {
+            publishBtn.classList.add("is-loading");
+            btnText.textContent = "Publishing...";
+        });
+    });
+</script>
+
 {% endblock %}

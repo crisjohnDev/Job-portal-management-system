@@ -110,6 +110,19 @@ class JobApplication(models.Model):
 
     message = models.TextField(blank=True)
 
+    # Application-specific documents
+    resume = models.FileField(
+        upload_to="job_applications/resumes/",
+        blank=True,
+        null=True
+    )
+
+    cover_letter = models.FileField(
+        upload_to="job_applications/cover_letters/",
+        blank=True,
+        null=True
+    )
+
     applied_at = models.DateTimeField(auto_now_add=True)
 
     status = models.CharField(

@@ -1,9 +1,14 @@
+
 {% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
+
 <style>
-    /* Scoped Clean Light Theme Job Posts Management Styles */
+    /* =========================================================
+       SCOPED CLEAN LIGHT THEME JOB POSTS MANAGEMENT STYLES
+    ========================================================= */
+
     .content-header {
         display: flex;
         justify-content: space-between;
@@ -60,7 +65,10 @@
         min-height: calc(100vh - 87px);
     }
 
-    /* Control Panel & Search Bar */
+    /* =========================================================
+       CONTROL PANEL & SEARCH
+    ========================================================= */
+
     .control-panel {
         display: flex;
         justify-content: space-between;
@@ -86,6 +94,7 @@
         outline: none;
         transition: all 0.2s ease;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        box-sizing: border-box;
     }
 
     .search-input:focus {
@@ -93,7 +102,10 @@
         box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
 
-    /* Data Table Card Structure */
+    /* =========================================================
+       DATA TABLE CARD
+    ========================================================= */
+
     .data-card {
         background: #ffffff;
         border: 1px solid #e2e8f0;
@@ -163,7 +175,10 @@
         border: 1px solid #e2e8f0;
     }
 
-    /* Status Badges */
+    /* =========================================================
+       STATUS BADGES
+    ========================================================= */
+
     .badge-status {
         display: inline-flex;
         align-items: center;
@@ -183,19 +198,37 @@
         border: 1px solid #a7f3d0;
     }
 
-    /* Action Buttons */
+    /* =========================================================
+       ACTION BUTTONS
+    ========================================================= */
+
+    .action-group {
+        display: inline-flex;
+        gap: 8px;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
     .btn-action {
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        gap: 7px;
         padding: 6px 14px;
+        min-width: 76px;
+        box-sizing: border-box;
         font-size: 0.825rem;
         font-weight: 600;
         border-radius: 6px;
         text-decoration: none;
         transition: all 0.2s ease;
         cursor: pointer;
+        position: relative;
     }
+
+    /* =========================================================
+       VIEW
+    ========================================================= */
 
     .btn-action-view {
         color: #2563eb;
@@ -208,6 +241,10 @@
         color: #1d4ed8;
     }
 
+    /* =========================================================
+       APPROVE
+    ========================================================= */
+
     .btn-action-approve {
         color: #059669;
         background-color: #ecfdf5;
@@ -219,6 +256,10 @@
         color: #047857;
     }
 
+    /* =========================================================
+       DELETE
+    ========================================================= */
+
     .btn-action-delete {
         color: #dc2626;
         background-color: #fef2f2;
@@ -229,118 +270,665 @@
         background-color: #fee2e2;
         color: #b91c1c;
     }
+
+    /* =========================================================
+       LOADING STATE
+    ========================================================= */
+
+    .btn-action.loading {
+        cursor: not-allowed;
+        opacity: 0.75;
+        pointer-events: none;
+    }
+
+    .btn-action:disabled {
+        cursor: not-allowed;
+        opacity: 0.75;
+    }
+
+    .normal-content {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .loading-content {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+    }
+
+    .btn-action.loading .normal-content {
+        display: none;
+    }
+
+    .btn-action.loading .loading-content {
+        display: inline-flex;
+    }
+
+    /* =========================================================
+       SPINNER
+    ========================================================= */
+
+    .button-spinner {
+        width: 14px;
+        height: 14px;
+        border: 2px solid currentColor;
+        border-right-color: transparent;
+        border-radius: 50%;
+        display: inline-block;
+        animation: buttonSpin 0.7s linear infinite;
+        flex-shrink: 0;
+    }
+
+    @keyframes buttonSpin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* =========================================================
+       SEARCH LOADING EFFECT
+    ========================================================= */
+
+    .search-input.searching {
+        background-image: linear-gradient(
+            90deg,
+            #ffffff 0%,
+            #f8fafc 50%,
+            #ffffff 100%
+        );
+
+        background-size: 200% 100%;
+        animation: searchLoading 1.2s linear infinite;
+    }
+
+    @keyframes searchLoading {
+        from {
+            background-position: 200% 0;
+        }
+
+        to {
+            background-position: -200% 0;
+        }
+    }
+
+    /* =========================================================
+       MOBILE
+    ========================================================= */
+
+    @media (max-width: 768px) {
+
+        .content-header {
+            padding: 20px;
+        }
+
+        .dashboard-workspace {
+            padding: 20px;
+        }
+
+        .admin-profile {
+            display: none;
+        }
+
+        th,
+        td {
+            padding: 12px 14px;
+        }
+
+        .action-group {
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            min-width: 75px;
+        }
+    }
 </style>
 
-<!-- Header Ribbon Controls -->
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
 <header class="content-header">
+
     <div class="page-title">
         <h2>List of Job Posts</h2>
     </div>
+
     <div class="admin-profile">
-        <span>Welcome, <strong>Admin Portal</strong></span>
+
+        <span>
+            Welcome, <strong>Admin Portal</strong>
+        </span>
+
         <div class="profile-badge">
-            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+            <svg
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
             </svg>
+
         </div>
+
     </div>
+
 </header>
 
-<!-- Context Content Area -->
+
+<!-- =========================================================
+     WORKSPACE
+========================================================= -->
+
 <div class="dashboard-workspace">
 
-    <!-- Sub-Header Management Control Panel Row -->
+
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
+
     <div class="control-panel">
+
         <div class="search-wrapper">
-            <input type="text" 
-                   placeholder="Search company name or permit number..." 
-                   class="search-input">
+
+            <input
+                type="text"
+                id="jobSearch"
+                placeholder="Search company name or permit number..."
+                class="search-input"
+                autocomplete="off"
+            >
+
         </div>
+
     </div>
-    
-    <!-- Data Table Card Container -->
+
+
+    <!-- =====================================================
+         DATA TABLE
+    ====================================================== -->
+
     <div class="data-card">
+
         <div class="data-card-header">
-            <h3>Job Applications Matrix</h3>
+
+            <h3>
+                Job Applications Matrix
+            </h3>
+
         </div>
+
         <div class="table-responsive">
-            <table>
+
+            <table id="jobTable">
+
                 <thead>
+
                     <tr>
+
                         <th>Company Name</th>
                         <th>Business Permit No.</th>
                         <th>Contact No.</th>
                         <th>Job Title</th>
                         <th>Status</th>
-                        <th style="text-align: right;">System Actions</th>
+
+                        <th style="text-align: right;">
+                            System Actions
+                        </th>
+
                     </tr>
+
                 </thead>
+
+
                 <tbody>
+
                     {% for i in jobs %}
-                    <tr>
+
+                    <tr class="job-row">
+
+                        <!-- =================================================
+                             COMPANY
+                        ================================================== -->
+
                         <td>
-                            <div style="font-weight: 700; color: #0f172a;">{{ i.employer.company_name }}</div>
-                            <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">Registered: {{ i.created_at|date:"Y-m-d" }}</div>
-                        </td>
-                        <td>
-                            <code class="permit-code">{{ i.employer.business_permit_no }}</code>
-                        </td>
-                        <td style="color: #334155;">{{ i.employer.contact_no }}</td>
-                        <td>
-                            <div style="font-weight: 600; color: #2563eb;">{{ i.title }}</div>
-                        </td>
-                        <td>
-                            {% if i.status|lower == 'approved' or i.status|lower == 'active' %}
-                                <span class="badge-status active">{{ i.status }}</span>
-                            {% else %}
-                                <span class="badge-status">{{ i.status }}</span>
-                            {% endif %}
-                        </td>
-                        <td style="text-align: right;">
-                            <div style="display: inline-flex; gap: 8px; justify-content: flex-end;">
-                                <a href="{% url 'view-job' i.id %}" title="View Profile" class="btn-action btn-action-view">View</a>
-                                
-                                {% if i.status|lower != 'approved' %}
-                                <a href="{% url 'approved-job' i.id %}" title="Approve Job Post" class="btn-action btn-action-approve">Approve</a>
-                                {% endif %}
-                                
-                                <form method="POST"
-                                      action="{% url 'delete-job' i.id %}"
-                                      style="display:inline;">
-                                    {% csrf_token %}
-                                    <button type="submit"
-                                            title="Delete Permanently"
-                                            onclick="return confirm('Are you sure you want to permanently delete this job post? This action cannot be undone.')"
-                                            class="btn-action btn-action-delete">
-                                        Delete
-                                    </button>
-                                </form>
+
+                            <div
+                                style="
+                                    font-weight: 700;
+                                    color: #0f172a;
+                                "
+                            >
+                                {{ i.employer.company_name }}
                             </div>
+
+                            <div
+                                style="
+                                    font-size: 0.78rem;
+                                    color: #64748b;
+                                    margin-top: 2px;
+                                "
+                            >
+                                Registered:
+                                {{ i.created_at|date:"Y-m-d" }}
+                            </div>
+
                         </td>
+
+
+                        <!-- =================================================
+                             BUSINESS PERMIT
+                        ================================================== -->
+
+                        <td>
+
+                            <code class="permit-code">
+                                {{ i.employer.business_permit_no }}
+                            </code>
+
+                        </td>
+
+
+                        <!-- =================================================
+                             CONTACT
+                        ================================================== -->
+
+                        <td style="color: #334155;">
+
+                            {{ i.employer.contact_no }}
+
+                        </td>
+
+
+                        <!-- =================================================
+                             JOB TITLE
+                        ================================================== -->
+
+                        <td>
+
+                            <div
+                                style="
+                                    font-weight: 600;
+                                    color: #2563eb;
+                                "
+                            >
+                                {{ i.title }}
+                            </div>
+
+                        </td>
+
+
+                        <!-- =================================================
+                             STATUS
+                        ================================================== -->
+
+                        <td>
+
+                            {% if i.status|lower == 'approved' or i.status|lower == 'active' %}
+
+                                <span class="badge-status active">
+                                    {{ i.status }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge-status">
+                                    {{ i.status }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- =================================================
+                             ACTIONS
+                        ================================================== -->
+
+                        <td style="text-align: right;">
+
+                            <div class="action-group">
+
+
+                                <!-- =================================================
+                                     VIEW
+                                ================================================== -->
+
+                                <a
+                                    href="{% url 'view-job' i.id %}"
+                                    title="View Job Post"
+                                    class="btn-action btn-action-view"
+                                    onclick="return handleView(this, event);"
+                                >
+
+                                    <span class="normal-content">
+                                        View
+                                    </span>
+
+                                    <span class="loading-content">
+
+                                        <span class="button-spinner"></span>
+                                        Loading...
+
+                                    </span>
+
+                                </a>
+
+
+                                <!-- =================================================
+                                     APPROVE
+                                ================================================== -->
+
+                                {% if i.status|lower != 'approved' %}
+
+                                <a
+                                    href="{% url 'approved-job' i.id %}"
+                                    title="Approve Job Post"
+                                    class="btn-action btn-action-approve"
+                                    onclick="return handleApprove(this, event);"
+                                >
+
+                                    <span class="normal-content">
+                                        Approve
+                                    </span>
+
+                                    <span class="loading-content">
+
+                                        <span class="button-spinner"></span>
+                                        Approving...
+
+                                    </span>
+
+                                </a>
+
+                                {% endif %}
+
+
+                                <!-- =================================================
+                                     DELETE
+                                ================================================== -->
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'delete-job' i.id %}"
+                                    class="delete-job-form"
+                                    style="display:inline;"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        title="Delete Permanently"
+                                        class="btn-action btn-action-delete"
+                                    >
+
+                                        <span class="normal-content">
+                                            Delete
+                                        </span>
+
+                                        <span class="loading-content">
+
+                                            <span class="button-spinner"></span>
+                                            Deleting...
+
+                                        </span>
+
+                                    </button>
+
+                                </form>
+
+
+                            </div>
+
+                        </td>
+
                     </tr>
+
                     {% empty %}
+
                     <tr>
-                        <td colspan="6" style="text-align: center; padding: 40px 0; color: #64748b;">
+
+                        <td
+                            colspan="6"
+                            style="
+                                text-align: center;
+                                padding: 40px 0;
+                                color: #64748b;
+                            "
+                        >
                             No job posts found in the system database.
                         </td>
+
                     </tr>
+
                     {% endfor %}
+
                 </tbody>
+
             </table>
+
         </div>
+
     </div>
-    
+
 </div>
 
-<!-- Dynamic Active Link Handler Script -->
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const links = document.querySelectorAll('.sidebar-menu-item a');
-        links.forEach(link => {
-            if (link.getAttribute('href') === window.location.pathname || link.href === window.location.href) {
-                link.parentElement.classList.add('active');
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    let actionInProgress = false;
+
+
+    /* =========================================================
+       VIEW BUTTON
+    ========================================================= */
+
+    window.handleView = function (button, event) {
+
+        if (actionInProgress) {
+
+            event.preventDefault();
+
+            return false;
+        }
+
+        actionInProgress = true;
+
+        button.classList.add("loading");
+
+        return true;
+    };
+
+
+    /* =========================================================
+       APPROVE BUTTON
+    ========================================================= */
+
+    window.handleApprove = function (button, event) {
+
+        if (actionInProgress) {
+
+            event.preventDefault();
+
+            return false;
+        }
+
+
+        const confirmed = confirm(
+            "Are you sure you want to approve this job post?"
+        );
+
+
+        if (!confirmed) {
+
+            event.preventDefault();
+
+            return false;
+        }
+
+
+        actionInProgress = true;
+
+        button.classList.add("loading");
+
+        return true;
+    };
+
+
+    /* =========================================================
+       DELETE FORMS
+    ========================================================= */
+
+    const deleteForms =
+        document.querySelectorAll(".delete-job-form");
+
+
+    deleteForms.forEach(function (form) {
+
+        form.addEventListener("submit", function (event) {
+
+            if (actionInProgress) {
+
+                event.preventDefault();
+
+                return;
             }
+
+
+            const confirmed = confirm(
+                "Are you sure you want to permanently delete this job post? This action cannot be undone."
+            );
+
+
+            if (!confirmed) {
+
+                event.preventDefault();
+
+                return;
+            }
+
+
+            actionInProgress = true;
+
+
+            const button =
+                form.querySelector("button");
+
+
+            if (button) {
+
+                button.classList.add("loading");
+
+                button.disabled = true;
+
+            }
+
         });
+
     });
+
+
+    /* =========================================================
+       SEARCH
+    ========================================================= */
+
+    const searchInput =
+        document.getElementById("jobSearch");
+
+
+    if (searchInput) {
+
+        searchInput.addEventListener("input", function () {
+
+            const searchValue =
+                this.value.toLowerCase().trim();
+
+
+            const rows =
+                document.querySelectorAll(".job-row");
+
+
+            this.classList.add("searching");
+
+
+            setTimeout(function () {
+
+                rows.forEach(function (row) {
+
+                    const rowText =
+                        row.textContent.toLowerCase();
+
+
+                    if (
+                        rowText.includes(searchValue)
+                    ) {
+
+                        row.style.display = "";
+
+                    } else {
+
+                        row.style.display = "none";
+
+                    }
+
+                });
+
+
+                searchInput.classList.remove("searching");
+
+            }, 120);
+
+        });
+
+    }
+
+
+    /* =========================================================
+       SIDEBAR ACTIVE LINK
+    ========================================================= */
+
+    const links =
+        document.querySelectorAll(
+            ".sidebar-menu-item a"
+        );
+
+
+    links.forEach(function (link) {
+
+        if (
+            link.getAttribute("href") ===
+            window.location.pathname
+
+            ||
+
+            link.href === window.location.href
+        ) {
+
+            link.parentElement.classList.add("active");
+
+        }
+
+    });
+
+});
+
 </script>
+
 {% endblock %}

@@ -1,536 +1,1953 @@
+
 {% extends 'home_base.html' %}
 {% load static %}
 
 {% block content %}
+
 <style>
-    /* --- Registration Layout Context Positioning --- */
+
+/* =========================================================
+   REGISTRATION PAGE
+========================================================= */
+
+.job-page-wrapper {
+    width: 100%;
+    min-height: calc(100vh - 140px);
+    padding: 40px 20px 80px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    position: relative;
+    z-index: 1;
+}
+
+
+/* =========================================================
+   MAIN FORM CARD
+========================================================= */
+
+.form-workspace-card {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    max-width: 950px;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px -15px rgba(6, 78, 59, 0.15);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    overflow: hidden;
+    text-align: left;
+}
+
+
+/* =========================================================
+   LEFT SIDEBAR
+========================================================= */
+
+.form-sidebar-panel {
+    flex: 1;
+    max-width: 320px;
+    background: linear-gradient(180deg, #022c22 0%, #064e3b 100%);
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #ffffff;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+.sidebar-brand h2 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    color: #ffffff;
+}
+
+
+.sidebar-brand p {
+    color: #a7f3d0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   STEP INDICATOR
+========================================================= */
+
+.step-indicator-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 40px 0;
+    position: relative;
+}
+
+
+.step-indicator-bar::before {
+    content: '';
+    position: absolute;
+    left: 23px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.15);
+    z-index: 1;
+}
+
+
+.step-node {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #a7f3d0;
+    transition: all 0.3s ease;
+}
+
+
+.step-node-dot {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #022c22;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #a7f3d0;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+
+.step-node.active {
+    color: #ffffff;
+}
+
+
+.step-node.active .step-node-dot {
+    border-color: #34d399;
+    background: #10b981;
+    color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.3);
+}
+
+
+.step-node.completed .step-node-dot {
+    border-color: #059669;
+    background: #059669;
+    color: #ffffff;
+}
+
+
+.step-node.completed {
+    color: #ecfdf5;
+}
+
+
+/* =========================================================
+   RIGHT FORM PANEL
+========================================================= */
+
+.form-body-panel {
+    flex: 2;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* =========================================================
+   FORM STEPS
+========================================================= */
+
+.form-step-panel {
+    display: none;
+}
+
+
+.form-step-panel.active {
+    display: block;
+}
+
+
+/* =========================================================
+   FIELD LAYOUT
+========================================================= */
+
+.field-row {
+    display: flex;
+    gap: 20px;
+}
+
+
+.field-group {
+    margin-bottom: 24px;
+    flex: 1;
+}
+
+
+.field-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #064e3b;
+    margin-bottom: 8px;
+}
+
+
+/* =========================================================
+   NORMAL INPUTS
+========================================================= */
+
+.field-group input[type="text"],
+.field-group input[type="email"],
+.field-group input[type="password"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    color: #0f172a;
+    outline: none;
+    background-color: #f8fafc;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+
+.field-group input:focus {
+    border-color: #10b981;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+
+/* =========================================================
+   PASSWORD WRAPPER
+========================================================= */
+
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+
+.password-wrapper input[type="password"],
+.password-wrapper input[type="text"] {
+    width: 100%;
+    padding: 12px 48px 12px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    color: #0f172a;
+    outline: none;
+    background-color: #f8fafc;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+
+.password-wrapper input:focus {
+    border-color: #10b981;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+
+/* =========================================================
+   PASSWORD SHOW / HIDE BUTTON
+========================================================= */
+
+.password-toggle {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 36px;
+    height: 36px;
+
+    border: none;
+    background: transparent;
+
+    color: #64748b;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 6px;
+
+    padding: 0;
+
+    transition: all 0.2s ease;
+}
+
+
+.password-toggle:hover {
+    color: #059669;
+    background: #ecfdf5;
+}
+
+
+.password-toggle:focus {
+    outline: 2px solid rgba(16, 185, 129, 0.3);
+    outline-offset: 1px;
+}
+
+
+.password-toggle svg {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* =========================================================
+   PASSWORD REQUIREMENTS
+========================================================= */
+
+.password-requirements {
+    margin-top: 10px;
+    padding: 13px 14px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 7px;
+}
+
+
+.password-requirements-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 8px;
+}
+
+
+.password-rule {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    font-size: 0.75rem;
+
+    color: #64748b;
+
+    margin: 6px 0;
+
+    transition: all 0.2s ease;
+}
+
+
+.password-rule .rule-icon {
+    width: 17px;
+    height: 17px;
+
+    border-radius: 50%;
+
+    background: #cbd5e1;
+
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    flex-shrink: 0;
+
+    transition: all 0.2s ease;
+}
+
+
+.password-rule.valid {
+    color: #059669;
+}
+
+
+.password-rule.valid .rule-icon {
+    background: #10b981;
+}
+
+
+.password-rule.invalid {
+    color: #64748b;
+}
+
+
+/* =========================================================
+   PASSWORD ERROR
+========================================================= */
+
+.password-error {
+    display: none;
+
+    margin-top: 8px;
+
+    padding: 8px 10px;
+
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+
+    color: #b91c1c;
+
+    border-radius: 6px;
+
+    font-size: 0.75rem;
+
+    font-weight: 600;
+}
+
+
+.password-error.show {
+    display: block;
+}
+
+
+/* =========================================================
+   FILE DROPZONE
+========================================================= */
+
+.file-dropzone-wrapper {
+    position: relative;
+
+    border: 2px dashed #cbd5e1;
+
+    background: #f8fafc;
+
+    border-radius: 8px;
+
+    padding: 24px 20px;
+
+    text-align: center;
+
+    transition: all 0.2s ease;
+
+    cursor: pointer;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.file-dropzone-wrapper:hover {
+    border-color: #10b981;
+    background: #ecfdf5;
+}
+
+
+.file-dropzone-wrapper svg {
+    color: #64748b;
+    transition: color 0.2s;
+}
+
+
+.file-dropzone-wrapper:hover svg {
+    color: #059669;
+}
+
+
+.file-dropzone-wrapper input[type="file"] {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    opacity: 0;
+
+    cursor: pointer;
+}
+
+
+.file-upload-text {
+    font-size: 0.9rem;
+    color: #475569;
+}
+
+
+.file-upload-text strong {
+    color: #059669;
+}
+
+
+.file-upload-tip {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+
+.file-selected-name {
+    font-size: 0.85rem;
+    color: #059669;
+    font-weight: 600;
+    margin-top: 4px;
+    display: none;
+}
+
+
+/* =========================================================
+   FOOTER BUTTONS
+========================================================= */
+
+.flow-control-footer {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: auto;
+
+    padding-top: 30px;
+
+    border-top: 1px solid #e2e8f0;
+
+    gap: 16px;
+}
+
+
+.btn-flow {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 12px 28px;
+
+    font-size: 0.95rem;
+
+    font-weight: 600;
+
+    border-radius: 99px;
+
+    cursor: pointer;
+
+    border: none;
+
+    transition: all 0.2s ease;
+}
+
+
+.btn-flow-back {
+    background-color: #e2e8f0;
+    color: #0f172a;
+}
+
+
+.btn-flow-back:hover {
+    background-color: #cbd5e1;
+}
+
+
+.btn-flow-next {
+    background-color: #059669;
+    color: #ffffff;
+
+    margin-left: auto;
+
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+}
+
+
+.btn-flow-next:hover {
+    background-color: #047857;
+
+    box-shadow: 0 6px 16px rgba(4, 120, 87, 0.35);
+
+    transform: translateY(-1px);
+}
+
+
+.btn-flow-submit {
+    background-color: #10b981;
+    color: #ffffff;
+
+    margin-left: auto;
+
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+
+.btn-flow-submit:hover {
+    background-color: #059669;
+
+    box-shadow: 0 6px 16px rgba(5, 150, 105, 0.4);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   ERROR MESSAGE
+========================================================= */
+
+.form-error {
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+
+    color: #b91c1c;
+
+    padding: 12px 16px;
+
+    border-radius: 8px;
+
+    font-size: 0.9rem;
+
+    font-weight: 600;
+
+    margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width: 850px) {
+
     .job-page-wrapper {
-        width: 100%;
-        min-height: calc(100vh - 140px);
-        padding: 40px 20px 80px 20px; /* Generous bottom padding to prevent footer overlaps */
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        position: relative; /* Restores standard layout flow relative to header & footer */
-        z-index: 1;
+        padding-top: 20px;
     }
 
-    /* Landscape Dual-Panel Canvas Dashboard Box */
+
     .form-workspace-card {
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(10px);
-        width: 100%;
-        max-width: 950px;
-        border-radius: 12px;
-        box-shadow: 0 20px 40px -15px rgba(6, 78, 59, 0.15);
-        border: 1px solid #e2e8f0;
-        display: flex;
-        overflow: hidden;
-        text-align: left;
+        flex-direction: column;
     }
 
-    /* Left Aesthetic Context Sidebar Panel - Municipal Green Theme */
+
     .form-sidebar-panel {
-        flex: 1;
-        max-width: 320px;
-        background: linear-gradient(180deg, #022c22 0%, #064e3b 100%);
-        padding: 40px 30px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        color: #ffffff;
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        max-width: 100%;
+        padding: 30px;
     }
 
-    .sidebar-brand h2 {
-        font-size: 1.75rem;
-        font-weight: 800;
-        letter-spacing: -0.01em;
-        line-height: 1.2;
-        margin-bottom: 12px;
-        color: #ffffff;
-    }
 
-    .sidebar-brand p {
-        color: #a7f3d0;
-        font-size: 0.9rem;
-        line-height: 1.5;
-    }
-
-    /* Right Inputs Workflow Panel */
-    .form-body-panel {
-        flex: 2;
-        padding: 40px;
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* --- Visual Step Progress Tracker Indicators --- */
     .step-indicator-bar {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        margin: 40px 0;
-        position: relative;
+        flex-direction: row;
+
+        justify-content: space-between;
+
+        margin: 20px 0 0 0;
+
+        gap: 10px;
     }
+
 
     .step-indicator-bar::before {
-        content: '';
-        position: absolute;
-        left: 23px;
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background: rgba(255, 255, 255, 0.15);
-        z-index: 1;
-    }
-
-    .step-node {
-        position: relative;
-        z-index: 2;
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: #a7f3d0;
-        transition: all 0.3s ease;
-    }
-
-    .step-node-dot {
-        width: 46px;
-        height: 46px;
-        border-radius: 50%;
-        background: #022c22;
-        border: 2px solid rgba(255, 255, 255, 0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        color: #a7f3d0;
-        transition: all 0.3s ease;
-        flex-shrink: 0;
-    }
-
-    .step-node.active {
-        color: #ffffff;
-    }
-
-    .step-node.active .step-node-dot {
-        border-color: #34d399;
-        background: #10b981;
-        color: #ffffff;
-        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.3);
-    }
-
-    .step-node.completed .step-node-dot {
-        border-color: #059669;
-        background: #059669;
-        color: #ffffff;
-    }
-
-    .step-node.completed {
-        color: #ecfdf5;
-    }
-
-    /* --- Workspace Form Panels & Inputs Grid Layout --- */
-    .form-step-panel {
         display: none;
     }
 
-    .form-step-panel.active {
-        display: block;
+
+    .step-node span {
+        display: none;
     }
+}
+
+
+@media(max-width: 600px) {
 
     .field-row {
-        display: flex;
-        gap: 20px;
-    }
-
-    .field-group {
-        margin-bottom: 24px;
-        flex: 1;
-    }
-
-    .field-group label {
-        display: block;
-        font-size: 0.8rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: #064e3b;
-        margin-bottom: 8px;
-    }
-
-    .field-group input[type="text"],
-    .field-group input[type="email"],
-    .field-group input[type="password"] {
-        width: 100%;
-        padding: 12px 16px;
-        border: 1px solid #cbd5e1;
-        border-radius: 6px;
-        font-size: 0.95rem;
-        color: #0f172a;
-        outline: none;
-        background-color: #f8fafc;
-        transition: all 0.2s ease;
-    }
-
-    .field-group input:focus {
-        border-color: #10b981;
-        background-color: #ffffff;
-        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-    }
-
-    /* --- Custom Drag & Drop File Dropzone --- */
-    .file-dropzone-wrapper {
-        position: relative;
-        border: 2px dashed #cbd5e1;
-        background: #f8fafc;
-        border-radius: 8px;
-        padding: 24px 20px;
-        text-align: center;
-        transition: all 0.2s ease;
-        cursor: pointer;
-        display: flex;
         flex-direction: column;
-        align-items: center;
-        gap: 8px;
+        gap: 0;
     }
 
-    .file-dropzone-wrapper:hover {
-        border-color: #10b981;
-        background: #ecfdf5;
+
+    .form-body-panel {
+        padding: 25px 20px;
     }
 
-    .file-dropzone-wrapper svg {
-        color: #64748b;
-        transition: color 0.2s;
-    }
 
-    .file-dropzone-wrapper:hover svg {
-        color: #059669;
-    }
-
-    .file-dropzone-wrapper input[type="file"] {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        cursor: pointer;
-    }
-
-    .file-upload-text {
-        font-size: 0.9rem;
-        color: #475569;
-    }
-
-    .file-upload-text strong {
-        color: #059669;
-    }
-
-    .file-upload-tip {
-        font-size: 0.75rem;
-        color: #94a3b8;
-    }
-
-    .file-selected-name {
-        font-size: 0.85rem;
-        color: #059669;
-        font-weight: 600;
-        margin-top: 4px;
-        display: none;
-    }
-
-    /* --- Footer Action Flow Controls --- */
     .flow-control-footer {
-        display: flex;
-        justify-content: space-between;
-        margin-top: auto;
-        padding-top: 30px;
-        border-top: 1px solid #e2e8f0;
-        gap: 16px;
+        flex-wrap: wrap;
     }
+
 
     .btn-flow {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 12px 28px;
-        font-size: 0.95rem;
-        font-weight: 600;
-        border-radius: 99px;
-        cursor: pointer;
-        border: none;
-        transition: all 0.2s ease;
+        padding: 11px 20px;
     }
+}
 
-    .btn-flow-back {
-        background-color: #e2e8f0;
-        color: #0f172a;
-    }
-
-    .btn-flow-back:hover {
-        background-color: #cbd5e1;
-    }
-
-    .btn-flow-next {
-        background-color: #059669;
-        color: #ffffff;
-        margin-left: auto;
-        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
-    }
-
-    .btn-flow-next:hover {
-        background-color: #047857;
-        box-shadow: 0 6px 16px rgba(4, 120, 87, 0.35);
-        transform: translateY(-1px);
-    }
-
-    .btn-flow-submit {
-        background-color: #10b981;
-        color: #ffffff;
-        margin-left: auto;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-    }
-
-    .btn-flow-submit:hover {
-        background-color: #059669;
-        box-shadow: 0 6px 16px rgba(5, 150, 105, 0.4);
-        transform: translateY(-1px);
-    }
-
-    .form-error {
-        background: #fef2f2;
-        border: 1px solid #fecaca;
-        color: #b91c1c;
-        padding: 12px 16px;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        margin-bottom: 20px;
-    }
-
-    /* Responsive Breakpoint Adjustment Rules */
-    @media(max-width: 850px) {
-        .job-page-wrapper {
-            padding-top: 20px;
-        }
-        .form-workspace-card {
-            flex-direction: column;
-        }
-        .form-sidebar-panel {
-            max-width: 100%;
-            padding: 30px;
-        }
-        .step-indicator-bar {
-            flex-direction: row;
-            justify-content: space-between;
-            margin: 20px 0 0 0;
-            gap: 10px;
-        }
-        .step-indicator-bar::before {
-            display: none;
-        }
-        .step-node span {
-            display: none;
-        }
-    }
-
-    @media(max-width: 600px) {
-        .field-row {
-            flex-direction: column;
-            gap: 0;
-        }
-    }
 </style>
 
+
+<!-- =========================================================
+     PAGE
+========================================================= -->
+
 <div class="job-page-wrapper">
+
     <div class="form-workspace-card">
-        
-        <!-- Left Panel View Area -->
+
+
+        <!-- =================================================
+             LEFT SIDEBAR
+        ================================================== -->
+
         <div class="form-sidebar-panel">
+
             <div class="sidebar-brand">
-                <h2>Applicant Registration</h2>
-                <p>Create your institutional account to browse open jobs, apply to municipal listings, and manage your employment records.</p>
+
+                <h2>
+                    Applicant Registration
+                </h2>
+
+                <p>
+                    Create your institutional account to browse
+                    open jobs, apply to municipal listings, and
+                    manage your employment records.
+                </p>
+
             </div>
 
-            <!-- Vertical Progress Visual Tracker System -->
+
+            <!-- =================================================
+                 STEP INDICATOR
+            ================================================== -->
+
             <div class="step-indicator-bar">
+
                 <div class="step-node active" id="indicator-1">
-                    <div class="step-node-dot">1</div>
-                    <span>Account Setup</span>
+
+                    <div class="step-node-dot">
+                        1
+                    </div>
+
+                    <span>
+                        Account Setup
+                    </span>
+
                 </div>
+
+
                 <div class="step-node" id="indicator-2">
-                    <div class="step-node-dot">2</div>
-                    <span>Personal Profile</span>
+
+                    <div class="step-node-dot">
+                        2
+                    </div>
+
+                    <span>
+                        Personal Profile
+                    </span>
+
                 </div>
+
             </div>
 
-            <div class="sidebar-footer" style="font-size: 0.75rem; color: rgba(255,255,255,0.5);">
+
+            <div
+                class="sidebar-footer"
+                style="font-size: 0.75rem; color: rgba(255,255,255,0.5);"
+            >
                 PESO Pio Duran &copy; 2026
             </div>
+
         </div>
 
-        <!-- Right Form Input Fields Panel Box -->
+
+        <!-- =================================================
+             RIGHT FORM PANEL
+        ================================================== -->
+
         <div class="form-body-panel">
+
+
+            <!-- =================================================
+                 SERVER ERROR
+            ================================================== -->
+
             {% if error %}
+
                 <div class="form-error">
                     {{ error }}
                 </div>
+
             {% endif %}
-            <form id="registrationForm" method="POST" enctype="multipart/form-data" action="#">
+
+
+            <form
+                id="registrationForm"
+                method="POST"
+                enctype="multipart/form-data"
+                action="#"
+            >
+
                 {% csrf_token %}
 
-                <!-- STAGE PANEL 1: ACCOUNT DETAILS -->
-                <div class="form-step-panel active" id="step-panel-1">
+
+                <!-- =================================================
+                     STEP 1 - ACCOUNT DETAILS
+                ================================================== -->
+
+                <div
+                    class="form-step-panel active"
+                    id="step-panel-1"
+                >
+
+
+                    <!-- USERNAME -->
+
                     <div class="field-group">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" name="username" placeholder="Choose a unique username" required>
+
+                        <label for="username">
+                            Username
+                        </label>
+
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Choose a unique username"
+                            autocomplete="username"
+                            required
+                        >
+
                     </div>
+
+
+                    <!-- PASSWORD -->
+
                     <div class="field-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" placeholder="Create a secure password" required>
+
+                        <label for="password">
+                            Password
+                        </label>
+
+
+                        <div class="password-wrapper">
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Create a secure password"
+                                autocomplete="new-password"
+                                minlength="8"
+                                required
+                            >
+
+
+                            <!-- SHOW / HIDE PASSWORD -->
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                id="passwordToggle"
+                                onclick="togglePassword()"
+                                aria-label="Show password"
+                                title="Show password"
+                            >
+
+                                <!-- NORMAL EYE -->
+
+                                <svg
+                                    id="eyeIcon"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+
+                                    <path
+                                        d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"
+                                    />
+
+                                    <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="3"
+                                    />
+
+                                </svg>
+
+                            </button>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             PASSWORD REQUIREMENTS
+                        ================================================== -->
+
+                        <div class="password-requirements">
+
+                            <div class="password-requirements-title">
+                                Password must contain:
+                            </div>
+
+
+                            <div
+                                class="password-rule invalid"
+                                id="rule-length"
+                            >
+
+                                <span class="rule-icon">
+                                    ✓
+                                </span>
+
+                                <span>
+                                    At least 8 characters
+                                </span>
+
+                            </div>
+
+
+                            <div
+                                class="password-rule invalid"
+                                id="rule-uppercase"
+                            >
+
+                                <span class="rule-icon">
+                                    ✓
+                                </span>
+
+                                <span>
+                                    At least 1 uppercase letter (A-Z)
+                                </span>
+
+                            </div>
+
+
+                            <div
+                                class="password-rule invalid"
+                                id="rule-lowercase"
+                            >
+
+                                <span class="rule-icon">
+                                    ✓
+                                </span>
+
+                                <span>
+                                    At least 1 lowercase letter (a-z)
+                                </span>
+
+                            </div>
+
+
+                            <div
+                                class="password-rule invalid"
+                                id="rule-number"
+                            >
+
+                                <span class="rule-icon">
+                                    ✓
+                                </span>
+
+                                <span>
+                                    At least 1 number (0-9)
+                                </span>
+
+                            </div>
+
+
+                            <div
+                                class="password-rule invalid"
+                                id="rule-special"
+                            >
+
+                                <span class="rule-icon">
+                                    ✓
+                                </span>
+
+                                <span>
+                                    At least 1 special character
+                                    (!@#$%^&*)
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PASSWORD ERROR -->
+
+                        <div
+                            class="password-error"
+                            id="passwordError"
+                        >
+                            Password does not meet the required
+                            security rules.
+                        </div>
+
                     </div>
+
                 </div>
 
-                <!-- STAGE PANEL 2: PERSONAL & PROFESSIONAL DETAILS -->
-                <div class="form-step-panel" id="step-panel-2">
-                    <!-- Name Grid Row -->
+
+                <!-- =================================================
+                     STEP 2 - PERSONAL & PROFESSIONAL DETAILS
+                ================================================== -->
+
+                <div
+                    class="form-step-panel"
+                    id="step-panel-2"
+                >
+
+
+                    <!-- NAME -->
+
                     <div class="field-row">
+
+
                         <div class="field-group">
-                            <label for="first_name">First Name</label>
-                            <input type="text" id="first_name" name="first_name" placeholder="First Name">
+
+                            <label for="first_name">
+                                First Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="first_name"
+                                name="first_name"
+                                placeholder="First Name"
+                            >
+
                         </div>
+
+
                         <div class="field-group">
-                            <label for="last_name">Last Name</label>
-                            <input type="text" id="last_name" name="last_name" placeholder="Last Name">
+
+                            <label for="last_name">
+                                Last Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="last_name"
+                                name="last_name"
+                                placeholder="Last Name"
+                            >
+
                         </div>
+
                     </div>
+
+
+                    <!-- MIDDLE NAME -->
 
                     <div class="field-group">
-                        <label for="middle_name">Middle Name</label>
-                        <input type="text" id="middle_name" name="middle_name" placeholder="Middle Name (Optional)">
+
+                        <label for="middle_name">
+                            Middle Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="middle_name"
+                            name="middle_name"
+                            placeholder="Middle Name (Optional)"
+                        >
+
                     </div>
 
-                    <!-- Contact Grid Row -->
+
+                    <!-- CONTACT -->
+
                     <div class="field-row">
+
+
                         <div class="field-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" placeholder="e.g., juandelacruz@email.com">
+
+                            <label for="email">
+                                Email Address
+                            </label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="e.g., juandelacruz@email.com"
+                            >
+
                         </div>
+
+
                         <div class="field-group">
-                            <label for="phone_number">Phone Number</label>
-                            <input type="text" id="phone_number" name="phone_number" placeholder="e.g., 09123456789">
+
+                            <label for="phone_number">
+                                Phone Number
+                            </label>
+
+                            <input
+                                type="text"
+                                id="phone_number"
+                                name="phone_number"
+                                placeholder="e.g., 09123456789"
+                            >
+
                         </div>
+
                     </div>
 
-                    <!-- Document Upload 1: Resume Dropzone -->
+
+                    <!-- =================================================
+                         RESUME UPLOAD
+                    ================================================== -->
+
                     <div class="field-group">
-                        <label>Upload Resume</label>
+
+                        <label>
+                            Upload Resume
+                        </label>
+
+
                         <div class="file-dropzone-wrapper">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m15 15-3-3-3 3"/></svg>
-                            <div class="file-upload-text">Drop your resume here or <strong>browse files</strong></div>
-                            <div class="file-upload-tip">Supports PDF, DOC, DOCX up to 5MB</div>
-                            <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" onchange="handleFileSelection(this, 'resumeSelectedName')">
-                            <div class="file-selected-name" id="resumeSelectedName"></div>
+
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="36"
+                                height="36"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+
+                                <path
+                                    d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"
+                                />
+
+                                <path
+                                    d="M12 12v9"
+                                />
+
+                                <path
+                                    d="m15 15-3-3-3 3"
+                                />
+
+                            </svg>
+
+
+                            <div class="file-upload-text">
+                                Drop your resume here or
+                                <strong>browse files</strong>
+                            </div>
+
+
+                            <div class="file-upload-tip">
+                                Supports PDF, DOC, DOCX up to 5MB
+                            </div>
+
+
+                            <input
+                                type="file"
+                                id="resume"
+                                name="resume"
+                                accept=".pdf,.doc,.docx"
+                                onchange="handleFileSelection(this, 'resumeSelectedName')"
+                            >
+
+
+                            <div
+                                class="file-selected-name"
+                                id="resumeSelectedName"
+                            ></div>
+
                         </div>
+
                     </div>
 
-                    <!-- Document Upload 2: Cover Letter Dropzone -->
+
+                    <!-- =================================================
+                         COVER LETTER UPLOAD
+                    ================================================== -->
+
                     <div class="field-group">
-                        <label>Upload Cover Letter</label>
+
+                        <label>
+                            Upload Cover Letter
+                        </label>
+
+
                         <div class="file-dropzone-wrapper">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-                            <div class="file-upload-text">Drop your cover letter here or <strong>browse files</strong></div>
-                            <div class="file-upload-tip">Supports PDF, DOC, DOCX up to 5MB</div>
-                            <input type="file" id="cover_letter" name="cover_letter" accept=".pdf,.doc,.docx" onchange="handleFileSelection(this, 'coverLetterSelectedName')">
-                            <div class="file-selected-name" id="coverLetterSelectedName"></div>
+
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="36"
+                                height="36"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+
+                                <path
+                                    d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
+                                />
+
+                                <polyline
+                                    points="14 2 14 8 20 8"
+                                />
+
+                                <line
+                                    x1="12"
+                                    y1="18"
+                                    x2="12"
+                                    y2="12"
+                                />
+
+                                <line
+                                    x1="9"
+                                    y1="15"
+                                    x2="15"
+                                    y2="15"
+                                />
+
+                            </svg>
+
+
+                            <div class="file-upload-text">
+                                Drop your cover letter here or
+                                <strong>browse files</strong>
+                            </div>
+
+
+                            <div class="file-upload-tip">
+                                Supports PDF, DOC, DOCX up to 5MB
+                            </div>
+
+
+                            <input
+                                type="file"
+                                id="cover_letter"
+                                name="cover_letter"
+                                accept=".pdf,.doc,.docx"
+                                onchange="handleFileSelection(this, 'coverLetterSelectedName')"
+                            >
+
+
+                            <div
+                                class="file-selected-name"
+                                id="coverLetterSelectedName"
+                            ></div>
+
                         </div>
+
                     </div>
+
                 </div>
 
-                <!-- NAVIGATION INTERACTION CONTROLS -->
+
+                <!-- =================================================
+                     NAVIGATION BUTTONS
+                ================================================== -->
+
                 <div class="flow-control-footer">
-                    <button type="button" class="btn-flow btn-flow-back" id="btnBack" style="display: none;" onclick="navigateStep(-1)">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="5" y1="12" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+
+
+                    <!-- BACK -->
+
+                    <button
+                        type="button"
+                        class="btn-flow btn-flow-back"
+                        id="btnBack"
+                        style="display: none;"
+                        onclick="navigateStep(-1)"
+                    >
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+
+                            <line
+                                x1="19"
+                                y1="12"
+                                x2="5"
+                                y2="12"
+                            />
+
+                            <polyline
+                                points="12 19 5 12 12 5"
+                            />
+
+                        </svg>
+
                         Back
+
                     </button>
-                    
-                    <button type="button" class="btn-flow btn-flow-next" id="btnNext" onclick="navigateStep(1)">
+
+
+                    <!-- NEXT -->
+
+                    <button
+                        type="button"
+                        class="btn-flow btn-flow-next"
+                        id="btnNext"
+                        onclick="navigateStep(1)"
+                    >
+
                         Next Step
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+
+                            <line
+                                x1="5"
+                                y1="12"
+                                x2="19"
+                                y2="12"
+                            />
+
+                            <polyline
+                                points="12 5 19 12 12 19"
+                            />
+
+                        </svg>
+
                     </button>
-                    
-                    <button type="submit" class="btn-flow btn-flow-submit" id="btnSubmit" style="display: none;">
+
+
+                    <!-- SUBMIT -->
+
+                    <button
+                        type="submit"
+                        class="btn-flow btn-flow-submit"
+                        id="btnSubmit"
+                        style="display: none;"
+                    >
+
                         Complete Registration
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+
+                            <polyline
+                                points="20 6 9 17 4 12"
+                            />
+
+                        </svg>
+
                     </button>
+
                 </div>
+
             </form>
+
         </div>
 
     </div>
+
 </div>
 
-<!-- CLIENT STATE FLOW ROUTER CONTROLLER -->
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
 <script>
-    let activeStep = 1;
-    const totalSteps = 2;
 
-    function navigateStep(direction) {
-        if (direction === 1 && !validateCurrentStep()) {
-            alert("Please fill out all required fields before proceeding.");
-            return;
-        }
+/* =========================================================
+   STEP SYSTEM
+========================================================= */
 
-        activeStep += direction;
-        if (activeStep < 1) activeStep = 1;
-        if (activeStep > totalSteps) activeStep = totalSteps;
+let activeStep = 1;
 
-        renderStepUI();
+const totalSteps = 2;
+
+
+/* =========================================================
+   NAVIGATE BETWEEN STEPS
+========================================================= */
+
+function navigateStep(direction) {
+
+    /*
+     * When moving forward, validate current step first.
+     */
+
+    if (direction === 1 && !validateCurrentStep()) {
+
+        return;
     }
 
-    function validateCurrentStep() {
-        const currentPanel = document.getElementById(`step-panel-${activeStep}`);
-        const inputs = currentPanel.querySelectorAll('input[required]');
-        for (let input of inputs) {
-            if (!input.value.trim()) return false;
-        }
-        return true;
+
+    activeStep += direction;
+
+
+    if (activeStep < 1) {
+        activeStep = 1;
     }
 
-    function renderStepUI() {
-        for (let i = 1; i <= totalSteps; i++) {
-            document.getElementById(`step-panel-${i}`).classList.toggle('active', i === activeStep);
-            
-            const node = document.getElementById(`indicator-1`);
-            const node2 = document.getElementById(`indicator-2`);
-            
-            if(activeStep === 1) {
-                node.className = "step-node active";
-                node2.className = "step-node";
-            } else if(activeStep === 2) {
-                node.className = "step-node completed";
-                node2.className = "step-node active";
-            }
-        }
 
-        document.getElementById('btnBack').style.display = activeStep === 1 ? 'none' : 'inline-flex';
-        document.getElementById('btnNext').style.display = activeStep === totalSteps ? 'none' : 'inline-flex';
-        document.getElementById('btnSubmit').style.display = activeStep === totalSteps ? 'inline-flex' : 'none';
+    if (activeStep > totalSteps) {
+        activeStep = totalSteps;
     }
 
-    function handleFileSelection(input, outputElementId) {
-        const targetOutput = document.getElementById(outputElementId);
-        if (input.files && input.files[0]) {
-            targetOutput.innerText = "Selected: " + input.files[0].name;
-            targetOutput.style.display = "block";
-        } else {
-            targetOutput.style.display = "none";
+
+    renderStepUI();
+
+}
+
+
+/* =========================================================
+   VALIDATE CURRENT STEP
+========================================================= */
+
+function validateCurrentStep() {
+
+    const currentPanel =
+        document.getElementById(`step-panel-${activeStep}`);
+
+
+    /*
+     * Check required inputs.
+     */
+
+    const inputs =
+        currentPanel.querySelectorAll('input[required]');
+
+
+    for (let input of inputs) {
+
+        if (!input.value.trim()) {
+
+            input.focus();
+
+            alert(
+                "Please fill out all required fields before proceeding."
+            );
+
+            return false;
         }
+
     }
+
+
+    /* =====================================================
+       PASSWORD SECURITY CHECK
+    ===================================================== */
+
+    if (activeStep === 1) {
+
+        const passwordInput =
+            document.getElementById("password");
+
+        const password =
+            passwordInput.value;
+
+
+        if (!validatePassword(password)) {
+
+            passwordInput.focus();
+
+            alert(
+                "Please create a stronger password.\n\n" +
+                "Your password must contain:\n\n" +
+                "• At least 8 characters\n" +
+                "• At least 1 uppercase letter\n" +
+                "• At least 1 lowercase letter\n" +
+                "• At least 1 number\n" +
+                "• At least 1 special character"
+            );
+
+            return false;
+        }
+
+    }
+
+
+    return true;
+}
+
+
+/* =========================================================
+   RENDER STEP UI
+========================================================= */
+
+function renderStepUI() {
+
+    for (let i = 1; i <= totalSteps; i++) {
+
+        document
+            .getElementById(`step-panel-${i}`)
+            .classList
+            .toggle(
+                'active',
+                i === activeStep
+            );
+
+    }
+
+
+    const node =
+        document.getElementById("indicator-1");
+
+    const node2 =
+        document.getElementById("indicator-2");
+
+
+    if (activeStep === 1) {
+
+        node.className =
+            "step-node active";
+
+        node2.className =
+            "step-node";
+
+    }
+
+
+    else if (activeStep === 2) {
+
+        node.className =
+            "step-node completed";
+
+        node2.className =
+            "step-node active";
+
+    }
+
+
+    document
+        .getElementById("btnBack")
+        .style.display =
+        activeStep === 1
+            ? "none"
+            : "inline-flex";
+
+
+    document
+        .getElementById("btnNext")
+        .style.display =
+        activeStep === totalSteps
+            ? "none"
+            : "inline-flex";
+
+
+    document
+        .getElementById("btnSubmit")
+        .style.display =
+        activeStep === totalSteps
+            ? "inline-flex"
+            : "none";
+
+}
+
+
+/* =========================================================
+   PASSWORD SHOW / HIDE
+========================================================= */
+
+function togglePassword() {
+
+    const passwordInput =
+        document.getElementById("password");
+
+    const passwordToggle =
+        document.getElementById("passwordToggle");
+
+    const eyeIcon =
+        document.getElementById("eyeIcon");
+
+
+    /*
+     * PASSWORD -> TEXT
+     * Show password
+     */
+
+    if (passwordInput.type === "password") {
+
+        passwordInput.type = "text";
+
+
+        passwordToggle.setAttribute(
+            "aria-label",
+            "Hide password"
+        );
+
+
+        passwordToggle.setAttribute(
+            "title",
+            "Hide password"
+        );
+
+
+        /*
+         * Eye with slash
+         */
+
+        eyeIcon.innerHTML = `
+
+            <path
+                d="M3 3l18 18"
+            />
+
+            <path
+                d="M10.6 10.6a2 2 0 0 0 2.8 2.8"
+            />
+
+            <path
+                d="M9.9 4.2A10.8 10.8 0 0 1 12 4c7 0 10 8 10 8a17.5 17.5 0 0 1-3.2 4.5"
+            />
+
+            <path
+                d="M6.6 6.6C3.7 8.4 2 12 2 12s3.5 8 10 8a10.7 10.7 0 0 0 4.4-.9"
+            />
+
+        `;
+
+    }
+
+
+    /*
+     * TEXT -> PASSWORD
+     * Hide password
+     */
+
+    else {
+
+        passwordInput.type = "password";
+
+
+        passwordToggle.setAttribute(
+            "aria-label",
+            "Show password"
+        );
+
+
+        passwordToggle.setAttribute(
+            "title",
+            "Show password"
+        );
+
+
+        /*
+         * Normal eye
+         */
+
+        eyeIcon.innerHTML = `
+
+            <path
+                d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"
+            />
+
+            <circle
+                cx="12"
+                cy="12"
+                r="3"
+            />
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   PASSWORD VALIDATION
+========================================================= */
+
+function validatePassword(password) {
+
+    const rules = {
+
+        length:
+            password.length >= 8,
+
+        uppercase:
+            /[A-Z]/.test(password),
+
+        lowercase:
+            /[a-z]/.test(password),
+
+        number:
+            /[0-9]/.test(password),
+
+        special:
+            /[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\\/;'`~]/.test(password)
+
+    };
+
+
+    /*
+     * Update each requirement.
+     */
+
+    updatePasswordRule(
+        "rule-length",
+        rules.length
+    );
+
+
+    updatePasswordRule(
+        "rule-uppercase",
+        rules.uppercase
+    );
+
+
+    updatePasswordRule(
+        "rule-lowercase",
+        rules.lowercase
+    );
+
+
+    updatePasswordRule(
+        "rule-number",
+        rules.number
+    );
+
+
+    updatePasswordRule(
+        "rule-special",
+        rules.special
+    );
+
+
+    /*
+     * All requirements must be true.
+     */
+
+    const isValid =
+        rules.length &&
+        rules.uppercase &&
+        rules.lowercase &&
+        rules.number &&
+        rules.special;
+
+
+    /*
+     * Password error.
+     */
+
+    const error =
+        document.getElementById("passwordError");
+
+
+    if (
+        password.length > 0 &&
+        !isValid
+    ) {
+
+        error.classList.add("show");
+
+    }
+
+    else {
+
+        error.classList.remove("show");
+
+    }
+
+
+    return isValid;
+}
+
+
+/* =========================================================
+   UPDATE PASSWORD REQUIREMENT
+========================================================= */
+
+function updatePasswordRule(
+    ruleId,
+    valid
+) {
+
+    const rule =
+        document.getElementById(ruleId);
+
+
+    if (valid) {
+
+        rule.classList.add("valid");
+
+        rule.classList.remove("invalid");
+
+    }
+
+    else {
+
+        rule.classList.remove("valid");
+
+        rule.classList.add("invalid");
+
+    }
+
+}
+
+
+/* =========================================================
+   LIVE PASSWORD VALIDATION
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const passwordInput =
+            document.getElementById("password");
+
+
+        if (passwordInput) {
+
+            passwordInput.addEventListener(
+                "input",
+                function () {
+
+                    validatePassword(
+                        this.value
+                    );
+
+                }
+            );
+
+        }
+
+
+        /*
+         * Also validate on form submission.
+         * This prevents bypassing the Next Step flow.
+         */
+
+        const registrationForm =
+            document.getElementById(
+                "registrationForm"
+            );
+
+
+        if (registrationForm) {
+
+            registrationForm.addEventListener(
+                "submit",
+                function (event) {
+
+                    const password =
+                        document.getElementById(
+                            "password"
+                        ).value;
+
+
+                    if (!validatePassword(password)) {
+
+                        event.preventDefault();
+
+
+                        document
+                            .getElementById("password")
+                            .focus();
+
+
+                        alert(
+                            "Registration cannot be submitted.\n\n" +
+                            "Please create a password that meets all security requirements."
+                        );
+
+                        return false;
+                    }
+
+                }
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   FILE SELECTION
+========================================================= */
+
+function handleFileSelection(
+    input,
+    outputElementId
+) {
+
+    const targetOutput =
+        document.getElementById(
+            outputElementId
+        );
+
+
+    if (
+        input.files &&
+        input.files[0]
+    ) {
+
+        targetOutput.innerText =
+            "Selected: " +
+            input.files[0].name;
+
+
+        targetOutput.style.display =
+            "block";
+
+    }
+
+    else {
+
+        targetOutput.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+renderStepUI();
+
 </script>
+
 {% endblock %}

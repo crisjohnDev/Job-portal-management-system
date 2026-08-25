@@ -11,16 +11,10 @@ from django.db.models import Count
 from django.db.models.functions import TruncWeek, TruncMonth
 from django.utils import timezone
 from datetime import timedelta
-# from django.http import HttpResponse
 
-# def test_sms(request):
-
-#     result = send_sms(
-#         "09707689275",
-#         "Hello!Testing"
-#     )
-
-#     return HttpResponse(result)
+import os
+import shutil
+from django.core.files import File
 
 def home_view(request):
 
@@ -465,29 +459,341 @@ def company_profile(request, id):
 
 @login_required(login_url="login_user")
 def apply_job(request, id):
-    print(request.user)
-    print(request.user.role)
 
-    job = get_object_or_404(JobPost, id=id)
+    # =========================================================
+    # GET JOB
+    # =========================================================
 
-    applicant = request.user.applicant_profile
+    job = get_object_or_404(
+        JobPost,
+        id=id
+    )
+
+    # =========================================================
+    # GET APPLICANT PROFILE
+    # =========================================================
+
+    try:
+
+        applicant = request.user.applicant_profile
+
+    except AttributeError:
+
+        messages.error(
+            request,
+            "Applicant profile not found."
+        )
+
+        return redirect(
+            "job_details",
+            id=job.id
+        )
+
+    # =========================================================
+    # ONLY APPROVED JOBS CAN RECEIVE APPLICATIONS
+    # =========================================================
+
+    if job.status != "approved":
+
+        messages.error(
+            request,
+            "This job is not currently accepting applications."
+        )
+
+        return redirect(
+            "job_details",
+            id=job.id
+        )
+
+    # =========================================================
+    # CHECK DUPLICATE APPLICATION
+    # =========================================================
+
+    existing_application = JobApplication.objects.filter(
+        job=job,
+        applicant=applicant
+    ).first()
+
+    if existing_application:
+
+        messages.warning(
+            request,
+            "You have already applied for this job."
+        )
+
+        return redirect(
+            "my-applications"
+        )
+
+    # =========================================================
+    # PROCESS APPLICATION
+    # =========================================================
 
     if request.method == "POST":
 
-        message = request.POST.get("message")
+        message = request.POST.get(
+            "message",
+            ""
+        ).strip()
 
-        JobApplication.objects.create(
+        uploaded_resume = request.FILES.get(
+            "resume"
+        )
+
+        uploaded_cover_letter = request.FILES.get(
+            "cover_letter"
+        )
+
+        # =====================================================
+        # FILE VALIDATION FUNCTION
+        # =====================================================
+
+        def validate_file(uploaded_file, field_name):
+
+            if not uploaded_file:
+                return None
+
+            # Maximum 5 MB
+            max_size = 5 * 1024 * 1024
+
+            if uploaded_file.size > max_size:
+
+                return (
+                    f"{field_name} must not exceed 5 MB."
+                )
+
+            allowed_extensions = [
+                ".pdf",
+                ".doc",
+                ".docx"
+            ]
+
+            extension = os.path.splitext(
+                uploaded_file.name
+            )[1].lower()
+
+            if extension not in allowed_extensions:
+
+                return (
+                    f"{field_name} must be a PDF, DOC, or DOCX file."
+                )
+
+            return None
+
+        # =====================================================
+        # VALIDATE RESUME
+        # =====================================================
+
+        resume_error = validate_file(
+            uploaded_resume,
+            "Resume"
+        )
+
+        if resume_error:
+
+            messages.error(
+                request,
+                resume_error
+            )
+
+            return render(
+                request,
+                "pages/apply_job.html",
+                {
+                    "job": job,
+                    "applicant": applicant,
+                    "existing_application": existing_application,
+                }
+            )
+
+        # =====================================================
+        # VALIDATE COVER LETTER
+        # =====================================================
+
+        cover_letter_error = validate_file(
+            uploaded_cover_letter,
+            "Cover letter"
+        )
+
+        if cover_letter_error:
+
+            messages.error(
+                request,
+                cover_letter_error
+            )
+
+            return render(
+                request,
+                "pages/apply_job.html",
+                {
+                    "job": job,
+                    "applicant": applicant,
+                    "existing_application": existing_application,
+                }
+            )
+
+        # =====================================================
+        # REQUIRE RESUME
+        #
+        # Either:
+        # - newly uploaded resume
+        # - existing applicant resume
+        # =====================================================
+
+        if not uploaded_resume and not applicant.resume:
+
+            messages.error(
+                request,
+                "Please upload a resume before submitting your application."
+            )
+
+            return render(
+                request,
+                "pages/apply_job.html",
+                {
+                    "job": job,
+                    "applicant": applicant,
+                    "existing_application": existing_application,
+                }
+            )
+
+        # =====================================================
+        # REQUIRE COVER LETTER
+        #
+        # Either:
+        # - newly uploaded cover letter
+        # - existing applicant cover letter
+        # =====================================================
+
+        if (
+            not uploaded_cover_letter
+            and not applicant.cover_letter
+        ):
+
+            messages.error(
+                request,
+                "Please upload a cover letter before submitting your application."
+            )
+
+            return render(
+                request,
+                "pages/apply_job.html",
+                {
+                    "job": job,
+                    "applicant": applicant,
+                    "existing_application": existing_application,
+                }
+            )
+
+        # =====================================================
+        # CREATE APPLICATION
+        # =====================================================
+
+        application = JobApplication.objects.create(
             job=job,
             applicant=applicant,
             message=message,
+            status="pending"
         )
 
-        return redirect("my-applications")
+        # =====================================================
+        # SAVE RESUME
+        #
+        # If a new resume was uploaded:
+        #     save the uploaded file
+        #
+        # Otherwise:
+        #     copy the applicant's existing file
+        # =====================================================
 
-    return render(request, "pages/apply_job.html", {
-        "job": job,
-        "applicant": applicant,
-    })
+        if uploaded_resume:
+
+            application.resume = uploaded_resume
+
+        elif applicant.resume:
+
+            source_path = applicant.resume.path
+
+            if os.path.exists(source_path):
+
+                with open(
+                    source_path,
+                    "rb"
+                ) as resume_file:
+
+                    application.resume.save(
+                        os.path.basename(
+                            source_path
+                        ),
+                        File(resume_file),
+                        save=False
+                    )
+
+        # =====================================================
+        # SAVE COVER LETTER
+        #
+        # If a new cover letter was uploaded:
+        #     save the uploaded file
+        #
+        # Otherwise:
+        #     copy the applicant's existing file
+        # =====================================================
+
+        if uploaded_cover_letter:
+
+            application.cover_letter = uploaded_cover_letter
+
+        elif applicant.cover_letter:
+
+            source_path = applicant.cover_letter.path
+
+            if os.path.exists(source_path):
+
+                with open(
+                    source_path,
+                    "rb"
+                ) as cover_letter_file:
+
+                    application.cover_letter.save(
+                        os.path.basename(
+                            source_path
+                        ),
+                        File(cover_letter_file),
+                        save=False
+                    )
+
+        # =====================================================
+        # FINAL SAVE
+        # =====================================================
+
+        application.save()
+
+        # =====================================================
+        # SUCCESS MESSAGE
+        # =====================================================
+
+        messages.success(
+            request,
+            f"Your application for {job.title} has been submitted successfully."
+        )
+
+        return redirect(
+            "my-applications"
+        )
+
+    # =========================================================
+    # DISPLAY APPLICATION PAGE
+    # =========================================================
+
+    return render(
+        request,
+        "pages/apply_job.html",
+        {
+            "job": job,
+            "applicant": applicant,
+            "existing_application": existing_application,
+        }
+    )
 
 @login_required(login_url="login_user")
 def my_applications(request):
