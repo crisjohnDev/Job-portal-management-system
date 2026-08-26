@@ -11,10 +11,14 @@ from django.db.models import Count
 from django.db.models.functions import TruncWeek, TruncMonth
 from django.utils import timezone
 from datetime import timedelta
-
+import csv
+import io
 import os
 import shutil
 from django.core.files import File
+from decimal import Decimal, InvalidOperation
+from datetime import datetime
+from django.db import transaction
 
 def home_view(request):
 
@@ -921,3 +925,326 @@ def update_applicant_status(request, id):
                 send_sms(phone, message)
 
     return redirect("applicants")
+
+
+@login_required(login_url="login_user")
+def import_job_list(request):
+
+    if request.method != "POST":
+        return redirect("job-list")
+
+    uploaded_file = request.FILES.get("job_file")
+
+    if not uploaded_file:
+        messages.error(request, "Please select a CSV file.")
+        return redirect("job-list")
+
+    # Only CSV files
+    if not uploaded_file.name.lower().endswith(".csv"):
+        messages.error(request, "Only CSV files are allowed.")
+        return redirect("job-list")
+
+    try:
+        # Read uploaded CSV
+        file_data = uploaded_file.read().decode("utf-8-sig")
+
+        reader = csv.DictReader(
+            io.StringIO(file_data)
+        )
+
+        # Required columns
+        required_columns = {
+            "title",
+            "description",
+            "qualifications",
+            "responsibilities",
+            "salary",
+            "location",
+            "job_type",
+            "vacancies",
+            "deadline",
+        }
+
+        csv_columns = set(reader.fieldnames or [])
+
+        missing_columns = required_columns - csv_columns
+
+        if missing_columns:
+            messages.error(
+                request,
+                "Missing CSV columns: "
+                + ", ".join(sorted(missing_columns))
+            )
+
+            return redirect("job-list")
+
+        # Valid JobPost job_type values
+        valid_job_types = {
+            "full_time",
+            "part_time",
+            "contract",
+            "internship",
+            "temporary",
+        }
+
+        imported_count = 0
+        skipped_count = 0
+
+        with transaction.atomic():
+
+            for row_number, row in enumerate(reader, start=2):
+
+                try:
+
+                    # ==========================================
+                    # TEXT FIELDS
+                    # ==========================================
+
+                    title = row.get(
+                        "title",
+                        ""
+                    ).strip()
+
+                    description = row.get(
+                        "description",
+                        ""
+                    ).strip()
+
+                    qualifications = row.get(
+                        "qualifications",
+                        ""
+                    ).strip()
+
+                    responsibilities = row.get(
+                        "responsibilities",
+                        ""
+                    ).strip()
+
+                    location = row.get(
+                        "location",
+                        ""
+                    ).strip()
+
+
+                    # ==========================================
+                    # REQUIRED VALIDATION
+                    # ==========================================
+
+                    if not title:
+                        raise ValueError(
+                            "Title is required."
+                        )
+
+                    if not description:
+                        raise ValueError(
+                            "Description is required."
+                        )
+
+                    if not qualifications:
+                        raise ValueError(
+                            "Qualifications are required."
+                        )
+
+                    if not location:
+                        raise ValueError(
+                            "Location is required."
+                        )
+
+
+                    # ==========================================
+                    # JOB TYPE
+                    # ==========================================
+
+                    job_type = row.get(
+                        "job_type",
+                        "full_time"
+                    ).strip().lower()
+
+                    if job_type not in valid_job_types:
+
+                        raise ValueError(
+                            f"Invalid job type '{job_type}'. "
+                            "Allowed values: "
+                            "full_time, part_time, contract, "
+                            "internship, temporary."
+                        )
+
+
+                    # ==========================================
+                    # VACANCIES
+                    # ==========================================
+
+                    vacancies_value = row.get(
+                        "vacancies",
+                        "1"
+                    ).strip()
+
+                    try:
+
+                        vacancies = int(
+                            vacancies_value
+                        )
+
+                    except (ValueError, TypeError):
+
+                        raise ValueError(
+                            "Vacancies must be a whole number."
+                        )
+
+                    if vacancies < 1:
+
+                        raise ValueError(
+                            "Vacancies must be at least 1."
+                        )
+
+
+                    # ==========================================
+                    # SALARY
+                    # ==========================================
+
+                    salary_value = row.get(
+                        "salary",
+                        ""
+                    ).strip()
+
+                    salary = None
+
+                    if salary_value:
+
+                        # Remove peso sign and commas
+                        salary_value = (
+                            salary_value
+                            .replace("₱", "")
+                            .replace(",", "")
+                            .strip()
+                        )
+
+                        try:
+
+                            salary = Decimal(
+                                salary_value
+                            )
+
+                        except InvalidOperation:
+
+                            raise ValueError(
+                                "Salary must be a valid number."
+                            )
+
+                        if salary < 0:
+
+                            raise ValueError(
+                                "Salary cannot be negative."
+                            )
+
+
+                    # ==========================================
+                    # DEADLINE
+                    # ==========================================
+
+                    deadline_value = row.get(
+                        "deadline",
+                        ""
+                    ).strip()
+
+                    if not deadline_value:
+
+                        raise ValueError(
+                            "Deadline is required."
+                        )
+
+                    try:
+
+                        deadline = datetime.strptime(
+                            deadline_value,
+                            "%Y-%m-%d"
+                        ).date()
+
+                    except ValueError:
+
+                        raise ValueError(
+                            "Deadline must use YYYY-MM-DD format."
+                        )
+
+
+                    # ==========================================
+                    # CREATE JOB POST
+                    # ==========================================
+
+                    JobPost.objects.create(
+
+                        employer=request.user.employer,
+
+                        title=title,
+
+                        description=description,
+
+                        qualifications=qualifications,
+
+                        responsibilities=responsibilities,
+
+                        salary=salary,
+
+                        location=location,
+
+                        job_type=job_type,
+
+                        vacancies=vacancies,
+
+                        deadline=deadline,
+
+                        # Always require admin approval
+                        status="pending",
+
+                    )
+
+                    imported_count += 1
+
+
+                except Exception as row_error:
+
+                    skipped_count += 1
+
+                    messages.warning(
+                        request,
+                        f"Row {row_number} skipped: {row_error}"
+                    )
+
+
+        # ==========================================
+        # SUCCESS / WARNING MESSAGES
+        # ==========================================
+
+        if imported_count > 0:
+
+            messages.success(
+                request,
+                f"{imported_count} job post(s) imported successfully."
+            )
+
+        if skipped_count > 0:
+
+            messages.warning(
+                request,
+                f"{skipped_count} row(s) skipped because of invalid data."
+            )
+
+
+    except UnicodeDecodeError:
+
+        messages.error(
+            request,
+            "Unable to read the CSV file. "
+            "Please save the CSV using UTF-8 encoding."
+        )
+
+
+    except Exception as e:
+
+        messages.error(
+            request,
+            f"Unable to import job list: {str(e)}"
+        )
+
+
+    return redirect("job-list")

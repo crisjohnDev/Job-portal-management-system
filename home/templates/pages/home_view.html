@@ -4,22 +4,47 @@
 {% block content %}
 
 <style>
-/* --- Hero Layout & Typography --- */
+/* --- FULL SCREEN COVER BACKGROUND --- */
+body, 
+html,
+[class*="hero"],
+[class*="bg"],
+[class*="main"] {
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+}
+
+/* --- GLOBAL SECTION FULL-PAGE STYLING --- */
+.hero-content-wrapper,
+.featured-jobs-wrapper,
+.stats-wrapper {
+    width: 100%;
+    min-height: calc(100vh - 73px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 40px;
+    box-sizing: border-box;
+}
+
+/* --- SECTION 1: HERO LAYOUT & TYPOGRAPHY --- */
 .hero-content-wrapper {
-    max-width: 900px;
-    margin: 40px auto 60px auto;
+    align-items: center;
     text-align: center;
-    padding: 0 20px;
+    margin: 0;
 }
 
 .hero-content-wrapper h2 {
-    font-size: 2.2rem;
+    font-size: 2.5rem;
     font-weight: 800;
     color: #ffffff;
-    line-height: 1.3;
-    margin-bottom: 28px;
+    line-height: 1.35;
+    margin-bottom: 32px;
     letter-spacing: -0.02em;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    max-width: 1000px;
 }
 
 .hero-actions {
@@ -29,36 +54,32 @@
     flex-wrap: wrap;
 }
 
-/* --- Section Title Styling --- */
+/* --- SECTION TITLE STYLING --- */
 .section-title {
-    font-size: 1.25rem;
     font-weight: 800;
-    color: #ffffff;
-    margin-bottom: 20px;
-    letter-spacing: -0.01em;
+    margin-bottom: 28px;
     text-transform: uppercase;
-    font-size: 0.95rem;
-    letter-spacing: 0.05em;
-    color: var(--text-sub, #a7f3d0);
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+    color: #74BC44;
+    text-align: left;
 }
 
-/* --- FEATURED JOBS SECTION --- */
+/* --- SECTION 2: FEATURED JOBS SECTION --- */
 .featured-jobs-wrapper {
-    max-width: 1200px;
-    margin: 0 auto 60px auto;
-    padding: 0 20px;
-    width: 100%;
+    justify-content: center;
 }
 
 .jobs-scroll-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    width: 100%;
 }
 
 .job-card {
-    background: rgba(5, 150, 105, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(116, 188, 68, 0.15);
+    border: 1px solid rgba(116, 188, 68, 0.25);
     border-radius: 16px;
     padding: 24px;
     display: flex;
@@ -68,12 +89,13 @@
     -webkit-backdrop-filter: blur(12px);
     transition: var(--transition-smooth, all 0.25s cubic-bezier(0.16, 1, 0.3, 1));
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    width: 100%;
 }
 
 .job-card:hover {
     transform: translateY(-4px);
-    background: rgba(5, 150, 105, 0.35);
-    border-color: rgba(52, 211, 153, 0.4);
+    background: rgba(116, 188, 68, 0.25);
+    border-color: #74BC44;
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
 }
 
@@ -85,7 +107,7 @@
 }
 
 .company-name {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.85);
     font-size: 0.9rem;
     font-weight: 600;
     display: flex;
@@ -105,14 +127,14 @@
 
 .job-meta-item {
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(255, 255, 255, 0.8);
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
 .job-meta-item svg {
-    color: #34d399;
+    color: #74BC44;
     flex-shrink: 0;
 }
 
@@ -120,9 +142,9 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(5, 150, 105, 0.3);
-    border: 1px solid rgba(52, 211, 153, 0.25);
-    color: #a7f3d0;
+    background: rgba(116, 188, 68, 0.2);
+    border: 1px solid rgba(116, 188, 68, 0.4);
+    color: #ffffff;
     font-size: 0.78rem;
     font-weight: 600;
     padding: 4px 10px;
@@ -144,7 +166,7 @@
     padding: 10px;
     background: #ffffff;
     border: 1px solid #ffffff;
-    color: #011409;
+    color: #0d1e05;
     font-size: 0.85rem;
     font-weight: 700;
     border-radius: 99px;
@@ -153,77 +175,99 @@
 }
 
 .btn-apply-card:hover {
-    background: #34d399;
-    border-color: #34d399;
-    color: #011409;
+    background: #74BC44;
+    border-color: #74BC44;
+    color: #ffffff;
     transform: translateY(-1px);
 }
 
 .empty-card {
     grid-column: 1 / -1;
     text-align: center;
-    padding: 40px;
+    padding: 60px 20px;
     background: rgba(255, 255, 255, 0.03);
     border-radius: 16px;
-    border: 1px dashed rgba(255, 255, 255, 0.15);
+    border: 1px dashed rgba(116, 188, 68, 0.3);
+    width: 100%;
 }
 
-/* --- STATISTICS SECTION --- */
+/* --- SECTION 3: STATISTICS SECTION --- */
 .stats-wrapper {
-    max-width: 1200px;
-    margin: 0 auto 60px auto;
-    padding: 0 20px;
-    width: 100%;
+    justify-content: center;
 }
 
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    width: 100%;
 }
 
 .stat-card {
-    background: var(--stat-card-bg, rgba(2, 36, 18, 0.85));
-    border: 1px solid var(--stat-card-border, rgba(255, 255, 255, 0.08));
+    background: rgba(12, 28, 8, 0.85);
+    border: 1px solid rgba(116, 188, 68, 0.2);
     border-radius: 16px;
-    padding: 24px;
+    padding: 32px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     transition: var(--transition-smooth, all 0.25s cubic-bezier(0.16, 1, 0.3, 1));
+    width: 100%;
 }
 
 .stat-card:hover {
-    border-color: rgba(52, 211, 153, 0.3);
+    border-color: #74BC44;
     transform: translateY(-2px);
 }
 
 .stat-num {
-    font-size: 2.25rem;
+    font-size: 2.5rem;
     font-weight: 800;
     color: #ffffff;
     line-height: 1;
 }
 
 .stat-label {
-    font-size: 0.82rem;
-    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.75);
     font-weight: 600;
-    margin-top: 6px;
+    margin-top: 8px;
     line-height: 1.3;
 }
 
 .arrow-icon {
-    font-size: 1.5rem;
-    color: #34d399;
+    font-size: 1.8rem;
+    color: #74BC44;
     font-weight: 700;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .hero-content-wrapper,
+    .featured-jobs-wrapper,
+    .stats-wrapper {
+        min-height: auto;
+        padding: 60px 20px;
+    }
+    
+    .hero-content-wrapper h2 {
+        font-size: 1.8rem;
+    }
+
+    body, 
+    html,
+    [class*="hero"],
+    [class*="bg"],
+    [class*="main"] {
+        background-attachment: scroll !important;
+    }
 }
 </style>
 
-<!-- MAIN TITLE & CALL TO ACTIONS -->
-<div class="hero-content-wrapper">
+<!-- SECTION 1: HERO / MAIN TITLE -->
+<section class="hero-content-wrapper">
     <h2>Connecting job seekers and employers with local employment opportunities and career resources in the Municipality of Pio Duran</h2>
     
     <div class="hero-actions">
@@ -232,12 +276,12 @@
         {% else %}
             <a href="{% url 'employer-dashboard' %}" class="btn-pill-white">Dashboard</a>
         {% endif %}
-        <a href="#learn-more" class="btn-pill-outline">Learn More</a>
+        <a href="#featured-jobs" class="btn-pill-outline">Learn More</a>
     </div>
-</div>
+</section>
 
-<!-- FEATURED JOB VACANCIES GRID -->
-<div class="featured-jobs-wrapper">
+<!-- SECTION 2: FEATURED JOB VACANCIES -->
+<section class="featured-jobs-wrapper" id="featured-jobs">
     <h3 class="section-title">Featured Job Vacancies</h3>
 
     <div class="jobs-scroll-grid">
@@ -276,66 +320,52 @@
             </div>
         {% endfor %}
     </div>
-</div>
+</section>
 
-<!-- PORTAL STATISTICS -->
-<!-- PORTAL STATISTICS -->
-<div class="stats-wrapper">
+<!-- SECTION 3: PORTAL STATISTICS -->
+<section class="stats-wrapper">
     <h3 class="section-title">Portal Statistics</h3>
 
     <div class="stats-grid">
-
-        <!-- REGISTERED APPLICANTS -->
         <div class="stat-card">
             <div>
                 <div class="stat-num">
                     {{ registered_applicants }}+
                 </div>
-
                 <div class="stat-label">
                     Registered<br>
                     Applicants
                 </div>
             </div>
-
             <span class="arrow-icon">›</span>
         </div>
 
-
-        <!-- ACTIVE JOB VACANCIES -->
         <div class="stat-card">
             <div>
                 <div class="stat-num">
                     {{ active_job_vacancies }}+
                 </div>
-
                 <div class="stat-label">
                     Active<br>
                     Job Vacancies
                 </div>
             </div>
-
             <span class="arrow-icon">›</span>
         </div>
 
-
-        <!-- SUCCESSFUL PLACEMENTS -->
         <div class="stat-card">
             <div>
                 <div class="stat-num">
                     {{ successful_placements }}
                 </div>
-
                 <div class="stat-label">
                     Successful<br>
                     Placements
                 </div>
             </div>
-
             <span class="arrow-icon">›</span>
         </div>
-
     </div>
-</div>
+</section>
 
 {% endblock %}

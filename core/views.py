@@ -11,6 +11,7 @@ from django.db.models import Count
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils import timezone
+from django.db import transaction
 
 def login_view(request):
     create_default_admin()
@@ -456,3 +457,55 @@ def reports(request):
     }
 
     return render(request, "pages/reports.html", context)
+
+
+@login_required(login_url="login_user")
+def delete_selected_applicants(request):
+
+    if request.method != "POST":
+        return redirect("applicants")
+
+    applicant_ids = request.POST.getlist("applicant_ids")
+
+    if not applicant_ids:
+        messages.error(
+            request,
+            "Please select at least one applicant."
+        )
+        return redirect("applicants")
+
+    try:
+        with transaction.atomic():
+
+            applicants = Applicant.objects.filter(
+                id__in=applicant_ids
+            ).select_related("user")
+
+            deleted_count = applicants.count()
+
+            users_to_delete = []
+
+            for applicant in applicants:
+                if applicant.user:
+                    users_to_delete.append(applicant.user)
+
+            # Delete applicant profiles
+            applicants.delete()
+
+            # Delete their associated user accounts
+            for user in users_to_delete:
+                user.delete()
+
+        messages.success(
+            request,
+            f"{deleted_count} applicant(s) deleted successfully."
+        )
+
+    except Exception as e:
+
+        messages.error(
+            request,
+            f"Unable to delete applicants: {str(e)}"
+        )
+
+    return redirect("applicants")

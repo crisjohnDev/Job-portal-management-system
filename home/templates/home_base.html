@@ -19,25 +19,26 @@
 
     <style>
         /* =========================================================
-           VARIABLES & THEME CONFIGURATION (GREEN PALETTE)
-        ========================================================= */
+            VARIABLES & THEME CONFIGURATION (#74BC44 PALETTE)
+         ========================================================= */
         :root {
-            --bg-dark-green: #021a0d;
-            --bg-green-gradient: linear-gradient(100deg, #011409 0%, #032b16 45%, rgba(3, 43, 22, 0.45) 100%);
-            --card-green: #059669;
-            --card-green-hover: #047857;
-            --stat-card-bg: rgba(2, 36, 18, 0.85);
-            --stat-card-border: rgba(255, 255, 255, 0.08);
+            --bg-dark-green: #011409;
+            --primary-accent: #74BC44;
+            --primary-accent-hover: #5ea132;
+            --card-green: rgba(116, 188, 68, 0.15);
+            --card-green-hover: rgba(116, 188, 68, 0.25);
+            --stat-card-bg: rgba(12, 28, 8, 0.85);
+            --stat-card-border: rgba(116, 188, 68, 0.2);
             
             --text-main: #ffffff;
-            --text-sub: #a7f3d0;
+            --text-sub: #74BC44;
             --font-main: 'Inter', system-ui, -apple-system, sans-serif;
             --transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         /* =========================================================
-           GLOBAL RESET
-        ========================================================= */
+            GLOBAL RESET & LAYOUT
+         ========================================================= */
         *, *::before, *::after {
             margin: 0;
             padding: 0;
@@ -45,10 +46,10 @@
         }
 
         html, body {
-            min-height: 100%;
+            min-height: 100vh;
             width: 100%;
             overflow-x: hidden;
-            background-color: #011409;
+            background-color: var(--bg-dark-green);
             font-family: var(--font-main);
             color: var(--text-main);
             -webkit-font-smoothing: antialiased;
@@ -57,26 +58,31 @@
         }
 
         /* =========================================================
-           SITE HEADER
-        ========================================================= */
+            SITE HEADER & NAVIGATION (STICKY & #74BC44 THEMED)
+         ========================================================= */
         .site-header {
-            position: absolute;
+            position: sticky;
             top: 0;
             left: 0;
             width: 100%;
             z-index: 1000;
-            padding: 24px 60px;
+            padding: 16px 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background-color: rgba(12, 28, 8, 0.92); /* Darkened container with tint */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 2px solid var(--primary-accent); /* #74BC44 accent line */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
-        /* BRANDING */
         .brand-text h1 {
-            color: var(--text-main);
+            color: #ffffff;
             font-size: 1.5rem;
             font-weight: 800;
             letter-spacing: -0.02em;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
         }
 
         .brand-text a {
@@ -84,7 +90,6 @@
             color: inherit;
         }
 
-        /* NAVIGATION */
         .navigation-menu {
             display: flex;
             align-items: center;
@@ -93,35 +98,47 @@
         }
 
         .navigation-menu a {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
             font-size: 0.85rem;
-            font-weight: 500;
+            font-weight: 600;
             transition: var(--transition-smooth);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
         }
 
         .navigation-menu a:hover,
         .navigation-menu a.active {
-            color: #ffffff;
+            color: var(--primary-accent);
         }
 
-        /* LOGIN / LOGOUT BUTTON SPECIFIC STYLES */
         .navigation-menu .nav-auth-btn {
-            padding: 7px 18px;
+            padding: 8px 20px;
             border-radius: 99px;
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            color: #ffffff;
-            font-weight: 600;
+            background: var(--primary-accent);
+            border: 1px solid var(--primary-accent);
+            color: #0d1e05;
+            font-weight: 700;
+            transition: var(--transition-smooth);
         }
 
         .navigation-menu .nav-auth-btn:hover {
-            background: #059669;
-            border-color: #34d399;
-            color: #ffffff;
+            background: #ffffff;
+            border-color: #ffffff;
+            color: #0d1e05;
+            transform: translateY(-1px);
         }
 
-        /* SEARCH BAR IN HEADER */
+        /* Mobile Hamburger Toggle */
+        .mobile-nav-toggle {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--primary-accent);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        /* Header Search Optional Component */
         .header-search {
             position: relative;
             display: flex;
@@ -129,8 +146,8 @@
         }
 
         .header-search input {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(116, 188, 68, 0.15);
+            border: 1px solid rgba(116, 188, 68, 0.3);
             padding: 8px 36px 8px 16px;
             border-radius: 20px;
             color: #fff;
@@ -141,13 +158,13 @@
         }
 
         .header-search input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .header-search input:focus {
             width: 200px;
-            background: rgba(255, 255, 255, 0.18);
-            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(116, 188, 68, 0.25);
+            border-color: var(--primary-accent);
         }
 
         .header-search button {
@@ -155,7 +172,7 @@
             right: 8px;
             background: none;
             border: none;
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--primary-accent);
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -163,29 +180,21 @@
         }
 
         /* =========================================================
-           HERO & LANDING CONTAINER
-        ========================================================= */
+            HERO & LANDING CONTAINER
+         ========================================================= */
         .hero-section {
             position: relative;
-            min-height: 100vh;
+            min-height: calc(100vh - 73px);
             width: 100%;
-            background-image: url("{% static 'images/bg.jpg' %}");
+            background-image: url("{% static 'images/0365e1a5-70f8-4784-910b-4fc16584816f.jpg' %}");
             background-size: cover;
             background-position: center right;
             background-repeat: no-repeat;
-            padding: 140px 60px 60px 60px;
+            padding: 60px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             flex: 1;
-        }
-
-        .hero-section::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: var(--bg-green-gradient);
-            z-index: 1;
         }
 
         .hero-content-wrapper {
@@ -202,9 +211,9 @@
             letter-spacing: -0.02em;
             margin-bottom: 28px;
             color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
         }
 
-        /* HERO CTA BUTTONS */
         .hero-actions {
             display: flex;
             gap: 14px;
@@ -212,7 +221,7 @@
 
         .btn-pill-white {
             background: #ffffff;
-            color: #011409;
+            color: #0d1e05;
             padding: 10px 24px;
             border-radius: 99px;
             font-weight: 600;
@@ -220,33 +229,39 @@
             text-decoration: none;
             transition: var(--transition-smooth);
             border: 1px solid #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
         }
 
         .btn-pill-white:hover {
-            background: #f1f5f9;
+            background: var(--primary-accent);
+            border-color: var(--primary-accent);
+            color: #ffffff;
             transform: translateY(-2px);
         }
 
         .btn-pill-outline {
-            background: transparent;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(4px);
             color: #ffffff;
             padding: 10px 24px;
             border-radius: 99px;
             font-weight: 600;
             font-size: 0.88rem;
             text-decoration: none;
-            border: 1.5px solid #ffffff;
+            border: 1.5px solid var(--primary-accent);
             transition: var(--transition-smooth);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
         }
 
         .btn-pill-outline:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: var(--primary-accent);
+            color: #ffffff;
             transform: translateY(-2px);
         }
 
         /* =========================================================
-           FEATURED JOBS CARDS
-        ========================================================= */
+            FEATURED JOBS CARDS
+         ========================================================= */
         .featured-jobs-wrapper {
             position: relative;
             z-index: 10;
@@ -257,7 +272,8 @@
             font-size: 1.1rem;
             font-weight: 700;
             margin-bottom: 18px;
-            color: #ffffff;
+            color: var(--primary-accent);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
         }
 
         .jobs-scroll-grid {
@@ -268,6 +284,7 @@
 
         .job-card {
             background: var(--card-green);
+            border: 1px solid rgba(116, 188, 68, 0.25);
             border-radius: 12px;
             padding: 20px 16px;
             display: flex;
@@ -280,6 +297,7 @@
 
         .job-card:hover {
             background: var(--card-green-hover);
+            border-color: var(--primary-accent);
             transform: translateY(-3px);
         }
 
@@ -298,7 +316,7 @@
 
         .job-card .btn-view-job {
             background: #ffffff;
-            color: #011409;
+            color: #0d1e05;
             text-decoration: none;
             font-size: 0.75rem;
             font-weight: 700;
@@ -310,13 +328,14 @@
         }
 
         .job-card .btn-view-job:hover {
-            background: #f8fafc;
+            background: var(--primary-accent);
+            color: #ffffff;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         /* =========================================================
-           PORTAL STATISTICS SECTION
-        ========================================================= */
+            PORTAL STATISTICS SECTION
+         ========================================================= */
         .stats-wrapper {
             position: relative;
             z-index: 10;
@@ -338,6 +357,12 @@
             align-items: center;
             justify-content: space-between;
             backdrop-filter: blur(12px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            transition: var(--transition-smooth);
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary-accent);
         }
 
         .stat-card .stat-num {
@@ -350,27 +375,28 @@
         .stat-card .stat-label {
             font-size: 0.82rem;
             font-weight: 600;
-            color: #ffffff;
+            color: rgba(255, 255, 255, 0.75);
             margin-top: 4px;
             line-height: 1.2;
         }
 
         .stat-card .arrow-icon {
-            color: rgba(255, 255, 255, 0.4);
+            color: var(--primary-accent);
             font-size: 1.2rem;
         }
 
         /* =========================================================
-           FOOTER STYLES
-        ========================================================= */
+            FOOTER STYLES
+         ========================================================= */
         .site-footer {
             background-color: #010d06;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(116, 188, 68, 0.2);
             position: relative;
             z-index: 10;
             padding: 40px 60px 24px 60px;
             color: rgba(255, 255, 255, 0.7);
             font-size: 0.85rem;
+            margin-top: auto;
         }
 
         .footer-container {
@@ -388,7 +414,7 @@
         }
 
         .footer-brand p {
-            color: #a7f3d0;
+            color: var(--primary-accent);
             line-height: 1.5;
             max-width: 360px;
             font-size: 0.82rem;
@@ -418,7 +444,7 @@
         }
 
         .footer-col ul a:hover {
-            color: #34d399;
+            color: var(--primary-accent);
         }
 
         .footer-bottom {
@@ -432,25 +458,47 @@
         }
 
         /* =========================================================
-           RESPONSIVE BREAKPOINTS
-        ========================================================= */
+            RESPONSIVE BREAKPOINTS
+         ========================================================= */
         @media (max-width: 992px) {
             .site-header {
-                padding: 20px 30px;
+                padding: 16px 30px;
             }
+
             .hero-section {
-                padding: 120px 30px 40px 30px;
+                padding: 40px 30px 40px 30px;
             }
+
+            .mobile-nav-toggle {
+                display: block;
+            }
+
             .navigation-menu {
                 display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: #0c1c08;
+                flex-direction: column;
+                padding: 20px 30px;
+                gap: 16px;
+                border-bottom: 2px solid var(--primary-accent);
             }
+
+            .navigation-menu.show {
+                display: flex;
+            }
+
             .hero-content-wrapper h2 {
                 font-size: 1.8rem;
             }
+
             .footer-container {
                 grid-template-columns: 1fr;
                 gap: 24px;
             }
+
             .site-footer {
                 padding: 30px 30px 20px 30px;
             }
@@ -460,12 +508,15 @@
             .hero-actions {
                 flex-direction: column;
             }
+
             .btn-pill-white, .btn-pill-outline {
                 text-align: center;
             }
+
             .jobs-scroll-grid {
                 grid-template-columns: 1fr;
             }
+
             .footer-bottom {
                 flex-direction: column;
                 gap: 8px;
@@ -479,13 +530,20 @@
 
     <!-- SITE HEADER -->
     <header class="site-header">
-        
         <div class="brand-text">
-            <a href="{% url 'home' %}"><h1>Pio Duran Job Portal </h1></a>
+            <a href="{% url 'home' %}"><h1>Pio Duran Job Portal</h1></a>
         </div>
 
+        <button class="mobile-nav-toggle" id="navToggle" aria-label="Toggle Navigation">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
         <nav>
-            <ul class="navigation-menu">
+            <ul class="navigation-menu" id="navMenu">
                 <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a></li>
                 
                 {% if not request.user.is_authenticated %}
@@ -503,24 +561,14 @@
                 {% endif %}
             </ul>
         </nav>
-
-        {% comment %} <div class="header-search">
-            <input type="text" placeholder="Search...">
-            <button type="button">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            </button>
-        </div> {% endcomment %}
-
     </header>
 
     <!-- HERO MAIN SECTION -->
-    <section class="hero-section">
-
+    <main class="hero-section">
         {% block content %}
-        <!-- CHILD TEMPLATE CONTENT CAN OVERRIDE OR INJECT EXTRA DATA HERE -->
+        <!-- Child template content overrides or injects layout items here -->
         {% endblock %}
-
-    </section>
+    </main>
 
     <!-- SITE FOOTER -->
     <footer class="site-footer">
@@ -552,5 +600,20 @@
         </div>
     </footer>
 
+    <script>
+        const navToggle = document.getElementById('navToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        navToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            navMenu.classList.toggle('show');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!navMenu.contains(e.target) && !navToggle.contains(e.target)) {
+                navMenu.classList.remove('show');
+            }
+        });
+    </script>
 </body>
 </html>

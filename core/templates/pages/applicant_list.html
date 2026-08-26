@@ -1,9 +1,15 @@
+
 {% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
+
 <style>
-    /* Scoped Clean Light Theme Applicants Management Styles */
+
+    /* =========================================================
+       PAGE HEADER
+    ========================================================= */
+
     .content-header {
         display: flex;
         justify-content: space-between;
@@ -19,6 +25,7 @@
         font-weight: 700;
         color: #0f172a;
         letter-spacing: -0.02em;
+        margin: 0;
     }
 
     .admin-profile {
@@ -51,6 +58,11 @@
         fill: none;
     }
 
+
+    /* =========================================================
+       WORKSPACE
+    ========================================================= */
+
     .dashboard-workspace {
         padding: 32px;
         background-color: #f8fafc;
@@ -60,7 +72,11 @@
         min-height: calc(100vh - 87px);
     }
 
-    /* Data Table Card Structure */
+
+    /* =========================================================
+       DATA CARD
+    ========================================================= */
+
     .data-card {
         background: #ffffff;
         border: 1px solid #e2e8f0;
@@ -79,7 +95,82 @@
         font-size: 1.1rem;
         font-weight: 700;
         color: #0f172a;
+        margin: 0;
     }
+
+
+    /* =========================================================
+       TOOLBAR
+    ========================================================= */
+
+    .applicant-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        padding: 16px 24px;
+        background: #ffffff;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .selection-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #64748b;
+        font-size: 0.88rem;
+    }
+
+    .selection-count {
+        font-weight: 700;
+        color: #2563eb;
+    }
+
+
+    /* =========================================================
+       DELETE BUTTON
+    ========================================================= */
+
+    .delete-selected-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+
+        padding: 10px 16px;
+
+        border: 1px solid #fecaca;
+        border-radius: 9px;
+
+        background: #fef2f2;
+        color: #dc2626;
+
+        font-size: 0.88rem;
+        font-weight: 700;
+
+        cursor: pointer;
+
+        transition: all 0.2s ease;
+    }
+
+    .delete-selected-btn:hover {
+        background: #fee2e2;
+        border-color: #fca5a5;
+        color: #b91c1c;
+    }
+
+    .delete-selected-btn:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        background: #f8fafc;
+        border-color: #e2e8f0;
+        color: #94a3b8;
+    }
+
+
+    /* =========================================================
+       TABLE
+    ========================================================= */
 
     .table-responsive {
         width: 100%;
@@ -102,6 +193,7 @@
         text-transform: uppercase;
         letter-spacing: 0.04em;
         border-bottom: 1px solid #e2e8f0;
+        white-space: nowrap;
     }
 
     td {
@@ -119,6 +211,29 @@
         background-color: #f8fafc;
     }
 
+
+    /* =========================================================
+       CHECKBOX
+    ========================================================= */
+
+    .checkbox-cell {
+        width: 50px;
+        text-align: center;
+    }
+
+    .applicant-checkbox,
+    #selectAll {
+        width: 17px;
+        height: 17px;
+        cursor: pointer;
+        accent-color: #2563eb;
+    }
+
+
+    /* =========================================================
+       APPLICANT DATA
+    ========================================================= */
+
     .applicant-username {
         color: #2563eb;
         font-weight: 600;
@@ -129,79 +244,571 @@
         color: #64748b;
         font-size: 0.88rem;
     }
+
+
+    /* =========================================================
+       SELECTED ROW
+    ========================================================= */
+
+    tr.selected-row td {
+        background-color: #eff6ff;
+    }
+
+
+    /* =========================================================
+       EMPTY STATE
+    ========================================================= */
+
+    .empty-state {
+        text-align: center;
+        color: #64748b;
+        padding: 50px 20px !important;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 700px) {
+
+        .content-header {
+            padding: 20px;
+        }
+
+        .dashboard-workspace {
+            padding: 16px;
+        }
+
+        .applicant-toolbar {
+            padding: 14px 16px;
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .delete-selected-btn {
+            width: 100%;
+        }
+
+        th,
+        td {
+            padding: 12px 14px;
+        }
+
+        .admin-profile {
+            display: none;
+        }
+    }
+
 </style>
 
-<!-- Content Control Bar Header -->
+
+<!-- =========================================================
+     CONTENT HEADER
+========================================================= -->
+
 <header class="content-header">
+
     <div class="page-title">
         <h2>Applicants</h2>
     </div>
 
     <div class="admin-profile">
-        <span>Welcome, <strong>Admin Portal</strong></span>
+
+        <span>
+            Welcome,
+            <strong>Admin Portal</strong>
+        </span>
+
         <div class="profile-badge">
-            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
+
+            <svg
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+
+                <path
+                    d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+                ></path>
+
+                <circle
+                    cx="12"
+                    cy="7"
+                    r="4"
+                ></circle>
+
             </svg>
+
         </div>
+
     </div>
+
 </header>
+
+
+<!-- =========================================================
+     WORKSPACE
+========================================================= -->
 
 <div class="dashboard-workspace">
 
-    <!-- DATA CARD CONTAINER -->
     <div class="data-card">
+
+
+        <!-- =====================================================
+             CARD HEADER
+        ====================================================== -->
+
         <div class="data-card-header">
-            <h3>Registered Applicants</h3>
+
+            <h3>
+                Registered Applicants
+            </h3>
+
         </div>
 
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Full Name</th>
-                        <th>Username</th>
-                        <th>Email Address</th>
-                        <th>Phone Number</th>
-                        <th>Date Joined</th>
-                    </tr>
-                </thead>
 
-                <tbody>
-                    {% for applicant in applicants %}
-                    <tr>
-                        <td>
-                            <strong style="color: #0f172a;">
-                                {{ applicant.first_name }}
-                                {% if applicant.middle_name %}{{ applicant.middle_name }}{% endif %}
-                                {{ applicant.last_name }}
-                            </strong>
-                        </td>
-                        <td class="applicant-username">
-                            {{ applicant.user.username }}
-                        </td>
-                        <td style="color: #334155;">
-                            {{ applicant.email }}
-                        </td>
-                        <td style="color: #334155;">
-                            {{ applicant.phone_number }}
-                        </td>
-                        <td class="date-joined">
-                            {{ applicant.user.date_joined|date:"F d, Y" }}
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" style="text-align: center; color: #64748b; padding: 40px 0;">
-                            No active job seeker profiles logged in system database.
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        <!-- =====================================================
+             DELETE TOOLBAR
+        ====================================================== -->
+
+        <form
+            method="POST"
+            action="{% url 'delete-selected-applicants' %}"
+            id="deleteApplicantsForm"
+        >
+
+            {% csrf_token %}
+
+            <div class="applicant-toolbar">
+
+                <div class="selection-info">
+
+                    <span>
+                        <strong
+                            class="selection-count"
+                            id="selectionCount"
+                        >
+                            0
+                        </strong>
+                        selected
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="delete-selected-btn"
+                    id="deleteSelectedBtn"
+                    disabled
+                    onclick="return confirmDeleteApplicants();"
+                >
+
+                    <svg
+                        width="17"
+                        height="17"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                    >
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6 7h12"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M8 7l1 14h6l1-14"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M10 11v6"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M14 11v6"
+                        />
+
+                    </svg>
+
+                    Delete Selected
+
+                </button>
+
+            </div>
+
+
+            <!-- =================================================
+                 TABLE
+            ================================================== -->
+
+            <div class="table-responsive">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <!-- SELECT ALL -->
+
+                            <th class="checkbox-cell">
+
+                                <input
+                                    type="checkbox"
+                                    id="selectAll"
+                                    title="Select all applicants"
+                                >
+
+                            </th>
+
+                            <th>
+                                Full Name
+                            </th>
+
+                            <th>
+                                Username
+                            </th>
+
+                            <th>
+                                Email Address
+                            </th>
+
+                            <th>
+                                Phone Number
+                            </th>
+
+                            <th>
+                                Date Joined
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for applicant in applicants %}
+
+                        <tr class="applicant-row">
+
+                            <!-- CHECKBOX -->
+
+                            <td class="checkbox-cell">
+
+                                <input
+                                    type="checkbox"
+                                    name="applicant_ids"
+                                    value="{{ applicant.id }}"
+                                    class="applicant-checkbox"
+                                >
+
+                            </td>
+
+
+                            <!-- FULL NAME -->
+
+                            <td>
+
+                                <strong style="color: #0f172a;">
+
+                                    {{ applicant.first_name }}
+
+                                    {% if applicant.middle_name %}
+                                        {{ applicant.middle_name }}
+                                    {% endif %}
+
+                                    {{ applicant.last_name }}
+
+                                </strong>
+
+                            </td>
+
+
+                            <!-- USERNAME -->
+
+                            <td class="applicant-username">
+
+                                {{ applicant.user.username }}
+
+                            </td>
+
+
+                            <!-- EMAIL -->
+
+                            <td style="color: #334155;">
+
+                                {{ applicant.email }}
+
+                            </td>
+
+
+                            <!-- PHONE -->
+
+                            <td style="color: #334155;">
+
+                                {{ applicant.phone_number }}
+
+                            </td>
+
+
+                            <!-- DATE JOINED -->
+
+                            <td class="date-joined">
+
+                                {{ applicant.user.date_joined|date:"F d, Y" }}
+
+                            </td>
+
+                        </tr>
+
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="6"
+                                class="empty-state"
+                            >
+
+                                No active job seeker profiles
+                                logged in system database.
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </form>
+
     </div>
 
 </div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const selectAll =
+        document.getElementById("selectAll");
+
+    const checkboxes =
+        document.querySelectorAll(".applicant-checkbox");
+
+    const deleteButton =
+        document.getElementById("deleteSelectedBtn");
+
+    const selectionCount =
+        document.getElementById("selectionCount");
+
+
+    /*
+    =========================================================
+    UPDATE SELECTION
+    =========================================================
+    */
+
+    function updateSelection() {
+
+        const checked =
+            document.querySelectorAll(
+                ".applicant-checkbox:checked"
+            );
+
+        const count =
+            checked.length;
+
+
+        /* Update counter */
+
+        selectionCount.textContent = count;
+
+
+        /* Enable / disable delete */
+
+        deleteButton.disabled =
+            count === 0;
+
+
+        /* Update select-all checkbox */
+
+        if (checkboxes.length === 0) {
+
+            selectAll.checked = false;
+            selectAll.indeterminate = false;
+
+            return;
+        }
+
+
+        if (count === 0) {
+
+            selectAll.checked = false;
+            selectAll.indeterminate = false;
+
+        }
+        else if (count === checkboxes.length) {
+
+            selectAll.checked = true;
+            selectAll.indeterminate = false;
+
+        }
+        else {
+
+            selectAll.checked = false;
+            selectAll.indeterminate = true;
+
+        }
+
+
+        /* Highlight selected rows */
+
+        checkboxes.forEach(function (checkbox) {
+
+            const row =
+                checkbox.closest("tr");
+
+            if (!row) {
+                return;
+            }
+
+            if (checkbox.checked) {
+
+                row.classList.add(
+                    "selected-row"
+                );
+
+            } else {
+
+                row.classList.remove(
+                    "selected-row"
+                );
+
+            }
+
+        });
+
+    }
+
+
+    /*
+    =========================================================
+    SELECT ALL
+    =========================================================
+    */
+
+    selectAll.addEventListener(
+        "change",
+        function () {
+
+            checkboxes.forEach(
+                function (checkbox) {
+
+                    checkbox.checked =
+                        selectAll.checked;
+
+                }
+            );
+
+            updateSelection();
+
+        }
+    );
+
+
+    /*
+    =========================================================
+    INDIVIDUAL CHECKBOX
+    =========================================================
+    */
+
+    checkboxes.forEach(
+        function (checkbox) {
+
+            checkbox.addEventListener(
+                "change",
+                updateSelection
+            );
+
+        }
+    );
+
+
+    /*
+    =========================================================
+    INITIAL STATE
+    =========================================================
+    */
+
+    updateSelection();
+
+});
+
+
+/*
+=========================================================
+CONFIRM DELETE
+=========================================================
+*/
+
+function confirmDeleteApplicants() {
+
+    const selected =
+        document.querySelectorAll(
+            ".applicant-checkbox:checked"
+        );
+
+    const count =
+        selected.length;
+
+
+    if (count === 0) {
+
+        return false;
+
+    }
+
+
+    return confirm(
+        "Are you sure you want to delete " +
+        count +
+        " selected applicant(s)?\n\n" +
+        "This action cannot be undone."
+    );
+
+}
+
+</script>
+
 {% endblock %}
