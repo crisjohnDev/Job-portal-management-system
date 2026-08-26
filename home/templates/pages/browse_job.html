@@ -2,27 +2,32 @@
 {% load static %}
 
 {% block content %}
+
 <style>
-    /* --- BROWSE JOBS LAYOUT WORKSPACE --- */
+
+    /* =========================================================
+       BROWSE JOBS LAYOUT
+    ========================================================= */
+
     .browse-container {
         width: 100%;
-        max-width: 1100px; /* Expanded width for two-column grid */
+        max-width: 1100px;
         margin: 120px auto 40px auto;
         padding: 0 20px;
         z-index: 10;
         position: relative;
         text-align: left;
         height: calc(100vh - 160px);
+        box-sizing: border-box;
     }
 
     .browse-grid {
         display: grid;
-        grid-template-columns: 280px 1fr; /* Sidebar width + Main content area */
+        grid-template-columns: 280px 1fr;
         gap: 24px;
         height: 100%;
     }
 
-    /* Scrollable behavior for both columns */
     .sidebar-column,
     .main-search-column {
         overflow-y: auto;
@@ -30,18 +35,22 @@
         height: 100%;
     }
 
-    /* Custom Scrollbar */
     .sidebar-column::-webkit-scrollbar,
     .main-search-column::-webkit-scrollbar {
         width: 5px;
     }
+
     .sidebar-column::-webkit-scrollbar-thumb,
     .main-search-column::-webkit-scrollbar-thumb {
         background-color: rgba(255, 255, 255, 0.2);
         border-radius: 0;
     }
 
-    /* Typography & Headers */
+
+    /* =========================================================
+       SECTION TITLE
+    ========================================================= */
+
     .section-title {
         color: var(--text-main, #ffffff);
         font-size: 1.8rem;
@@ -51,7 +60,11 @@
         padding-bottom: 8px;
     }
 
-    /* --- SIDEBAR CARD FOR COMPANIES --- */
+
+    /* =========================================================
+       COMPANY SIDEBAR
+    ========================================================= */
+
     .companies-card {
         background: rgba(255, 255, 255, 0.06);
         border: 1px solid rgba(255, 255, 255, 0.12);
@@ -109,7 +122,11 @@
         border-radius: 0;
     }
 
-    /* --- SEARCH COMPONENT --- */
+
+    /* =========================================================
+       SEARCH
+    ========================================================= */
+
     .search-box-wrapper {
         margin-bottom: 24px;
         position: relative;
@@ -126,6 +143,7 @@
         outline: none;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         transition: all 0.2s ease;
+        box-sizing: border-box;
     }
 
     .search-input:focus {
@@ -133,7 +151,11 @@
         box-shadow: 0 4px 20px rgba(52, 211, 153, 0.4);
     }
 
-    /* --- JOB POST CARDS --- */
+
+    /* =========================================================
+       JOB CARD
+    ========================================================= */
+
     .job-card {
         background: rgba(255, 255, 255, 0.08);
         backdrop-filter: blur(10px);
@@ -149,22 +171,110 @@
         transform: translateY(-2px);
         background: rgba(255, 255, 255, 0.14);
         border-color: rgba(255, 255, 255, 0.3);
-        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+
+    /* =========================================================
+       JOB HEADER
+       LOGO + TITLE
+    ========================================================= */
+
+    .job-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 4px;
+    }
+
+
+    /* =========================================================
+       COMPANY LOGO
+    ========================================================= */
+
+    .company-logo-button {
+        width: 58px;
+        height: 58px;
+        min-width: 58px;
+        padding: 0;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        overflow: hidden;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
+
+    .company-logo-button:hover {
+        transform: scale(1.05);
+        border-color: #34d399;
+        box-shadow: 0 4px 15px rgba(52, 211, 153, 0.3);
+    }
+
+    .company-logo-button img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+    }
+
+
+    /* =========================================================
+       LOGO FALLBACK
+    ========================================================= */
+
+    .company-logo-placeholder {
+        width: 58px;
+        height: 58px;
+        min-width: 58px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: rgba(255, 255, 255, 0.12);
+
+        border: 1px solid rgba(255, 255, 255, 0.2);
+
+        color: #a7f3d0;
+
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+
+    /* =========================================================
+       JOB TITLE
+    ========================================================= */
+
+    .job-title-wrapper {
+        min-width: 0;
+        flex: 1;
     }
 
     .job-title {
         font-size: 1.25rem;
         font-weight: 600;
         color: #a7f3d0;
-        margin-bottom: 4px;
+        margin: 0;
+        line-height: 1.3;
     }
 
     .job-company {
         font-weight: 500;
         color: #e2e8f0;
         font-size: 0.95rem;
+        margin-top: 5px;
         margin-bottom: 12px;
     }
+
+
+    /* =========================================================
+       JOB META
+    ========================================================= */
 
     .job-meta-details {
         display: flex;
@@ -176,21 +286,41 @@
     }
 
     .meta-item {
-        display: flex;
+        display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: 6px;
+        white-space: nowrap;
     }
+
+    .meta-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        stroke: #a7f3d0;
+    }
+
+
+    /* =========================================================
+       DESCRIPTION
+    ========================================================= */
 
     .job-description {
         font-size: 0.92rem;
         line-height: 1.5;
         color: #e2e8f0;
         margin-bottom: 16px;
+
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
+
         overflow: hidden;
     }
+
+
+    /* =========================================================
+       APPLY BUTTON
+    ========================================================= */
 
     .btn-apply {
         display: inline-block;
@@ -208,7 +338,11 @@
         background-color: var(--card-green-hover, #047857);
     }
 
-    /* Empty state display text */
+
+    /* =========================================================
+       EMPTY / NO RESULTS
+    ========================================================= */
+
     .no-results {
         color: #cbd5e1;
         text-align: center;
@@ -217,145 +351,874 @@
         display: none;
     }
 
-    /* Responsive adjustments */
+
+    /* =========================================================
+       LOGO MODAL
+    ========================================================= */
+
+    .logo-modal {
+        position: fixed;
+        inset: 0;
+
+        background: rgba(0, 0, 0, 0.82);
+        backdrop-filter: blur(6px);
+
+        display: none;
+
+        align-items: center;
+        justify-content: center;
+
+        z-index: 99999;
+
+        padding: 30px;
+
+        box-sizing: border-box;
+    }
+
+    .logo-modal.active {
+        display: flex;
+    }
+
+
+    /* =========================================================
+       MODAL CONTENT
+    ========================================================= */
+
+    .logo-modal-content {
+        position: relative;
+
+        max-width: 90vw;
+        max-height: 90vh;
+
+        background: #ffffff;
+
+        padding: 20px;
+
+        border-radius: 12px;
+
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        animation: logoModalIn 0.2s ease;
+    }
+
+    @keyframes logoModalIn {
+
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+    }
+
+
+    /* =========================================================
+       LARGE LOGO
+    ========================================================= */
+
+    .logo-modal-image {
+        max-width: 70vw;
+        max-height: 70vh;
+
+        width: auto;
+        height: auto;
+
+        object-fit: contain;
+
+        display: block;
+    }
+
+
+    /* =========================================================
+       COMPANY NAME
+    ========================================================= */
+
+    .logo-modal-company {
+        color: #0f172a;
+
+        font-size: 1.1rem;
+        font-weight: 700;
+
+        margin-top: 15px;
+
+        text-align: center;
+    }
+
+
+    /* =========================================================
+       CLOSE BUTTON
+    ========================================================= */
+
+    .logo-modal-close {
+        position: absolute;
+
+        top: -14px;
+        right: -14px;
+
+        width: 36px;
+        height: 36px;
+
+        border-radius: 50%;
+
+        border: none;
+
+        background: #ffffff;
+
+        color: #0f172a;
+
+        font-size: 24px;
+
+        line-height: 36px;
+
+        cursor: pointer;
+
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+
+        transition: all 0.2s ease;
+    }
+
+    .logo-modal-close:hover {
+        background: #ef4444;
+        color: #ffffff;
+        transform: scale(1.05);
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
     @media(max-width: 992px) {
+
         .browse-container {
             height: auto;
             margin-top: 100px;
         }
+
         .browse-grid {
-            grid-template-columns: 1fr; /* Stack sidebar on top for smaller screens */
+            grid-template-columns: 1fr;
         }
+
         .sidebar-column,
         .main-search-column {
             overflow-y: visible;
             height: auto;
         }
+
     }
+
+
+    @media(max-width: 600px) {
+
+        .browse-container {
+            padding: 0 12px;
+        }
+
+        .job-card {
+            padding: 16px;
+        }
+
+        .job-header {
+            gap: 10px;
+        }
+
+        .company-logo-button,
+        .company-logo-placeholder {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+        }
+
+        .job-title {
+            font-size: 1.05rem;
+        }
+
+        .job-meta-details {
+            gap: 10px;
+        }
+
+        .logo-modal {
+            padding: 20px;
+        }
+
+        .logo-modal-content {
+            padding: 15px;
+        }
+
+        .logo-modal-image {
+            max-width: 80vw;
+            max-height: 70vh;
+        }
+
+    }
+
 </style>
 
+
+<!-- =========================================================
+     MAIN CONTAINER
+========================================================= -->
+
 <div class="browse-container">
-    
+
     <div class="browse-grid">
-        
-        <!-- SIDEBAR COLUMN: COMPANY FILTER CARD -->
+
+
+        <!-- =====================================================
+             SIDEBAR
+        ====================================================== -->
+
         <aside class="sidebar-column">
+
             <div class="companies-card">
-                <div class="companies-card-header">Companies</div>
-                <div class="company-list" id="companyList">
-                    <div class="company-item active" data-company="all">
-                        <span>All Companies</span>
-                        <span class="badge-count">{{ job|length }}</span>
+
+                <div class="companies-card-header">
+                    Companies
+                </div>
+
+                <div
+                    class="company-list"
+                    id="companyList"
+                >
+
+                    <div
+                        class="company-item active"
+                        data-company="all"
+                    >
+
+                        <span>
+                            All Companies
+                        </span>
+
+                        <span class="badge-count">
+                            {{ job|length }}
+                        </span>
+
                     </div>
 
+
                     {% regroup job by employer.company_name as company_group %}
+
                     {% for company in company_group %}
+
                         {% if company.grouper %}
-                            <div class="company-item" data-company="{{ company.grouper|lower }}">
-                                <span>{{ company.grouper }}</span>
-                                <span class="badge-count">{{ company.list|length }}</span>
+
+                            <div
+                                class="company-item"
+                                data-company="{{ company.grouper|lower }}"
+                            >
+
+                                <span>
+                                    {{ company.grouper }}
+                                </span>
+
+                                <span class="badge-count">
+                                    {{ company.list|length }}
+                                </span>
+
                             </div>
+
                         {% endif %}
+
                     {% endfor %}
+
                 </div>
+
             </div>
+
         </aside>
 
-        <!-- MAIN COLUMN: LIVE SEARCH & JOB POSTINGS -->
+
+        <!-- =====================================================
+             MAIN JOB COLUMN
+        ====================================================== -->
+
         <main class="main-search-column">
-            <h2 class="section-title">Job Vacancies in Pioduran</h2>
-            
-            <!-- Live Search Field Input -->
+
+            <h2 class="section-title">
+                Job Vacancies in Pioduran
+            </h2>
+
+
+            <!-- SEARCH -->
+
             <div class="search-box-wrapper">
-                <input type="text" id="liveSearch" class="search-input" placeholder="Search by job title, company, skills, or tags...">
+
+                <input
+                    type="text"
+                    id="liveSearch"
+                    class="search-input"
+                    placeholder="Search by job title, company, skills, or tags..."
+                >
+
             </div>
 
-            <!-- Dynamic Target Postings Container -->
+
+            <!-- JOB LIST -->
+
             <div id="jobPostingsList">
 
                 {% for i in job %}
-                <div class="job-card" 
-                     data-company="{{ i.employer.company_name|default:''|lower }}" 
-                     data-searchable="{{ i.title|lower }} {{ i.employer.company_name|default:''|lower }} {{ i.location|lower }} {{ i.description|lower }}">
-                    <div class="job-title">{{ i.title }}</div>
-                    <div class="job-company">{{ i.employer.company_name }}</div>
-                    <div class="job-meta-details">
-                        <span class="meta-item">{{ i.location }}</span>
-                        <span class="meta-item">{{ i.job_type }}</span>
-                        <span class="meta-item">
-                            {{ i.salary_display }}{% if i.salary %} / month{% endif %}
-                        </span>
+
+                <div
+                    class="job-card"
+
+                    data-company="{{ i.employer.company_name|default:''|lower }}"
+
+                    data-searchable="
+                        {{ i.title|lower }}
+                        {{ i.employer.company_name|default:''|lower }}
+                        {{ i.location|lower }}
+                        {{ i.description|lower }}
+                        {{ i.qualifications|lower }}
+                        {{ i.responsibilities|lower }}
+                    "
+                >
+
+
+                    <!-- =================================================
+                         JOB TITLE + COMPANY LOGO
+                    ================================================== -->
+
+                    <div class="job-header">
+
+
+                        {% if i.employer.company_logo %}
+
+                            <!-- CLICKABLE COMPANY LOGO -->
+
+                            <button
+                                type="button"
+                                class="company-logo-button"
+
+                                onclick="openLogoModal(
+                                    '{{ i.employer.company_logo.url }}',
+                                    '{{ i.employer.company_name|escapejs }}'
+                                )"
+
+                                title="View {{ i.employer.company_name }} logo"
+                            >
+
+                                <img
+                                    src="{{ i.employer.company_logo.url }}"
+                                    alt="{{ i.employer.company_name }} Logo"
+                                >
+
+                            </button>
+
+                        {% else %}
+
+                            <!-- LOGO FALLBACK -->
+
+                            <div
+                                class="company-logo-placeholder"
+                                title="No company logo"
+                            >
+
+                                {{ i.employer.company_name|first|upper }}
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- JOB TITLE -->
+
+                        <div class="job-title-wrapper">
+
+                            <div class="job-title">
+                                {{ i.title }}
+                            </div>
+
+                            <div class="job-company">
+                                {{ i.employer.company_name }}
+                            </div>
+
+                        </div>
+
                     </div>
+
+
+                    <!-- =================================================
+                         JOB META
+                    ================================================== -->
+
+                    <div class="job-meta-details">
+
+
+                        <!-- LOCATION -->
+
+                        <span class="meta-item">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M20 10.5c0 5.25-8 11-8 11s-8-5.75-8-11a8 8 0 1 1 16 0Z"></path>
+                                <circle cx="12" cy="10.5" r="2.5"></circle>
+                            </svg>
+
+                            <span>
+                                {{ i.location }}
+                            </span>
+
+                        </span>
+
+
+                        <!-- JOB TYPE -->
+
+                        <span class="meta-item">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <rect
+                                    x="3"
+                                    y="7"
+                                    width="18"
+                                    height="13"
+                                    rx="2"
+                                ></rect>
+
+                                <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+
+                                <path d="M3 12h18"></path>
+
+                            </svg>
+
+                            <span>
+                                {{ i.get_job_type_display }}
+                            </span>
+
+                        </span>
+
+
+                        <!-- SALARY -->
+
+                        <span class="meta-item">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+
+                                <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="9"
+                                ></circle>
+
+                                <path d="M15 8.5c-.7-.7-1.7-1-3-1-1.7 0-3 1-3 2.3 0 3.2 6 1.3 6 4.4 0 1.3-1.3 2.3-3 2.3-1.3 0-2.4-.4-3.2-1.2"></path>
+
+                                <path d="M12 6v12"></path>
+
+                            </svg>
+
+                            <span>
+
+                                {{ i.salary_display }}
+
+                                {% if i.salary %}
+                                    / month
+                                {% endif %}
+
+                            </span>
+
+                        </span>
+
+
+                        <!-- VACANCIES -->
+
+                        <span class="meta-item">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+
+                                <circle
+                                    cx="9"
+                                    cy="8"
+                                    r="3"
+                                ></circle>
+
+                                <path
+                                    d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"
+                                ></path>
+
+                                <path d="M16 11c2.8 0 5 2.2 5 5"></path>
+
+                                <path d="M16 5.5a3 3 0 0 1 0 5.8"></path>
+
+                            </svg>
+
+                            <span>
+
+                                {{ i.vacancies }}
+                                opening{{ i.vacancies|pluralize }}
+
+                            </span>
+
+                        </span>
+
+
+                    </div>
+
+
+                    <!-- =================================================
+                         DESCRIPTION
+                    ================================================== -->
+
                     <p class="job-description">
                         {{ i.description }}
                     </p>
-                    <a href="{% url 'job_details' i.id %}" class="btn-apply">View Details</a>
+
+
+                    <!-- =================================================
+                         VIEW DETAILS
+                    ================================================== -->
+
+                    <a
+                        href="{% url 'job_details' i.id %}"
+                        class="btn-apply"
+                    >
+                        View Details
+                    </a>
+
                 </div>
+
+
                 {% empty %}
-                <div class="no-results" style="display: block;">
-                    No job vacancies match your current search terms. Please check back later or modify your keyword queries.
+
+                <div
+                    class="no-results"
+                    style="display: block;"
+                >
+                    No job vacancies are currently available.
                 </div>
+
                 {% endfor %}
 
-                <div id="noResultsMessage" class="no-results">
-                    No job vacancies match your current search terms. Please check back later or modify your keyword queries.
+
+                <!-- DYNAMIC NO RESULTS -->
+
+                <div
+                    id="noResultsMessage"
+                    class="no-results"
+                >
+                    No job vacancies match your current search terms.
+                    Please check back later or modify your keyword queries.
                 </div>
+
             </div>
+
         </main>
 
     </div>
 
 </div>
 
-<!-- COMPONENT LIVE SEARCH & SIDEBAR FILTER SCRIPT -->
+
+<!-- =========================================================
+     COMPANY LOGO MODAL
+========================================================= -->
+
+<div
+    id="logoModal"
+    class="logo-modal"
+    onclick="closeLogoModal(event)"
+>
+
+    <div
+        class="logo-modal-content"
+        onclick="event.stopPropagation()"
+    >
+
+        <!-- CLOSE -->
+
+        <button
+            type="button"
+            class="logo-modal-close"
+            onclick="closeLogoModal()"
+            aria-label="Close"
+        >
+            ×
+        </button>
+
+
+        <!-- LARGE LOGO -->
+
+        <img
+            id="modalLogoImage"
+            class="logo-modal-image"
+            src=""
+            alt="Company Logo"
+        >
+
+
+        <!-- COMPANY NAME -->
+
+        <div
+            id="modalCompanyName"
+            class="logo-modal-company"
+        >
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const searchInput = document.getElementById("liveSearch");
-        const jobCards = document.querySelectorAll(".job-card");
-        const noResultsMessage = document.getElementById("noResultsMessage");
-        const companyItems = document.querySelectorAll(".company-item");
-        
-        let selectedCompany = "all";
 
-        function filterJobs() {
-            const queryValue = searchInput.value.toLowerCase().trim();
-            let visibleCardsCount = 0;
+document.addEventListener("DOMContentLoaded", function () {
 
-            jobCards.forEach(card => {
-                const searchableMetadata = card.getAttribute("data-searchable") || "";
-                const cardCompany = card.getAttribute("data-company") || "";
+    const searchInput =
+        document.getElementById("liveSearch");
 
-                const matchesSearch = searchableMetadata.includes(queryValue);
-                const matchesCompany = (selectedCompany === "all") || (cardCompany === selectedCompany);
+    const jobCards =
+        document.querySelectorAll(".job-card");
 
-                if (matchesSearch && matchesCompany) {
-                    card.style.display = "block";
-                    visibleCardsCount++;
-                } else {
-                    card.style.display = "none";
-                }
-            });
+    const noResultsMessage =
+        document.getElementById("noResultsMessage");
 
-            if (visibleCardsCount === 0 && jobCards.length > 0) {
-                noResultsMessage.style.display = "block";
+    const companyItems =
+        document.querySelectorAll(".company-item");
+
+    let selectedCompany = "all";
+
+
+    /* =========================================================
+       FILTER JOBS
+    ========================================================= */
+
+    function filterJobs() {
+
+        const queryValue =
+            searchInput.value
+                .toLowerCase()
+                .trim();
+
+        let visibleCardsCount = 0;
+
+
+        jobCards.forEach(card => {
+
+            const searchableMetadata =
+                card.getAttribute("data-searchable") || "";
+
+            const cardCompany =
+                card.getAttribute("data-company") || "";
+
+
+            const matchesSearch =
+                searchableMetadata.includes(queryValue);
+
+            const matchesCompany =
+                selectedCompany === "all" ||
+                cardCompany === selectedCompany;
+
+
+            if (
+                matchesSearch &&
+                matchesCompany
+            ) {
+
+                card.style.display = "block";
+
+                visibleCardsCount++;
+
             } else {
-                noResultsMessage.style.display = "none";
+
+                card.style.display = "none";
+
             }
+
+        });
+
+
+        if (
+            visibleCardsCount === 0 &&
+            jobCards.length > 0
+        ) {
+
+            noResultsMessage.style.display = "block";
+
+        } else {
+
+            noResultsMessage.style.display = "none";
+
         }
 
-        // Search Input Event
-        searchInput.addEventListener("input", filterJobs);
+    }
 
-        // Company Item Click Event
-        companyItems.forEach(item => {
-            item.addEventListener("click", function() {
-                companyItems.forEach(c => c.classList.remove("active"));
+
+    /* =========================================================
+       SEARCH
+    ========================================================= */
+
+    searchInput.addEventListener(
+        "input",
+        filterJobs
+    );
+
+
+    /* =========================================================
+       COMPANY FILTER
+    ========================================================= */
+
+    companyItems.forEach(item => {
+
+        item.addEventListener(
+            "click",
+            function () {
+
+                companyItems.forEach(c =>
+                    c.classList.remove("active")
+                );
+
                 this.classList.add("active");
-                
-                selectedCompany = this.getAttribute("data-company");
+
+                selectedCompany =
+                    this.getAttribute(
+                        "data-company"
+                    );
+
                 filterJobs();
-            });
-        });
+
+            }
+        );
+
     });
+
+});
+
+
+/* =============================================================
+   OPEN LOGO MODAL
+============================================================= */
+
+function openLogoModal(
+    logoUrl,
+    companyName
+) {
+
+    const modal =
+        document.getElementById("logoModal");
+
+    const image =
+        document.getElementById("modalLogoImage");
+
+    const name =
+        document.getElementById("modalCompanyName");
+
+
+    image.src = logoUrl;
+
+    image.alt =
+        companyName + " Logo";
+
+    name.textContent =
+        companyName;
+
+
+    modal.classList.add("active");
+
+
+    /* Prevent background scrolling */
+
+    document.body.style.overflow = "hidden";
+
+}
+
+
+/* =============================================================
+   CLOSE LOGO MODAL
+============================================================= */
+
+function closeLogoModal(event) {
+
+    const modal =
+        document.getElementById("logoModal");
+
+
+    /*
+       Only close when:
+       - Close button is clicked
+       - Dark background is clicked
+    */
+
+    if (
+        event &&
+        event.target !== modal
+    ) {
+        return;
+    }
+
+
+    modal.classList.remove("active");
+
+
+    document.body.style.overflow = "";
+
+
+    document.getElementById(
+        "modalLogoImage"
+    ).src = "";
+
+}
+
+
+/* =============================================================
+   ESC KEY CLOSE
+============================================================= */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Escape") {
+
+            closeLogoModal();
+
+        }
+
+    }
+);
+
 </script>
+
 {% endblock %}
