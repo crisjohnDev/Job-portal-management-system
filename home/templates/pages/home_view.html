@@ -4,9 +4,13 @@
 {% block content %}
 
 <style>
-/* --- FULL SCREEN COVER BACKGROUND --- */
-body, 
+
+/* =========================================================
+   GLOBAL BACKGROUND
+========================================================= */
+
 html,
+body,
 [class*="hero"],
 [class*="bg"],
 [class*="main"] {
@@ -16,7 +20,11 @@ html,
     background-attachment: fixed !important;
 }
 
-/* --- GLOBAL SECTION FULL-PAGE STYLING --- */
+
+/* =========================================================
+   SECTION 1: HERO
+========================================================= */
+
 .hero-content-wrapper,
 .featured-jobs-wrapper,
 .stats-wrapper {
@@ -29,7 +37,9 @@ html,
     box-sizing: border-box;
 }
 
-/* --- SECTION 1: HERO LAYOUT & TYPOGRAPHY --- */
+
+/* Hero */
+
 .hero-content-wrapper {
     align-items: center;
     text-align: center;
@@ -43,7 +53,7 @@ html,
     line-height: 1.35;
     margin-bottom: 32px;
     letter-spacing: -0.02em;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
     max-width: 1000px;
 }
 
@@ -54,7 +64,11 @@ html,
     flex-wrap: wrap;
 }
 
-/* --- SECTION TITLE STYLING --- */
+
+/* =========================================================
+   SECTION TITLES
+========================================================= */
+
 .section-title {
     font-weight: 800;
     margin-bottom: 28px;
@@ -65,7 +79,11 @@ html,
     text-align: left;
 }
 
-/* --- SECTION 2: FEATURED JOBS SECTION --- */
+
+/* =========================================================
+   SECTION 2: FEATURED JOBS
+========================================================= */
+
 .featured-jobs-wrapper {
     justify-content: center;
 }
@@ -87,7 +105,10 @@ html,
     justify-content: space-between;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    transition: var(--transition-smooth, all 0.25s cubic-bezier(0.16, 1, 0.3, 1));
+    transition: var(
+        --transition-smooth,
+        all 0.25s cubic-bezier(0.16, 1, 0.3, 1)
+    );
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     width: 100%;
 }
@@ -191,7 +212,11 @@ html,
     width: 100%;
 }
 
-/* --- SECTION 3: STATISTICS SECTION --- */
+
+/* =========================================================
+   SECTION 3: STATISTICS
+========================================================= */
+
 .stats-wrapper {
     justify-content: center;
 }
@@ -213,7 +238,10 @@ html,
     justify-content: space-between;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    transition: var(--transition-smooth, all 0.25s cubic-bezier(0.16, 1, 0.3, 1));
+    transition: var(
+        --transition-smooth,
+        all 0.25s cubic-bezier(0.16, 1, 0.3, 1)
+    );
     width: 100%;
 }
 
@@ -243,20 +271,326 @@ html,
     font-weight: 700;
 }
 
-/* Mobile Responsiveness */
+
+/* =========================================================
+   SECTION 4: LEARN MORE
+========================================================= */
+
+.learn-more-wrapper {
+    width: 100%;
+    padding: 110px 40px;
+    background: rgba(5, 15, 3, 0.94);
+    box-sizing: border-box;
+}
+
+.learn-more-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+/* Introduction */
+
+.learn-more-intro {
+    max-width: 950px;
+    margin-bottom: 65px;
+}
+
+.learn-more-intro h2 {
+    color: #ffffff;
+    font-size: 2.4rem;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 20px;
+}
+
+.learn-more-intro h2 span {
+    color: #74BC44;
+}
+
+.learn-more-intro p {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin: 0;
+}
+
+
+/* Information Cards */
+
+.portal-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 80px;
+}
+
+.portal-info-card {
+    background: rgba(116, 188, 68, 0.07);
+    border: 1px solid rgba(116, 188, 68, 0.20);
+    padding: 30px;
+    min-height: 220px;
+    transition: all 0.25s ease;
+}
+
+.portal-info-card:hover {
+    border-color: #74BC44;
+    background: rgba(116, 188, 68, 0.13);
+    transform: translateY(-3px);
+}
+
+.portal-info-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    color: #74BC44;
+}
+
+.portal-info-card h3 {
+    color: #ffffff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.portal-info-card p {
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin: 0;
+}
+
+
+/* Content Sections */
+
+.learn-content-section {
+    margin-bottom: 75px;
+}
+
+.learn-content-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.learn-content-heading span {
+    width: 4px;
+    height: 30px;
+    background: #74BC44;
+    display: block;
+    flex-shrink: 0;
+}
+
+.learn-content-heading h3 {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0;
+}
+
+.learn-content-section > p {
+    color: rgba(255, 255, 255, 0.70);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    max-width: 1050px;
+}
+
+
+/* =========================================================
+   WHY WAS THIS CREATED
+========================================================= */
+
+.why-portal {
+    border-top: 1px solid rgba(116, 188, 68, 0.15);
+    border-bottom: 1px solid rgba(116, 188, 68, 0.15);
+    padding: 60px 0;
+    margin-bottom: 75px;
+}
+
+.why-portal p {
+    max-width: 1050px;
+    color: rgba(255, 255, 255, 0.72);
+    line-height: 1.8;
+    font-size: 0.95rem;
+}
+
+.portal-goals {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px 35px;
+    margin-top: 28px;
+    max-width: 950px;
+}
+
+.portal-goal {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.9rem;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.portal-goal::before {
+    content: "✓";
+    color: #74BC44;
+    font-weight: 700;
+    margin-right: 10px;
+}
+
+
+/* =========================================================
+   FEATURE BOXES
+========================================================= */
+
+.portal-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 30px;
+}
+
+.portal-feature-box {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.025);
+    padding: 28px;
+}
+
+.portal-feature-box h4 {
+    color: #74BC44;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+
+.portal-feature-box p {
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.portal-feature-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.portal-feature-box li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 10px;
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 0.88rem;
+    line-height: 1.55;
+}
+
+.portal-feature-box li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 6px;
+    height: 6px;
+    background: #74BC44;
+}
+
+
+/* =========================================================
+   VISION
+========================================================= */
+
+.portal-vision {
+    text-align: center;
+    padding: 75px 30px;
+    border: 1px solid rgba(116, 188, 68, 0.20);
+    background: rgba(116, 188, 68, 0.06);
+}
+
+.portal-vision h3 {
+    color: #74BC44;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 20px;
+}
+
+.portal-vision h2 {
+    color: #ffffff;
+    font-size: 2rem;
+    line-height: 1.4;
+    font-weight: 800;
+    max-width: 850px;
+    margin: 0 auto 20px;
+}
+
+.portal-vision p {
+    color: rgba(255, 255, 255, 0.68);
+    max-width: 800px;
+    margin: 0 auto 10px;
+    line-height: 1.7;
+}
+
+.vision-tagline {
+    color: #74BC44;
+    font-weight: 700;
+    margin-top: 28px;
+    font-size: 1rem;
+}
+
+
+/* =========================================================
+   MOBILE RESPONSIVENESS
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .portal-info-grid,
+    .portal-feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
 @media (max-width: 768px) {
+
     .hero-content-wrapper,
     .featured-jobs-wrapper,
     .stats-wrapper {
         min-height: auto;
         padding: 60px 20px;
     }
-    
+
     .hero-content-wrapper h2 {
         font-size: 1.8rem;
     }
 
-    body, 
+    .learn-more-wrapper {
+        padding: 75px 20px;
+    }
+
+    .learn-more-intro h2 {
+        font-size: 1.8rem;
+    }
+
+    .portal-info-grid,
+    .portal-feature-grid,
+    .portal-goals {
+        grid-template-columns: 1fr;
+    }
+
+    .portal-vision {
+        padding: 55px 20px;
+    }
+
+    .portal-vision h2 {
+        font-size: 1.5rem;
+    }
+
+    body,
     html,
     [class*="hero"],
     [class*="bg"],
@@ -264,108 +598,1175 @@ html,
         background-attachment: scroll !important;
     }
 }
+
 </style>
 
-<!-- SECTION 1: HERO / MAIN TITLE -->
+
+<!-- =========================================================
+     SECTION 1: HERO / MAIN TITLE
+========================================================= -->
+
 <section class="hero-content-wrapper">
-    <h2>Connecting job seekers and employers with local employment opportunities and career resources in the Municipality of Pio Duran</h2>
-    
+
+    <h2>
+        Connecting job seekers and employers with local employment
+        opportunities and career resources in the Municipality of Pio Duran
+    </h2>
+
     <div class="hero-actions">
+
         {% if request.user.role == "applicant" or not request.user.is_authenticated %}
-            <a href="{% url 'browse-job' %}" class="btn-pill-white">Browse Jobs</a>
+
+            <a href="{% url 'browse-job' %}" class="btn-pill-white">
+                Browse Jobs
+            </a>
+
         {% else %}
-            <a href="{% url 'employer-dashboard' %}" class="btn-pill-white">Dashboard</a>
+
+            <a href="{% url 'employer-dashboard' %}" class="btn-pill-white">
+                Dashboard
+            </a>
+
         {% endif %}
-        <a href="#featured-jobs" class="btn-pill-outline">Learn More</a>
+
+        <a href="#learn-more" class="btn-pill-outline">
+            Learn More
+        </a>
+
     </div>
+
 </section>
 
-<!-- SECTION 2: FEATURED JOB VACANCIES -->
+
+<!-- =========================================================
+     SECTION 2: FEATURED JOB VACANCIES
+========================================================= -->
+
 <section class="featured-jobs-wrapper" id="featured-jobs">
-    <h3 class="section-title">Featured Job Vacancies</h3>
+
+    <h3 class="section-title">
+        Featured Job Vacancies
+    </h3>
 
     <div class="jobs-scroll-grid">
+
         {% for job in featured_jobs %}
+
             <div class="job-card">
+
                 <div class="job-card-header">
-                    <h4>{{ job.title }}</h4>
+
+                    <h4>
+                        {{ job.title }}
+                    </h4>
+
                     <div class="company-name">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 4v0"/><path d="M16 4v0"/></svg>
+
+                        <svg width="16"
+                             height="16"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <rect width="16"
+                                  height="16"
+                                  x="4"
+                                  y="4"
+                                  rx="2"/>
+
+                            <path d="M9 22v-4h6v4"/>
+                            <path d="M8 4v0"/>
+                            <path d="M16 4v0"/>
+
+                        </svg>
+
                         {{ job.employer.company_name }}
+
                     </div>
+
 
                     <div class="job-meta-list">
+
                         <div class="job-meta-item">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+
+                            <svg width="15"
+                                 height="15"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round">
+
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+
+                            </svg>
+
                             {{ job.location }}
+
                         </div>
+
+
                         <div class="applicant-badge">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                            {{ job.application_count }} applicant{{ job.application_count|pluralize }}
+
+                            <svg width="14"
+                                 height="14"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round">
+
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+
+                                <circle cx="9"
+                                        cy="7"
+                                        r="4"/>
+
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+
+                            </svg>
+
+                            {{ job.application_count }}
+                            applicant{{ job.application_count|pluralize }}
+
                         </div>
+
                     </div>
+
                 </div>
+
 
                 <div class="job-card-footer">
-                    <a href="{% url 'job_details' job.id %}" class="btn-apply-card">
+
+                    <a href="{% url 'job_details' job.id %}"
+                       class="btn-apply-card">
+
                         View Opportunity
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+
+                        <svg width="14"
+                             height="14"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2.5"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <line x1="5"
+                                  x2="19"
+                                  y1="12"
+                                  y2="12"/>
+
+                            <polyline points="12 5 19 12 12 19"/>
+
+                        </svg>
+
                     </a>
+
                 </div>
+
             </div>
+
         {% empty %}
+
             <div class="empty-card">
-                <h4 style="color: #ffffff; margin-bottom: 6px;">No Featured Jobs Available</h4>
-                <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.9rem;">There are currently no active job vacancies. Please check back soon.</p>
+
+                <h4 style="color: #ffffff; margin-bottom: 6px;">
+                    No Featured Jobs Available
+                </h4>
+
+                <p style="
+                    color: rgba(255,255,255,0.6);
+                    font-size: 0.9rem;
+                ">
+                    There are currently no active job vacancies.
+                    Please check back soon.
+                </p>
+
             </div>
+
         {% endfor %}
+
     </div>
+
 </section>
 
-<!-- SECTION 3: PORTAL STATISTICS -->
+
+<!-- =========================================================
+     SECTION 3: PORTAL STATISTICS
+========================================================= -->
+
 <section class="stats-wrapper">
-    <h3 class="section-title">Portal Statistics</h3>
+
+    <h3 class="section-title">
+        Portal Statistics
+    </h3>
 
     <div class="stats-grid">
+
+
+        <!-- REGISTERED APPLICANTS -->
+
         <div class="stat-card">
+
             <div>
+
                 <div class="stat-num">
                     {{ registered_applicants }}+
                 </div>
+
                 <div class="stat-label">
                     Registered<br>
                     Applicants
                 </div>
+
             </div>
-            <span class="arrow-icon">›</span>
+
+            <span class="arrow-icon">
+                ›
+            </span>
+
         </div>
 
+
+        <!-- ACTIVE JOB VACANCIES -->
+
         <div class="stat-card">
+
             <div>
+
                 <div class="stat-num">
                     {{ active_job_vacancies }}+
                 </div>
+
                 <div class="stat-label">
                     Active<br>
                     Job Vacancies
                 </div>
+
             </div>
-            <span class="arrow-icon">›</span>
+
+            <span class="arrow-icon">
+                ›
+            </span>
+
         </div>
 
+
+        <!-- SUCCESSFUL PLACEMENTS -->
+
         <div class="stat-card">
+
             <div>
+
                 <div class="stat-num">
                     {{ successful_placements }}
                 </div>
+
                 <div class="stat-label">
                     Successful<br>
                     Placements
                 </div>
+
             </div>
-            <span class="arrow-icon">›</span>
+
+            <span class="arrow-icon">
+                ›
+            </span>
+
         </div>
+
     </div>
+
 </section>
+
+
+<!-- =========================================================
+     SECTION 4: LEARN MORE ABOUT OUR JOB PORTAL
+========================================================= -->
+
+<section class="learn-more-wrapper" id="learn-more">
+
+    <div class="learn-more-container">
+
+
+        <!-- =====================================================
+             INTRODUCTION
+        ====================================================== -->
+
+        <div class="learn-more-intro">
+
+            <h2>
+                Learn More About Our
+                <span>Job Portal</span>
+            </h2>
+
+            <p>
+                Welcome to the Job Application and Recruitment Portal
+                for Pio Duran — a community-focused platform designed
+                to make finding jobs and hiring employees easier,
+                faster, and more accessible.
+            </p>
+
+            <p style="margin-top: 15px;">
+                Our goal is simple: help job seekers discover
+                opportunities and help local employers find the right
+                people for their jobs.
+            </p>
+
+        </div>
+
+
+        <!-- =====================================================
+             WHO CAN USE THE PORTAL
+        ====================================================== -->
+
+        <div class="portal-info-grid">
+
+
+            <!-- JOB SEEKERS -->
+
+            <div class="portal-info-card">
+
+                <div class="portal-info-icon">
+
+                    <svg width="28"
+                         height="28"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="1.8"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
+
+                        <circle cx="12"
+                                cy="8"
+                                r="4"/>
+
+                        <path d="M5 21a7 7 0 0 1 14 0"/>
+
+                    </svg>
+
+                </div>
+
+                <h3>
+                    Job Seekers
+                </h3>
+
+                <p>
+                    Create a professional profile, discover available
+                    job opportunities, submit applications online,
+                    and track your application progress.
+                </p>
+
+            </div>
+
+
+            <!-- EMPLOYERS -->
+
+            <div class="portal-info-card">
+
+                <div class="portal-info-icon">
+
+                    <svg width="28"
+                         height="28"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="1.8"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
+
+                        <rect x="3"
+                              y="4"
+                              width="18"
+                              height="16"
+                              rx="2"/>
+
+                        <path d="M8 4V2h8v2"/>
+
+                        <path d="M8 12h8"/>
+                        <path d="M8 16h5"/>
+
+                    </svg>
+
+                </div>
+
+                <h3>
+                    Employers
+                </h3>
+
+                <p>
+                    Create company profiles, publish job vacancies,
+                    review applicants, shortlist qualified candidates,
+                    and manage recruitment information.
+                </p>
+
+            </div>
+
+
+            <!-- PESO -->
+
+            <div class="portal-info-card">
+
+                <div class="portal-info-icon">
+
+                    <svg width="28"
+                         height="28"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="1.8"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
+
+                        <path d="M4 21V5"/>
+                        <path d="M4 5l16-2v14L4 19"/>
+
+                        <path d="M8 9h.01"/>
+                        <path d="M12 8h.01"/>
+                        <path d="M16 7h.01"/>
+
+                    </svg>
+
+                </div>
+
+                <h3>
+                    PESO Staff
+                </h3>
+
+                <p>
+                    Manage employment information, monitor vacancies,
+                    assist applicants and employers, and generate
+                    useful employment-related reports.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             WHAT IS THIS SYSTEM
+        ====================================================== -->
+
+        <div class="learn-content-section">
+
+            <div class="learn-content-heading">
+
+                <span></span>
+
+                <h3>
+                    What Is This System?
+                </h3>
+
+            </div>
+
+            <p>
+                The Job Application and Recruitment Portal for Pio Duran
+                is a web-based platform created to support the local
+                employment community of Pio Duran, Albay.
+            </p>
+
+            <p>
+                The system allows job seekers to create profiles,
+                search for available jobs, and submit applications
+                online. Employers can create company profiles, post
+                job vacancies, and manage applicants.
+            </p>
+
+            <p>
+                PESO staff can monitor job opportunities, manage
+                applicant information, assist job seekers, and
+                generate useful employment reports.
+            </p>
+
+            <p>
+                Instead of relying only on social media posts, printed
+                announcements, word-of-mouth, or manual applications,
+                this portal provides one convenient place where job
+                opportunities and applicants can meet.
+            </p>
+
+        </div>
+
+
+        <!-- =====================================================
+             WHY WAS THIS SYSTEM CREATED
+        ====================================================== -->
+
+        <div class="why-portal">
+
+            <div class="learn-content-heading">
+
+                <span></span>
+
+                <h3>
+                    Why Was This System Created?
+                </h3>
+
+            </div>
+
+            <p>
+                Finding a job should not be difficult simply because
+                information is scattered.
+            </p>
+
+            <p>
+                Job opportunities may be posted in different Facebook
+                pages, groups, bulletin boards, or through personal
+                contacts. At the same time, employers may have difficulty
+                reaching qualified applicants, while PESO staff may spend
+                additional time managing applicant information manually.
+            </p>
+
+            <p>
+                This system aims to help solve these challenges by
+                providing a centralized and organized online employment
+                platform.
+            </p>
+
+
+            <div class="portal-goals">
+
+                <div class="portal-goal">
+                    Make job opportunities easier to find
+                </div>
+
+                <div class="portal-goal">
+                    Make applications more convenient
+                </div>
+
+                <div class="portal-goal">
+                    Help employers reach potential applicants
+                </div>
+
+                <div class="portal-goal">
+                    Organize applicant and employment information
+                </div>
+
+                <div class="portal-goal">
+                    Reduce unnecessary paperwork and manual processing
+                </div>
+
+                <div class="portal-goal">
+                    Improve communication between applicants and employers
+                </div>
+
+                <div class="portal-goal">
+                    Support PESO in providing employment assistance
+                </div>
+
+                <div class="portal-goal">
+                    Encourage local employment and career opportunities
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             USER FEATURES
+        ====================================================== -->
+
+        <div class="learn-content-section">
+
+            <div class="learn-content-heading">
+
+                <span></span>
+
+                <h3>
+                    Who Can Use the Portal?
+                </h3>
+
+            </div>
+
+
+            <div class="portal-feature-grid">
+
+
+                <!-- JOB SEEKERS -->
+
+                <div class="portal-feature-box">
+
+                    <h4>
+                        Job Seekers
+                    </h4>
+
+                    <ul>
+
+                        <li>
+                            Create and manage your profile
+                        </li>
+
+                        <li>
+                            Add your education and qualifications
+                        </li>
+
+                        <li>
+                            Add skills and work experience
+                        </li>
+
+                        <li>
+                            Search available job vacancies
+                        </li>
+
+                        <li>
+                            View job details and requirements
+                        </li>
+
+                        <li>
+                            Submit applications online
+                        </li>
+
+                        <li>
+                            Track your application status
+                        </li>
+
+                        <li>
+                            Receive important application notifications
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <!-- EMPLOYERS -->
+
+                <div class="portal-feature-box">
+
+                    <h4>
+                        Employers
+                    </h4>
+
+                    <ul>
+
+                        <li>
+                            Create an employer or company profile
+                        </li>
+
+                        <li>
+                            Post job vacancies
+                        </li>
+
+                        <li>
+                            Specify qualifications and requirements
+                        </li>
+
+                        <li>
+                            Review submitted applications
+                        </li>
+
+                        <li>
+                            View applicant profiles
+                        </li>
+
+                        <li>
+                            Shortlist qualified applicants
+                        </li>
+
+                        <li>
+                            Update application statuses
+                        </li>
+
+                        <li>
+                            Manage recruitment information
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <!-- PESO -->
+
+                <div class="portal-feature-box">
+
+                    <h4>
+                        PESO Staff
+                    </h4>
+
+                    <ul>
+
+                        <li>
+                            Manage job seeker information
+                        </li>
+
+                        <li>
+                            Monitor job vacancies
+                        </li>
+
+                        <li>
+                            Assist applicants
+                        </li>
+
+                        <li>
+                            Monitor recruitment activities
+                        </li>
+
+                        <li>
+                            Manage employer information
+                        </li>
+
+                        <li>
+                            Generate employment-related reports
+                        </li>
+
+                        <li>
+                            Track hiring outcomes
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             COMMUNITY BENEFITS
+        ====================================================== -->
+
+        <div class="learn-content-section">
+
+            <div class="learn-content-heading">
+
+                <span></span>
+
+                <h3>
+                    How Does It Help the Community?
+                </h3>
+
+            </div>
+
+            <p>
+                This portal is more than just a website for posting
+                jobs. It can become a digital bridge between local
+                talent and local employment opportunities.
+            </p>
+
+
+            <div class="portal-feature-grid">
+
+
+                <div class="portal-feature-box">
+
+                    <h4>
+                        For Job Seekers
+                    </h4>
+
+                    <p>
+                        It provides easier access to job opportunities
+                        without having to visit different places or
+                        search through numerous social media posts.
+                    </p>
+
+                </div>
+
+
+                <div class="portal-feature-box">
+
+                    <h4>
+                        For Employers
+                    </h4>
+
+                    <p>
+                        It provides a more organized way to advertise
+                        vacancies and find potential employees.
+                    </p>
+
+                </div>
+
+
+                <div class="portal-feature-box">
+
+                    <h4>
+                        For PESO
+                    </h4>
+
+                    <p>
+                        It can help organize employment information
+                        and support faster employment facilitation.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             COMMUNITY IMPACT
+        ====================================================== -->
+
+        <div class="learn-content-section">
+
+            <div class="learn-content-heading">
+
+                <span></span>
+
+                <h3>
+                    For the Community
+                </h3>
+
+            </div>
+
+            <p>
+                The portal can encourage local hiring, reduce barriers
+                to employment, and connect people with opportunities
+                closer to home.
+            </p>
+
+            <div class="portal-goals">
+
+                <div class="portal-goal">
+                    Connect local talent with local employers
+                </div>
+
+                <div class="portal-goal">
+                    Improve access to employment opportunities
+                </div>
+
+                <div class="portal-goal">
+                    Support local businesses and organizations
+                </div>
+
+                <div class="portal-goal">
+                    Strengthen employment assistance
+                </div>
+
+                <div class="portal-goal">
+                    Reduce barriers to job searching
+                </div>
+
+                <div class="portal-goal">
+                    Encourage local employment
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             WHAT MAKES OUR PORTAL DIFFERENT
+        ====================================================== -->
+
+        <div class="learn-content-section">
+
+            <div class="learn-content-heading">
+
+                <span></span>
+
+                <h3>
+                    What Makes Our Portal Different?
+                </h3>
+
+            </div>
+
+            <p>
+                Unlike large international career platforms, this
+                system focuses specifically on the Pio Duran community.
+            </p>
+
+            <p>
+                Our vision is to create a platform where:
+            </p>
+
+            <p style="
+                color: #74BC44;
+                font-size: 1.1rem;
+                font-weight: 700;
+            ">
+                Local opportunities can reach local people, and local
+                talent can help build the local community.
+            </p>
+
+
+            <div class="portal-feature-grid">
+
+
+                <div class="portal-feature-box">
+
+                    <h4>
+                        Local Opportunities
+                    </h4>
+
+                    <p>
+                        Help residents discover employment opportunities
+                        available within and around the local community.
+                    </p>
+
+                </div>
+
+
+                <div class="portal-feature-box">
+
+                    <h4>
+                        Career Resources
+                    </h4>
+
+                    <p>
+                        Provide a centralized platform where applicants
+                        can organize their professional information and
+                        explore career opportunities.
+                    </p>
+
+                </div>
+
+
+                <div class="portal-feature-box">
+
+                    <h4>
+                        Community Employment
+                    </h4>
+
+                    <p>
+                        Strengthen connections between local businesses,
+                        job seekers, and employment assistance services.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             SAFETY AND TRUST
+        ====================================================== -->
+
+        <div class="learn-content-section">
+
+            <div class="learn-content-heading">
+
+                <span></span>
+
+                <h3>
+                    Safety and Trust
+                </h3>
+
+            </div>
+
+            <p>
+                Because job applications involve personal information,
+                protecting user data should be an important part of
+                the system.
+            </p>
+
+
+            <div class="portal-feature-grid">
+
+
+                <div class="portal-feature-box">
+
+                    <h4>
+                        Account Security
+                    </h4>
+
+                    <ul>
+
+                        <li>
+                            Secure account authentication
+                        </li>
+
+                        <li>
+                            Responsible handling of personal information
+                        </li>
+
+                        <li>
+                            Privacy-conscious applicant profiles
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="portal-feature-box">
+
+                    <h4>
+                        Employer Trust
+                    </h4>
+
+                    <ul>
+
+                        <li>
+                            Verified employer accounts where applicable
+                        </li>
+
+                        <li>
+                            Clear reporting mechanisms
+                        </li>
+
+                        <li>
+                            Reporting of suspicious job postings
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="portal-feature-box">
+
+                    <h4>
+                        Data Protection
+                    </h4>
+
+                    <ul>
+
+                        <li>
+                            Secure information storage
+                        </li>
+
+                        <li>
+                            Regular data backups
+                        </li>
+
+                        <li>
+                            Responsible information management
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             FUTURE DEVELOPMENT
+        ====================================================== -->
+
+        <div class="learn-content-section">
+
+            <div class="learn-content-heading">
+
+                <span></span>
+
+                <h3>
+                    Future Opportunities for the Portal
+                </h3>
+
+            </div>
+
+            <p>
+                The system can continue to be developed based on the
+                needs of job seekers, employers, PESO staff, and the
+                local employment community.
+            </p>
+
+
+            <div class="portal-goals">
+
+                <div class="portal-goal">
+                    Job and application notifications
+                </div>
+
+                <div class="portal-goal">
+                    Online resume and profile management
+                </div>
+
+                <div class="portal-goal">
+                    Applicant skills and qualifications
+                </div>
+
+                <div class="portal-goal">
+                    Job search and filtering
+                </div>
+
+                <div class="portal-goal">
+                    PESO employment reports
+                </div>
+
+                <div class="portal-goal">
+                    Job fair announcements
+                </div>
+
+                <div class="portal-goal">
+                    Training and career-development opportunities
+                </div>
+
+                <div class="portal-goal">
+                    Employer verification
+                </div>
+
+                <div class="portal-goal">
+                    Secure applicant information
+                </div>
+
+                <div class="portal-goal">
+                    Mobile-friendly access
+                </div>
+
+                <div class="portal-goal">
+                    Employment statistics
+                </div>
+
+                <div class="portal-goal">
+                    Community employment insights
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             OUR VISION
+        ====================================================== -->
+
+        <div class="portal-vision">
+
+            <h3>
+                Our Vision
+            </h3>
+
+            <h2>
+                A more connected, accessible, and organized
+                local employment community.
+            </h2>
+
+            <p>
+                We envision a more connected, accessible, and organized
+                local employment community where finding a job does not
+                have to be complicated and where employers can discover
+                capable people from the community.
+            </p>
+
+            <p>
+                This portal aims to support job seekers, employers,
+                PESO, and the local community by bringing employment
+                opportunities into one accessible digital platform.
+            </p>
+
+            <div class="vision-tagline">
+                Find an Opportunity. Build Your Future.
+                Strengthen Our Community.
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
 
 {% endblock %}
