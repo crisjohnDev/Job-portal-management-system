@@ -1,6 +1,8 @@
 from django.db import models
 from user.models import User
 from applicant.models import Applicant
+from django.utils import timezone
+
 
 class Employer(models.Model):
     employer = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -11,6 +13,41 @@ class Employer(models.Model):
     company_logo = models.ImageField(upload_to="company_logo")
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
+
+class EmployerRegistrationOTP(models.Model):
+    username = models.CharField(max_length=150)
+    email = models.EmailField()
+    password = models.CharField(max_length=255)
+
+    company_name = models.CharField(max_length=255)
+    business_permit_no = models.CharField(max_length=255)
+    contact_no = models.CharField(max_length=11)
+
+    description = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    company_logo = models.ImageField(
+        upload_to="company_logo",
+        blank=True,
+        null=True
+    )
+
+    otp_code = models.CharField(max_length=6)
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    expires_at = models.DateTimeField()
+
+    is_verified = models.BooleanField(
+        default=False
+    )
+
+    def is_expired(self):
+        return timezone.now() > self.expires_at
 
 
 

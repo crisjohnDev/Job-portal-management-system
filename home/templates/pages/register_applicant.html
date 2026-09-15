@@ -1,4 +1,3 @@
-
 {% extends 'home_base.html' %}
 {% load static %}
 
@@ -212,7 +211,8 @@
 
 .field-group input[type="text"],
 .field-group input[type="email"],
-.field-group input[type="password"] {
+.field-group input[type="password"],
+.field-group textarea {
     width: 100%;
     padding: 12px 16px;
     border: 1px solid #cbd5e1;
@@ -226,10 +226,64 @@
 }
 
 
-.field-group input:focus {
+.field-group textarea {
+    min-height: 120px;
+    resize: vertical;
+    line-height: 1.5;
+    font-family: inherit;
+}
+
+
+.field-group input:focus,
+.field-group textarea:focus {
     border-color: #10b981;
     background-color: #ffffff;
     box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+
+.field-group textarea::placeholder,
+.field-group input::placeholder {
+    color: #94a3b8;
+}
+
+
+/* =========================================================
+   SKILLS FIELD
+========================================================= */
+
+.skills-help {
+    margin-top: 8px;
+
+    color: #64748b;
+
+    font-size: 0.75rem;
+
+    line-height: 1.5;
+}
+
+
+.skills-help strong {
+    color: #475569;
+}
+
+
+.skills-example {
+    margin-top: 5px;
+
+    padding: 9px 11px;
+
+    background: #ecfdf5;
+
+    border: 1px solid #d1fae5;
+
+    border-radius: 6px;
+
+    color: #047857;
+
+    font-size: 0.75rem;
+
+    line-height: 1.5;
 }
 
 
@@ -603,6 +657,13 @@
 }
 
 
+.btn-flow:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
 /* =========================================================
    ERROR MESSAGE
 ========================================================= */
@@ -667,6 +728,7 @@
     .step-node span {
         display: none;
     }
+
 }
 
 
@@ -691,6 +753,7 @@
     .btn-flow {
         padding: 11px 20px;
     }
+
 }
 
 </style>
@@ -732,7 +795,10 @@
 
             <div class="step-indicator-bar">
 
-                <div class="step-node active" id="indicator-1">
+                <div
+                    class="step-node active"
+                    id="indicator-1"
+                >
 
                     <div class="step-node-dot">
                         1
@@ -745,7 +811,10 @@
                 </div>
 
 
-                <div class="step-node" id="indicator-2">
+                <div
+                    class="step-node"
+                    id="indicator-2"
+                >
 
                     <div class="step-node-dot">
                         2
@@ -764,7 +833,7 @@
                 class="sidebar-footer"
                 style="font-size: 0.75rem; color: rgba(255,255,255,0.5);"
             >
-                PESO Pio Duran &copy; 2026
+                PESO Pio Duran © 2026
             </div>
 
         </div>
@@ -794,7 +863,7 @@
                 id="registrationForm"
                 method="POST"
                 enctype="multipart/form-data"
-                action="#"
+                action=""
             >
 
                 {% csrf_token %}
@@ -862,8 +931,6 @@
                                 aria-label="Show password"
                                 title="Show password"
                             >
-
-                                <!-- NORMAL EYE -->
 
                                 <svg
                                     id="eyeIcon"
@@ -1016,7 +1083,6 @@
 
                     <div class="field-row">
 
-
                         <div class="field-group">
 
                             <label for="first_name">
@@ -1028,6 +1094,7 @@
                                 id="first_name"
                                 name="first_name"
                                 placeholder="First Name"
+                                required
                             >
 
                         </div>
@@ -1044,6 +1111,7 @@
                                 id="last_name"
                                 name="last_name"
                                 placeholder="Last Name"
+                                required
                             >
 
                         </div>
@@ -1073,7 +1141,6 @@
 
                     <div class="field-row">
 
-
                         <div class="field-group">
 
                             <label for="email">
@@ -1085,6 +1152,7 @@
                                 id="email"
                                 name="email"
                                 placeholder="e.g., juandelacruz@email.com"
+                                required
                             >
 
                         </div>
@@ -1101,8 +1169,43 @@
                                 id="phone_number"
                                 name="phone_number"
                                 placeholder="e.g., 09123456789"
+                                maxlength="11"
+                                minlength="11"
+                                inputmode="numeric"
+                                required
                             >
 
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         SKILLS
+                    ================================================== -->
+
+                    <div class="field-group">
+
+                        <label for="skills">
+                            Skills
+                        </label>
+
+                        <textarea
+                            id="skills"
+                            name="skills"
+                            placeholder="Enter your skills separated by commas"
+                            required
+                        ></textarea>
+
+                        <div class="skills-help">
+                            <strong>
+                                Add the skills you have that are relevant to the jobs you want.
+                            </strong>
+                            Separate each skill with a comma.
+                        </div>
+
+                        <div class="skills-example">
+                            Example: Python, Django, JavaScript, React, SQL, Microsoft Office, Communication, Customer Service
                         </div>
 
                     </div>
@@ -1414,7 +1517,6 @@ function navigateStep(direction) {
      */
 
     if (direction === 1 && !validateCurrentStep()) {
-
         return;
     }
 
@@ -1448,18 +1550,20 @@ function validateCurrentStep() {
 
 
     /*
-     * Check required inputs.
+     * Check required inputs, textareas and selects.
      */
 
-    const inputs =
-        currentPanel.querySelectorAll('input[required]');
+    const fields =
+        currentPanel.querySelectorAll(
+            'input[required], textarea[required], select[required]'
+        );
 
 
-    for (let input of inputs) {
+    for (let field of fields) {
 
-        if (!input.value.trim()) {
+        if (!field.value.trim()) {
 
-            input.focus();
+            field.focus();
 
             alert(
                 "Please fill out all required fields before proceeding."
@@ -1598,11 +1702,6 @@ function togglePassword() {
         document.getElementById("eyeIcon");
 
 
-    /*
-     * PASSWORD -> TEXT
-     * Show password
-     */
-
     if (passwordInput.type === "password") {
 
         passwordInput.type = "text";
@@ -1619,10 +1718,6 @@ function togglePassword() {
             "Hide password"
         );
 
-
-        /*
-         * Eye with slash
-         */
 
         eyeIcon.innerHTML = `
 
@@ -1646,12 +1741,6 @@ function togglePassword() {
 
     }
 
-
-    /*
-     * TEXT -> PASSWORD
-     * Hide password
-     */
-
     else {
 
         passwordInput.type = "password";
@@ -1668,10 +1757,6 @@ function togglePassword() {
             "Show password"
         );
 
-
-        /*
-         * Normal eye
-         */
 
         eyeIcon.innerHTML = `
 
@@ -1713,14 +1798,10 @@ function validatePassword(password) {
             /[0-9]/.test(password),
 
         special:
-            /[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\\/;'`~]/.test(password)
+            /[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\\/;''`~]/.test(password)
 
     };
 
-
-    /*
-     * Update each requirement.
-     */
 
     updatePasswordRule(
         "rule-length",
@@ -1752,10 +1833,6 @@ function validatePassword(password) {
     );
 
 
-    /*
-     * All requirements must be true.
-     */
-
     const isValid =
         rules.length &&
         rules.uppercase &&
@@ -1763,10 +1840,6 @@ function validatePassword(password) {
         rules.number &&
         rules.special;
 
-
-    /*
-     * Password error.
-     */
 
     const error =
         document.getElementById("passwordError");
@@ -1853,8 +1926,33 @@ document.addEventListener(
 
 
         /*
-         * Also validate on form submission.
-         * This prevents bypassing the Next Step flow.
+         * PHONE NUMBER
+         * Allow numbers only.
+         */
+
+        const phoneInput =
+            document.getElementById("phone_number");
+
+
+        if (phoneInput) {
+
+            phoneInput.addEventListener(
+                "input",
+                function () {
+
+                    this.value =
+                        this.value
+                            .replace(/\D/g, "")
+                            .slice(0, 11);
+
+                }
+            );
+
+        }
+
+
+        /*
+         * FORM SUBMISSION
          */
 
         const registrationForm =
@@ -1880,6 +1978,11 @@ document.addEventListener(
                         event.preventDefault();
 
 
+                        activeStep = 1;
+
+                        renderStepUI();
+
+
                         document
                             .getElementById("password")
                             .focus();
@@ -1891,6 +1994,69 @@ document.addEventListener(
                         );
 
                         return false;
+                    }
+
+
+                    /*
+                     * Make sure Step 2 fields are valid
+                     * before final submission.
+                     */
+
+                    const stepTwo =
+                        document.getElementById(
+                            "step-panel-2"
+                        );
+
+
+                    const requiredFields =
+                        stepTwo.querySelectorAll(
+                            'input[required], textarea[required], select[required]'
+                        );
+
+
+                    for (let field of requiredFields) {
+
+                        if (!field.value.trim()) {
+
+                            event.preventDefault();
+
+
+                            activeStep = 2;
+
+                            renderStepUI();
+
+
+                            field.focus();
+
+
+                            alert(
+                                "Please complete all required fields before submitting your registration."
+                            );
+
+                            return false;
+                        }
+
+                    }
+
+
+                    /*
+                     * Prevent accidental double submission.
+                     */
+
+                    const submitButton =
+                        document.getElementById(
+                            "btnSubmit"
+                        );
+
+
+                    if (submitButton) {
+
+                        submitButton.disabled = true;
+
+                        submitButton.innerHTML = `
+                            Submitting...
+                        `;
+
                     }
 
                 }
@@ -1922,9 +2088,40 @@ function handleFileSelection(
         input.files[0]
     ) {
 
+        const file =
+            input.files[0];
+
+
+        /*
+         * 5 MB FILE LIMIT
+         */
+
+        const maxSize =
+            5 * 1024 * 1024;
+
+
+        if (file.size > maxSize) {
+
+            alert(
+                "The selected file is larger than 5MB. Please choose a smaller file."
+            );
+
+
+            input.value = "";
+
+            targetOutput.innerText = "";
+
+            targetOutput.style.display =
+                "none";
+
+            return;
+
+        }
+
+
         targetOutput.innerText =
             "Selected: " +
-            input.files[0].name;
+            file.name;
 
 
         targetOutput.style.display =

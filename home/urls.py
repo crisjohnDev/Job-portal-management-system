@@ -20,5 +20,15 @@ urlpatterns = [
     path('applicants-list/', views.applicants, name='applicants'),
     path("application/<int:id>/status/", views.update_applicant_status, name="update-applicant-status"),
     path("employer/jobs/import/", views.import_job_list, name="import-job-list"),
+    path(
+    "employee/registration/verify/",
+    views.verify_employer_registration,
+    name="verify-employer-registration"
+),
+path(
+    "applicant/registration/verify/",
+    views.verify_applicant_registration,
+    name="verify-applicant-registration"
+),
 
 ]
