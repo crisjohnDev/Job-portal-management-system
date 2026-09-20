@@ -1,619 +1,1549 @@
 {% load static %}
+
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>PESO Pio Duran - Find Jobs</title>
 
+
     <!-- Favicons -->
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/PIODURAN.png' %}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'images/PIODURAN.png' %}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/PIODURAN.png' %}">
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="32x32"
+        href="{% static 'images/PIODURAN.png' %}"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="192x192"
+        href="{% static 'images/PIODURAN.png' %}"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        sizes="180x180"
+        href="{% static 'images/PIODURAN.png' %}"
+    >
+
 
     <!-- Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
 
     <style>
+
         /* =========================================================
-            VARIABLES & THEME CONFIGURATION (#74BC44 PALETTE)
-         ========================================================= */
+           VARIABLES & THEME CONFIGURATION
+        ========================================================= */
+
         :root {
+
             --bg-dark-green: #011409;
+
             --primary-accent: #74BC44;
+
             --primary-accent-hover: #5ea132;
+
             --card-green: rgba(116, 188, 68, 0.15);
+
             --card-green-hover: rgba(116, 188, 68, 0.25);
+
             --stat-card-bg: rgba(12, 28, 8, 0.85);
+
             --stat-card-border: rgba(116, 188, 68, 0.2);
-            
+
             --text-main: #ffffff;
+
             --text-sub: #74BC44;
+
             --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+
             --transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
         }
 
+
         /* =========================================================
-            GLOBAL RESET & LAYOUT
-         ========================================================= */
-        *, *::before, *::after {
+           GLOBAL RESET & LAYOUT
+        ========================================================= */
+
+        *,
+        *::before,
+        *::after {
+
             margin: 0;
+
             padding: 0;
+
             box-sizing: border-box;
+
         }
 
-        html, body {
+
+        html,
+        body {
+
             min-height: 100vh;
+
             width: 100%;
+
             overflow-x: hidden;
+
             background-color: var(--bg-dark-green);
+
             font-family: var(--font-main);
+
             color: var(--text-main);
+
             -webkit-font-smoothing: antialiased;
+
             display: flex;
+
             flex-direction: column;
+
         }
+
 
         /* =========================================================
-            SITE HEADER & NAVIGATION (STICKY & #74BC44 THEMED)
-         ========================================================= */
+           SITE HEADER & NAVIGATION
+        ========================================================= */
+
         .site-header {
+
             position: sticky;
+
             top: 0;
+
             left: 0;
+
             width: 100%;
+
             z-index: 1000;
-            padding: 16px 60px;
+
+            padding: 12px 60px;
+
             display: flex;
+
             justify-content: space-between;
+
             align-items: center;
-            background-color: rgba(12, 28, 8, 0.92); /* Darkened container with tint */
+
+            background-color: rgba(12, 28, 8, 0.92);
+
             backdrop-filter: blur(12px);
+
             -webkit-backdrop-filter: blur(12px);
-            border-bottom: 2px solid var(--primary-accent); /* #74BC44 accent line */
+
+            border-bottom: 2px solid var(--primary-accent);
+
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+
         }
+
+
+        /* =========================================================
+           BRAND / LOGO
+        ========================================================= */
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+        }
+
+
+        .brand-link {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            text-decoration: none;
+
+            color: inherit;
+
+        }
+
+
+        .brand-logo {
+
+            width: 50px;
+
+            height: 50px;
+
+            object-fit: contain;
+
+            display: block;
+
+            flex-shrink: 0;
+
+        }
+
+
+        .brand-text {
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+        }
+
 
         .brand-text h1 {
+
             color: #ffffff;
-            font-size: 1.5rem;
+
+            font-size: 1.35rem;
+
             font-weight: 800;
+
             letter-spacing: -0.02em;
+
+            line-height: 1.1;
+
+            margin: 0;
+
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+
         }
 
-        .brand-text a {
-            text-decoration: none;
-            color: inherit;
+
+        .brand-text span {
+
+            color: var(--primary-accent);
+
+            font-size: 0.68rem;
+
+            font-weight: 600;
+
+            margin-top: 4px;
+
+            letter-spacing: 0.03em;
+
+            line-height: 1.2;
+
         }
+
+
+        /* =========================================================
+           NAVIGATION
+        ========================================================= */
 
         .navigation-menu {
+
             display: flex;
+
             align-items: center;
+
             gap: 24px;
+
             list-style: none;
+
         }
 
+
         .navigation-menu a {
+
             color: rgba(255, 255, 255, 0.9);
+
             text-decoration: none;
+
             font-size: 0.85rem;
+
             font-weight: 600;
+
             transition: var(--transition-smooth);
+
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+
         }
+
 
         .navigation-menu a:hover,
         .navigation-menu a.active {
+
             color: var(--primary-accent);
+
         }
+
 
         .navigation-menu .nav-auth-btn {
+
             padding: 8px 20px;
+
             border-radius: 99px;
+
             background: var(--primary-accent);
+
             border: 1px solid var(--primary-accent);
+
             color: #0d1e05;
+
             font-weight: 700;
+
             transition: var(--transition-smooth);
+
         }
+
 
         .navigation-menu .nav-auth-btn:hover {
+
             background: #ffffff;
+
             border-color: #ffffff;
+
             color: #0d1e05;
+
             transform: translateY(-1px);
+
         }
 
-        /* Mobile Hamburger Toggle */
+
+        /* =========================================================
+           MOBILE HAMBURGER
+        ========================================================= */
+
         .mobile-nav-toggle {
+
             display: none;
+
             background: transparent;
+
             border: none;
+
             color: var(--primary-accent);
+
             cursor: pointer;
+
             padding: 4px;
+
         }
 
-        /* Header Search Optional Component */
+
+        /* =========================================================
+           HEADER SEARCH OPTIONAL COMPONENT
+        ========================================================= */
+
         .header-search {
+
             position: relative;
+
             display: flex;
+
             align-items: center;
+
         }
+
 
         .header-search input {
+
             background: rgba(116, 188, 68, 0.15);
+
             border: 1px solid rgba(116, 188, 68, 0.3);
+
             padding: 8px 36px 8px 16px;
+
             border-radius: 20px;
+
             color: #fff;
+
             font-size: 0.82rem;
+
             outline: none;
+
             width: 160px;
+
             transition: var(--transition-smooth);
+
         }
+
 
         .header-search input::placeholder {
+
             color: rgba(255, 255, 255, 0.6);
+
         }
+
 
         .header-search input:focus {
+
             width: 200px;
+
             background: rgba(116, 188, 68, 0.25);
+
             border-color: var(--primary-accent);
+
         }
+
 
         .header-search button {
+
             position: absolute;
+
             right: 8px;
+
             background: none;
+
             border: none;
+
             color: var(--primary-accent);
+
             cursor: pointer;
+
             display: flex;
+
             align-items: center;
+
             justify-content: center;
+
         }
 
+
         /* =========================================================
-            HERO & LANDING CONTAINER
-         ========================================================= */
+           HERO & LANDING CONTAINER
+        ========================================================= */
+
         .hero-section {
+
             position: relative;
+
             min-height: calc(100vh - 73px);
+
             width: 100%;
+
             background-image: url("{% static 'images/0365e1a5-70f8-4784-910b-4fc16584816f.jpg' %}");
+
             background-size: cover;
+
             background-position: center right;
+
             background-repeat: no-repeat;
+
             padding: 60px;
+
             display: flex;
+
             flex-direction: column;
+
             justify-content: space-between;
+
             flex: 1;
+
         }
+
 
         .hero-content-wrapper {
+
             position: relative;
+
             z-index: 10;
+
             max-width: 620px;
+
             margin-top: 20px;
+
         }
+
 
         .hero-content-wrapper h2 {
+
             font-size: 2.3rem;
+
             font-weight: 700;
+
             line-height: 1.25;
+
             letter-spacing: -0.02em;
+
             margin-bottom: 28px;
+
             color: #ffffff;
+
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+
         }
+
 
         .hero-actions {
+
             display: flex;
+
             gap: 14px;
+
         }
+
 
         .btn-pill-white {
+
             background: #ffffff;
+
             color: #0d1e05;
+
             padding: 10px 24px;
+
             border-radius: 99px;
+
             font-weight: 600;
+
             font-size: 0.88rem;
+
             text-decoration: none;
+
             transition: var(--transition-smooth);
+
             border: 1px solid #ffffff;
+
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+
         }
+
 
         .btn-pill-white:hover {
+
             background: var(--primary-accent);
+
             border-color: var(--primary-accent);
+
             color: #ffffff;
+
             transform: translateY(-2px);
+
         }
+
 
         .btn-pill-outline {
+
             background: rgba(0, 0, 0, 0.3);
+
             backdrop-filter: blur(4px);
+
             color: #ffffff;
+
             padding: 10px 24px;
+
             border-radius: 99px;
+
             font-weight: 600;
+
             font-size: 0.88rem;
+
             text-decoration: none;
+
             border: 1.5px solid var(--primary-accent);
+
             transition: var(--transition-smooth);
+
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+
         }
+
 
         .btn-pill-outline:hover {
+
             background: var(--primary-accent);
+
             color: #ffffff;
+
             transform: translateY(-2px);
+
         }
 
+
         /* =========================================================
-            FEATURED JOBS CARDS
-         ========================================================= */
+           FEATURED JOBS CARDS
+        ========================================================= */
+
         .featured-jobs-wrapper {
+
             position: relative;
+
             z-index: 10;
+
             margin-top: 50px;
+
         }
+
 
         .section-title {
+
             font-size: 1.1rem;
+
             font-weight: 700;
+
             margin-bottom: 18px;
+
             color: var(--primary-accent);
+
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+
         }
+
 
         .jobs-scroll-grid {
+
             display: grid;
+
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+
             gap: 16px;
+
         }
+
 
         .job-card {
+
             background: var(--card-green);
+
             border: 1px solid rgba(116, 188, 68, 0.25);
+
             border-radius: 12px;
+
             padding: 20px 16px;
+
             display: flex;
+
             flex-direction: column;
+
             justify-content: space-between;
+
             min-height: 130px;
+
             transition: var(--transition-smooth);
+
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+
         }
+
 
         .job-card:hover {
+
             background: var(--card-green-hover);
+
             border-color: var(--primary-accent);
+
             transform: translateY(-3px);
+
         }
+
 
         .job-card h4 {
+
             font-size: 0.95rem;
+
             font-weight: 700;
+
             color: #ffffff;
+
             margin-bottom: 4px;
+
         }
+
 
         .job-card p {
+
             font-size: 0.75rem;
+
             color: rgba(255, 255, 255, 0.85);
+
             margin-bottom: 16px;
+
         }
+
 
         .job-card .btn-view-job {
+
             background: #ffffff;
+
             color: #0d1e05;
+
             text-decoration: none;
+
             font-size: 0.75rem;
+
             font-weight: 700;
+
             padding: 6px 14px;
+
             border-radius: 99px;
+
             text-align: center;
+
             align-self: flex-start;
+
             transition: var(--transition-smooth);
+
         }
+
 
         .job-card .btn-view-job:hover {
+
             background: var(--primary-accent);
+
             color: #ffffff;
+
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
         }
 
+
         /* =========================================================
-            PORTAL STATISTICS SECTION
-         ========================================================= */
+           PORTAL STATISTICS SECTION
+        ========================================================= */
+
         .stats-wrapper {
+
             position: relative;
+
             z-index: 10;
+
             margin-top: 40px;
+
         }
+
 
         .stats-grid {
+
             display: grid;
+
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
             gap: 16px;
+
         }
+
 
         .stat-card {
+
             background: var(--stat-card-bg);
+
             border: 1px solid var(--stat-card-border);
+
             border-radius: 14px;
+
             padding: 20px 24px;
+
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
+
             backdrop-filter: blur(12px);
+
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+
             transition: var(--transition-smooth);
+
         }
+
 
         .stat-card:hover {
+
             border-color: var(--primary-accent);
+
         }
+
 
         .stat-card .stat-num {
+
             font-size: 1.8rem;
+
             font-weight: 800;
+
             color: #ffffff;
+
             line-height: 1;
+
         }
+
 
         .stat-card .stat-label {
+
             font-size: 0.82rem;
+
             font-weight: 600;
+
             color: rgba(255, 255, 255, 0.75);
+
             margin-top: 4px;
+
             line-height: 1.2;
+
         }
+
 
         .stat-card .arrow-icon {
+
             color: var(--primary-accent);
+
             font-size: 1.2rem;
+
         }
 
+
         /* =========================================================
-            FOOTER STYLES
-         ========================================================= */
+           FOOTER STYLES
+        ========================================================= */
+
         .site-footer {
+
             background-color: #010d06;
+
             border-top: 1px solid rgba(116, 188, 68, 0.2);
+
             position: relative;
+
             z-index: 10;
+
             padding: 40px 60px 24px 60px;
+
             color: rgba(255, 255, 255, 0.7);
+
             font-size: 0.85rem;
+
             margin-top: auto;
+
         }
+
 
         .footer-container {
+
             display: grid;
+
             grid-template-columns: 2fr 1fr 1fr;
+
             gap: 40px;
+
             margin-bottom: 30px;
+
         }
+
 
         .footer-brand h3 {
+
             color: #ffffff;
+
             font-size: 1.2rem;
+
             font-weight: 800;
+
             margin-bottom: 10px;
+
         }
+
 
         .footer-brand p {
+
             color: var(--primary-accent);
+
             line-height: 1.5;
+
             max-width: 360px;
+
             font-size: 0.82rem;
+
         }
+
 
         .footer-col h4 {
+
             color: #ffffff;
+
             font-size: 0.9rem;
+
             font-weight: 700;
+
             margin-bottom: 12px;
+
             text-transform: uppercase;
+
             letter-spacing: 0.05em;
+
         }
+
 
         .footer-col ul {
+
             list-style: none;
+
         }
+
 
         .footer-col ul li {
+
             margin-bottom: 8px;
+
         }
+
 
         .footer-col ul a {
+
             color: rgba(255, 255, 255, 0.6);
+
             text-decoration: none;
+
             transition: var(--transition-smooth);
+
         }
+
 
         .footer-col ul a:hover {
+
             color: var(--primary-accent);
+
         }
+
 
         .footer-bottom {
+
             border-top: 1px solid rgba(255, 255, 255, 0.05);
+
             padding-top: 20px;
+
             display: flex;
+
             justify-content: space-between;
+
             align-items: center;
+
             font-size: 0.78rem;
+
             color: rgba(255, 255, 255, 0.4);
+
         }
+
 
         /* =========================================================
-            RESPONSIVE BREAKPOINTS
-         ========================================================= */
+           RESPONSIVE BREAKPOINTS
+        ========================================================= */
+
         @media (max-width: 992px) {
+
             .site-header {
-                padding: 16px 30px;
+
+                padding: 12px 30px;
+
             }
+
 
             .hero-section {
-                padding: 40px 30px 40px 30px;
+
+                padding: 40px 30px;
+
             }
+
 
             .mobile-nav-toggle {
+
                 display: block;
+
             }
+
 
             .navigation-menu {
+
                 display: none;
+
                 position: absolute;
+
                 top: 100%;
+
                 left: 0;
+
                 width: 100%;
+
                 background: #0c1c08;
+
                 flex-direction: column;
+
                 padding: 20px 30px;
+
                 gap: 16px;
+
                 border-bottom: 2px solid var(--primary-accent);
+
             }
+
 
             .navigation-menu.show {
+
                 display: flex;
+
             }
+
 
             .hero-content-wrapper h2 {
+
                 font-size: 1.8rem;
+
             }
+
 
             .footer-container {
+
                 grid-template-columns: 1fr;
+
                 gap: 24px;
+
             }
+
 
             .site-footer {
+
                 padding: 30px 30px 20px 30px;
+
             }
+
         }
+
 
         @media (max-width: 600px) {
-            .hero-actions {
-                flex-direction: column;
+
+            .site-header {
+
+                padding: 10px 18px;
+
             }
 
-            .btn-pill-white, .btn-pill-outline {
-                text-align: center;
+
+            .brand-logo {
+
+                width: 40px;
+
+                height: 40px;
+
             }
+
+
+            .brand-link {
+
+                gap: 9px;
+
+            }
+
+
+            .brand-text h1 {
+
+                font-size: 1.05rem;
+
+            }
+
+
+            .brand-text span {
+
+                font-size: 0.58rem;
+
+                margin-top: 3px;
+
+            }
+
+
+            .hero-section {
+
+                padding: 30px 18px;
+
+            }
+
+
+            .hero-actions {
+
+                flex-direction: column;
+
+            }
+
+
+            .btn-pill-white,
+            .btn-pill-outline {
+
+                text-align: center;
+
+            }
+
 
             .jobs-scroll-grid {
+
                 grid-template-columns: 1fr;
+
             }
 
+
             .footer-bottom {
+
                 flex-direction: column;
+
                 gap: 8px;
+
                 text-align: center;
+
             }
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
-    <!-- SITE HEADER -->
+
+    <!-- =========================================================
+         SITE HEADER
+    ========================================================= -->
+
     <header class="site-header">
-        <div class="brand-text">
-            <a href="{% url 'home' %}"><h1>Pio Duran Job Portal</h1></a>
+
+
+        <!-- BRAND -->
+
+        <div class="brand">
+
+            <a
+                href="{% url 'home' %}"
+                class="brand-link"
+            >
+
+                <img
+                    src="{% static 'images/PESO.png' %}"
+                    alt="PESO Logo"
+                    class="brand-logo"
+                >
+
+                <div class="brand-text">
+
+                    <h1>
+                        Pio Duran Job Portal
+                    </h1>
+
+                    <span>
+                        Public Employment Service Office
+                    </span>
+
+                </div>
+
+            </a>
+
         </div>
 
-        <button class="mobile-nav-toggle" id="navToggle" aria-label="Toggle Navigation">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
+
+        <!-- MOBILE NAV TOGGLE -->
+
+        <button
+            class="mobile-nav-toggle"
+            id="navToggle"
+            aria-label="Toggle Navigation"
+        >
+
+            <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+
+                <line
+                    x1="3"
+                    y1="12"
+                    x2="21"
+                    y2="12"
+                ></line>
+
+                <line
+                    x1="3"
+                    y1="6"
+                    x2="21"
+                    y2="6"
+                ></line>
+
+                <line
+                    x1="3"
+                    y1="18"
+                    x2="21"
+                    y2="18"
+                ></line>
+
             </svg>
+
         </button>
 
+
+        <!-- NAVIGATION -->
+
         <nav>
-            <ul class="navigation-menu" id="navMenu">
-                <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a></li>
-                
+
+            <ul
+                class="navigation-menu"
+                id="navMenu"
+            >
+
+                <li>
+
+                    <a
+                        href="{% url 'home' %}"
+                        class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+                    >
+                        Home
+                    </a>
+
+                </li>
+
+
                 {% if not request.user.is_authenticated %}
-                    <li><a href="{% url 'applicant-registration' %}">Register Applicant</a></li>
-                    <li><a href="{% url 'employee-registration' %}">Register Employer</a></li>
-                    <li><a href="{% url 'login-user' %}" class="nav-auth-btn">Log In</a></li>
+
+                    <li>
+
+                        <a href="{% url 'applicant-registration' %}">
+                            Register Applicant
+                        </a>
+
+                    </li>
+
+
+                    <li>
+
+                        <a href="{% url 'employee-registration' %}">
+                            Register Employer
+                        </a>
+
+                    </li>
+
+
+                    <li>
+
+                        <a
+                            href="{% url 'login-user' %}"
+                            class="nav-auth-btn"
+                        >
+                            Log In
+                        </a>
+
+                    </li>
+
+
                 {% elif request.user.role == "applicant" %}
-                    <li><a href="{% url 'browse-job' %}">Browse Jobs</a></li>
-                    <li><a href="{% url 'my-applications' %}">My Applications</a></li>
-                    <li><a href="{% url 'logout_user' %}" class="nav-auth-btn">Log Out</a></li>
+
+                    <li>
+
+                        <a href="{% url 'browse-job' %}">
+                            Browse Jobs
+                        </a>
+
+                    </li>
+
+
+                    <li>
+
+                        <a href="{% url 'my-applications' %}">
+                            My Applications
+                        </a>
+
+                    </li>
+
+
+                    <li>
+
+                        <a
+                            href="{% url 'logout_user' %}"
+                            class="nav-auth-btn"
+                        >
+                            Log Out
+                        </a>
+
+                    </li>
+
+
                 {% elif request.user.role == "employer" %}
-                    <li><a href="{% url 'employer-dashboard' %}">Dashboard</a></li>
-                    <li><a href="{% url 'job-list' %}">My Jobs</a></li>
-                    <li><a href="{% url 'logout_user' %}" class="nav-auth-btn">Log Out</a></li>
+
+                    <li>
+
+                        <a href="{% url 'employer-dashboard' %}">
+                            Dashboard
+                        </a>
+
+                    </li>
+
+
+                    <li>
+
+                        <a href="{% url 'job-list' %}">
+                            My Jobs
+                        </a>
+
+                    </li>
+
+
+                    <li>
+
+                        <a
+                            href="{% url 'logout_user' %}"
+                            class="nav-auth-btn"
+                        >
+                            Log Out
+                        </a>
+
+                    </li>
+
                 {% endif %}
+
             </ul>
+
         </nav>
+
     </header>
 
-    <!-- HERO MAIN SECTION -->
+
+    <!-- =========================================================
+         HERO MAIN SECTION
+    ========================================================= -->
+
     <main class="hero-section">
+
         {% block content %}
+
         <!-- Child template content overrides or injects layout items here -->
+
         {% endblock %}
+
     </main>
 
-    <!-- SITE FOOTER -->
+
+    <!-- =========================================================
+         SITE FOOTER
+    ========================================================= -->
+
     <footer class="site-footer">
+
         <div class="footer-container">
+
+
+            <!-- FOOTER BRAND -->
+
             <div class="footer-brand">
-                <h3>PESO Pio Duran</h3>
-                <p>Public Employment Service Office — Connecting job seekers with local opportunities and empowering businesses in Pio Duran, Albay.</p>
+
+                <div
+                    style="
+                        display:flex;
+                        align-items:center;
+                        gap:12px;
+                        margin-bottom:12px;
+                    "
+                >
+
+                    <img
+                        src="{% static 'images/PIODURAN.png' %}"
+                        alt="Pio Duran Logo"
+                        style="
+                            width:48px;
+                            height:48px;
+                            object-fit:contain;
+                        "
+                    >
+
+                    <h3 style="margin:0;">
+                        PESO Pio Duran
+                    </h3>
+
+                </div>
+
+
+                <p>
+
+                    Public Employment Service Office —
+                    Connecting job seekers with local
+                    opportunities and empowering businesses
+                    in Pio Duran, Albay.
+
+                </p>
+
             </div>
+
+
+            <!-- QUICK LINKS -->
+
             <div class="footer-col">
-                <h4>Quick Links</h4>
+
+                <h4>
+                    Quick Links
+                </h4>
+
                 <ul>
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'applicant-registration' %}">Applicant Portal</a></li>
-                    <li><a href="{% url 'employee-registration' %}">Employer Portal</a></li>
+
+                    <li>
+
+                        <a href="{% url 'home' %}">
+                            Home
+                        </a>
+
+                    </li>
+
+
+                    <li>
+
+                        <a href="{% url 'applicant-registration' %}">
+                            Applicant Portal
+                        </a>
+
+                    </li>
+
+
+                    <li>
+
+                        <a href="{% url 'employee-registration' %}">
+                            Employer Portal
+                        </a>
+
+                    </li>
+
                 </ul>
+
             </div>
+
+
+            <!-- SUPPORT -->
+
             <div class="footer-col">
-                <h4>Support & Contact</h4>
+
+                <h4>
+                    Support & Contact
+                </h4>
+
                 <ul>
-                    <li><a href="#">Help Center</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">LGU Pio Duran</a></li>
+
+                    <li>
+
+                        <a href="#">
+                            Help Center
+                        </a>
+
+                    </li>
+
+
+                    <li>
+
+                        <a href="#">
+                            Privacy Policy
+                        </a>
+
+                    </li>
+
+
+                    <li>
+
+                        <a href="#">
+                            LGU Pio Duran
+                        </a>
+
+                    </li>
+
                 </ul>
+
             </div>
+
         </div>
+
+
+        <!-- FOOTER BOTTOM -->
+
         <div class="footer-bottom">
-            <p>&copy; {% now "Y" %} Public Employment Service Office - Pio Duran. All rights reserved.</p>
-            <p>Designed for Municipal Employment Services</p>
+
+            <p>
+                &copy; {% now "Y" %}
+                Public Employment Service Office - Pio Duran.
+                All rights reserved.
+            </p>
+
+
+            <p>
+                Designed for Municipal Employment Services
+            </p>
+
         </div>
+
     </footer>
 
+
+    <!-- =========================================================
+         MOBILE NAVIGATION SCRIPT
+    ========================================================= -->
+
     <script>
-        const navToggle = document.getElementById('navToggle');
-        const navMenu = document.getElementById('navMenu');
 
-        navToggle.addEventListener('click', function(e) {
-            e.stopPropagation();
-            navMenu.classList.toggle('show');
-        });
+        const navToggle =
+            document.getElementById('navToggle');
 
-        document.addEventListener('click', function(e) {
-            if (!navMenu.contains(e.target) && !navToggle.contains(e.target)) {
-                navMenu.classList.remove('show');
+        const navMenu =
+            document.getElementById('navMenu');
+
+
+        navToggle.addEventListener(
+            'click',
+            function(e) {
+
+                e.stopPropagation();
+
+                navMenu.classList.toggle('show');
+
             }
-        });
+        );
+
+
+        document.addEventListener(
+            'click',
+            function(e) {
+
+                if (
+                    !navMenu.contains(e.target) &&
+                    !navToggle.contains(e.target)
+                ) {
+
+                    navMenu.classList.remove('show');
+
+                }
+
+            }
+        );
+
     </script>
+
+
 </body>
+
 </html>
