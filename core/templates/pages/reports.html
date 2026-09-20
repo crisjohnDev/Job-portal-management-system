@@ -2,11 +2,15 @@
 {% load static %}
 
 {% block content %}
+
 <!-- Chart.js Dependency -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-    /* Scoped System Reports Dashboard Styles */
+    /* =========================================================
+       REPORTS PAGE
+    ========================================================= */
+
     .content-header {
         display: flex;
         justify-content: space-between;
@@ -22,6 +26,7 @@
         font-weight: 700;
         color: #0f172a;
         letter-spacing: -0.02em;
+        margin: 0;
     }
 
     .admin-profile {
@@ -54,6 +59,11 @@
         fill: none;
     }
 
+
+    /* =========================================================
+       WORKSPACE
+    ========================================================= */
+
     .dashboard-workspace {
         padding: 32px;
         background-color: #f8fafc;
@@ -63,59 +73,177 @@
         min-height: calc(100vh - 87px);
     }
 
-    /* KPI Summary Grid */
+
+    /* =========================================================
+       KPI SUMMARY GRID
+    ========================================================= */
+
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 16px;
     }
 
     .stat-card {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        position: relative;
+        min-height: 135px;
+        padding: 22px;
+        border: none;
+        border-radius: 14px;
+        overflow: hidden;
+
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        justify-content: center;
+
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
     }
 
     .stat-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
     }
 
+
+    /* Decorative circles */
+
+    .stat-card::before {
+        content: "";
+        position: absolute;
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        right: -35px;
+        top: -35px;
+        background: rgba(255, 255, 255, 0.10);
+        pointer-events: none;
+    }
+
+    .stat-card::after {
+        content: "";
+        position: absolute;
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+        right: 25px;
+        bottom: -45px;
+        background: rgba(255, 255, 255, 0.07);
+        pointer-events: none;
+    }
+
+
+    /* =========================================================
+       SOLID CARD COLORS
+    ========================================================= */
+
+    .stat-card.total-employers {
+        background: #2563eb;
+        color: #ffffff;
+    }
+
+    .stat-card.active-employers {
+        background: #059669;
+        color: #ffffff;
+    }
+
+    .stat-card.suspended-employers {
+        background: #dc2626;
+        color: #ffffff;
+    }
+
+    .stat-card.total-applicants {
+        background: #7c3aed;
+        color: #ffffff;
+    }
+
+    .stat-card.total-jobs {
+        background: #0891b2;
+        color: #ffffff;
+    }
+
+    .stat-card.approved-jobs {
+        background: #047857;
+        color: #ffffff;
+    }
+
+    .stat-card.pending-jobs {
+        background: #d97706;
+        color: #ffffff;
+    }
+
+    .stat-card.rejected-jobs {
+        background: #b91c1c;
+        color: #ffffff;
+    }
+
+
+    /* =========================================================
+       STAT CARD CONTENT
+    ========================================================= */
+
     .stat-label {
-        font-size: 0.825rem;
-        font-weight: 600;
-        color: #64748b;
+        position: relative;
+        z-index: 2;
+
+        font-size: 0.76rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.82);
+
         text-transform: uppercase;
-        letter-spacing: 0.03em;
-        margin-bottom: 8px;
+        letter-spacing: 0.05em;
+
+        margin-bottom: 9px;
     }
 
     .stat-value {
-        font-size: 1.75rem;
-        font-weight: 700;
-        color: #0f172a;
+        position: relative;
+        z-index: 2;
+
+        font-size: 2rem;
+        font-weight: 800;
         line-height: 1;
+
+        color: #ffffff !important;
     }
 
-    /* Graphical Section Grid */
+    .stat-description {
+        position: relative;
+        z-index: 2;
+
+        margin-top: 10px;
+
+        font-size: 0.74rem;
+        font-weight: 500;
+
+        color: rgba(255, 255, 255, 0.72);
+    }
+
+
+    /* =========================================================
+       GRAPHICAL DATA GRID
+    ========================================================= */
+
     .charts-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 24px;
     }
 
-    /* Data Card Structures */
+
+    /* =========================================================
+       DATA CARDS
+    ========================================================= */
+
     .data-card {
         background: #ffffff;
         border: 1px solid #e2e8f0;
         border-radius: 16px;
         overflow: hidden;
+
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
     }
 
@@ -132,16 +260,30 @@
         margin: 0;
     }
 
+
+    /* =========================================================
+       CHART
+    ========================================================= */
+
     .chart-container {
         padding: 20px;
         position: relative;
         height: 280px;
+
         display: flex;
         justify-content: center;
         align-items: center;
     }
 
-    /* Table Styles */
+    .chart-container canvas {
+        max-width: 100%;
+    }
+
+
+    /* =========================================================
+       TABLE
+    ========================================================= */
+
     .table-responsive {
         width: 100%;
         overflow-x: auto;
@@ -157,18 +299,27 @@
     th {
         background: #f8fafc;
         color: #475569;
+
         padding: 14px 24px;
+
         font-weight: 600;
-        font-size: 0.8rem;
+        font-size: 0.78rem;
+
         text-transform: uppercase;
         letter-spacing: 0.04em;
+
         border-bottom: 1px solid #e2e8f0;
+
+        white-space: nowrap;
     }
 
     td {
         padding: 16px 24px;
+
         border-bottom: 1px solid #f1f5f9;
+
         color: #334155;
+
         vertical-align: middle;
     }
 
@@ -180,15 +331,47 @@
         background-color: #f8fafc;
     }
 
-    /* Status Badges */
+    td strong {
+        color: #0f172a;
+        font-weight: 700;
+    }
+
+
+    /* =========================================================
+       CODE / PERMIT NUMBER
+    ========================================================= */
+
+    .permit-code {
+        font-family: monospace;
+        background: #f1f5f9;
+        color: #334155;
+
+        padding: 3px 7px;
+
+        border-radius: 4px;
+
+        font-size: 0.85rem;
+    }
+
+
+    /* =========================================================
+       STATUS BADGES
+    ========================================================= */
+
     .badge-status {
         display: inline-flex;
         align-items: center;
-        padding: 4px 10px;
+
+        padding: 5px 11px;
+
         border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 600;
+
+        font-size: 0.74rem;
+        font-weight: 700;
+
         text-transform: capitalize;
+
+        white-space: nowrap;
     }
 
     .badge-status.active {
@@ -209,178 +392,578 @@
         color: #991b1b;
         border: 1px solid #fecaca;
     }
+
+
+    /* =========================================================
+       EMPTY STATE
+    ========================================================= */
+
+    .empty-state {
+        text-align: center;
+        color: #64748b;
+        padding: 40px 20px !important;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 1200px) {
+
+        .stats-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .charts-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+    }
+
+
+    @media (max-width: 1000px) {
+
+        .stats-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .charts-grid {
+            grid-template-columns: 1fr;
+        }
+
+    }
+
+
+    @media (max-width: 768px) {
+
+        .content-header {
+            padding: 20px;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .page-title h2 {
+            font-size: 1.25rem;
+        }
+
+        .admin-profile {
+            font-size: 0.8rem;
+        }
+
+        .profile-badge {
+            width: 34px;
+            height: 34px;
+        }
+
+        .dashboard-workspace {
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .stat-card {
+            min-height: 125px;
+            padding: 19px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+        }
+
+        .data-card-header {
+            padding: 18px;
+        }
+
+        th,
+        td {
+            padding: 13px 16px;
+        }
+
+    }
+
+
+    @media (max-width: 520px) {
+
+        .content-header {
+            padding: 18px;
+        }
+
+        .admin-profile span {
+            display: none;
+        }
+
+        .dashboard-workspace {
+            padding: 14px;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .stat-card {
+            min-height: 115px;
+            border-radius: 12px;
+        }
+
+        .data-card {
+            border-radius: 12px;
+        }
+
+        .chart-container {
+            height: 260px;
+            padding: 15px;
+        }
+
+    }
 </style>
 
-<!-- Content Control Bar Header -->
+
+<!-- =========================================================
+     CONTENT HEADER
+========================================================= -->
+
 <header class="content-header">
+
     <div class="page-title">
         <h2>System Reports</h2>
     </div>
 
     <div class="admin-profile">
-        <span>Welcome, <strong>Admin Portal</strong></span>
+
+        <span>
+            Welcome,
+            <strong>Admin Portal</strong>
+        </span>
+
         <div class="profile-badge">
-            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+            <svg
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>
             </svg>
+
         </div>
+
     </div>
+
 </header>
+
+
+<!-- =========================================================
+     WORKSPACE
+========================================================= -->
 
 <div class="dashboard-workspace">
 
-    <!-- SUMMARY CARDS GRID -->
+
+    <!-- =====================================================
+         SUMMARY CARDS
+    ===================================================== -->
+
     <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-label">Total Employers</div>
-            <div class="stat-value">{{ total_employers }}</div>
+
+
+        <!-- Total Employers -->
+
+        <div class="stat-card total-employers">
+
+            <div class="stat-label">
+                Total Employers
+            </div>
+
+            <div class="stat-value">
+                {{ total_employers }}
+            </div>
+
+            <div class="stat-description">
+                All registered employers
+            </div>
+
         </div>
 
-        <div class="stat-card">
-            <div class="stat-label">Active Employers</div>
-            <div class="stat-value" style="color: #059669;">{{ active_employers }}</div>
+
+        <!-- Active Employers -->
+
+        <div class="stat-card active-employers">
+
+            <div class="stat-label">
+                Active Employers
+            </div>
+
+            <div class="stat-value">
+                {{ active_employers }}
+            </div>
+
+            <div class="stat-description">
+                Currently active accounts
+            </div>
+
         </div>
 
-        <div class="stat-card">
-            <div class="stat-label">Suspended Employers</div>
-            <div class="stat-value" style="color: #dc2626;">{{ suspended_employers }}</div>
+
+        <!-- Suspended Employers -->
+
+        <div class="stat-card suspended-employers">
+
+            <div class="stat-label">
+                Suspended Employers
+            </div>
+
+            <div class="stat-value">
+                {{ suspended_employers }}
+            </div>
+
+            <div class="stat-description">
+                Suspended accounts
+            </div>
+
         </div>
 
-        <div class="stat-card">
-            <div class="stat-label">Total Applicants</div>
-            <div class="stat-value">{{ total_applicants }}</div>
+
+        <!-- Total Applicants -->
+
+        <div class="stat-card total-applicants">
+
+            <div class="stat-label">
+                Total Applicants
+            </div>
+
+            <div class="stat-value">
+                {{ total_applicants }}
+            </div>
+
+            <div class="stat-description">
+                Registered job seekers
+            </div>
+
         </div>
 
-        <div class="stat-card">
-            <div class="stat-label">Total Job Posts</div>
-            <div class="stat-value">{{ total_jobs }}</div>
+
+        <!-- Total Jobs -->
+
+        <div class="stat-card total-jobs">
+
+            <div class="stat-label">
+                Total Job Posts
+            </div>
+
+            <div class="stat-value">
+                {{ total_jobs }}
+            </div>
+
+            <div class="stat-description">
+                All submitted job posts
+            </div>
+
         </div>
 
-        <div class="stat-card">
-            <div class="stat-label">Approved Jobs</div>
-            <div class="stat-value" style="color: #059669;">{{ approved_jobs }}</div>
+
+        <!-- Approved Jobs -->
+
+        <div class="stat-card approved-jobs">
+
+            <div class="stat-label">
+                Approved Jobs
+            </div>
+
+            <div class="stat-value">
+                {{ approved_jobs }}
+            </div>
+
+            <div class="stat-description">
+                Approved positions
+            </div>
+
         </div>
 
-        <div class="stat-card">
-            <div class="stat-label">Pending Jobs</div>
-            <div class="stat-value" style="color: #d97706;">{{ pending_jobs }}</div>
+
+        <!-- Pending Jobs -->
+
+        <div class="stat-card pending-jobs">
+
+            <div class="stat-label">
+                Pending Jobs
+            </div>
+
+            <div class="stat-value">
+                {{ pending_jobs }}
+            </div>
+
+            <div class="stat-description">
+                Awaiting review
+            </div>
+
         </div>
 
-        <div class="stat-card">
-            <div class="stat-label">Rejected Jobs</div>
-            <div class="stat-value" style="color: #dc2626;">{{ rejected_jobs }}</div>
+
+        <!-- Rejected Jobs -->
+
+        <div class="stat-card rejected-jobs">
+
+            <div class="stat-label">
+                Rejected Jobs
+            </div>
+
+            <div class="stat-value">
+                {{ rejected_jobs }}
+            </div>
+
+            <div class="stat-description">
+                Rejected job posts
+            </div>
+
         </div>
+
     </div>
 
-    <!-- GRAPHICAL DATA LAYOUT -->
+
+    <!-- =====================================================
+         CHARTS
+    ===================================================== -->
+
     <div class="charts-grid">
+
+
+        <!-- Job Status -->
+
         <div class="data-card">
+
             <div class="data-card-header">
                 <h3>Job Status Allocation</h3>
             </div>
+
             <div class="chart-container">
                 <canvas id="jobChart"></canvas>
             </div>
+
         </div>
 
+
+        <!-- Employer Distribution -->
+
         <div class="data-card">
+
             <div class="data-card-header">
                 <h3>Employer Distribution</h3>
             </div>
+
             <div class="chart-container">
                 <canvas id="employerChart"></canvas>
             </div>
+
         </div>
 
+
+        <!-- Overall Metrics -->
+
         <div class="data-card">
+
             <div class="data-card-header">
                 <h3>Overall System Metrics</h3>
             </div>
-            <div class="chart-container" style="display: block;">
+
+            <div
+                class="chart-container"
+                style="display: block;"
+            >
                 <canvas id="overallChart"></canvas>
             </div>
+
         </div>
+
     </div>
 
-    <!-- EMPLOYER DATA TABLES -->
+
+    <!-- =====================================================
+         EMPLOYER REPORT
+    ===================================================== -->
+
     <div class="data-card">
+
         <div class="data-card-header">
             <h3>Employer Report</h3>
         </div>
+
         <div class="table-responsive">
+
             <table>
+
                 <thead>
+
                     <tr>
                         <th>Company Name</th>
                         <th>Business Permit No.</th>
                         <th>Contact Number</th>
                         <th>System Status</th>
                     </tr>
+
                 </thead>
+
                 <tbody>
+
                     {% for employer in employers %}
+
                     <tr>
-                        <td><strong style="color: #0f172a;">{{ employer.company_name }}</strong></td>
-                        <td><code style="font-family: monospace; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem;">{{ employer.business_permit_no }}</code></td>
-                        <td>{{ employer.contact_no }}</td>
+
                         <td>
-                            {% if employer.is_active %}
-                                <span class="badge-status active">Active</span>
-                            {% else %}
-                                <span class="badge-status suspended">Suspended</span>
-                            {% endif %}
+                            <strong>
+                                {{ employer.company_name }}
+                            </strong>
                         </td>
+
+                        <td>
+                            <code class="permit-code">
+                                {{ employer.business_permit_no }}
+                            </code>
+                        </td>
+
+                        <td>
+                            {{ employer.contact_no }}
+                        </td>
+
+                        <td>
+
+                            {% if employer.is_active %}
+
+                                <span class="badge-status active">
+                                    Active
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge-status suspended">
+                                    Suspended
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
                     </tr>
+
                     {% empty %}
+
                     <tr>
-                        <td colspan="4" style="text-align: center; color: #64748b; padding: 40px 0;">No employer instances logged in system database.</td>
+
+                        <td
+                            colspan="4"
+                            class="empty-state"
+                        >
+                            No employer records found in the system.
+                        </td>
+
                     </tr>
+
                     {% endfor %}
+
                 </tbody>
+
             </table>
+
         </div>
+
     </div>
 
-    <!-- APPLICANT DATA TABLES -->
+
+    <!-- =====================================================
+         APPLICANT REPORT
+    ===================================================== -->
+
     <div class="data-card">
+
         <div class="data-card-header">
             <h3>Applicant Report</h3>
         </div>
+
         <div class="table-responsive">
+
             <table>
+
                 <thead>
+
                     <tr>
                         <th>Full Name</th>
                         <th>Email Address</th>
                         <th>Phone Account</th>
                     </tr>
+
                 </thead>
+
                 <tbody>
+
                     {% for applicant in applicants %}
+
                     <tr>
-                        <td><strong style="color: #0f172a;">{{ applicant.first_name }} {{ applicant.middle_name }} {{ applicant.last_name }}</strong></td>
-                        <td>{{ applicant.email }}</td>
-                        <td>{{ applicant.phone_number }}</td>
+
+                        <td>
+                            <strong>
+                                {{ applicant.first_name }}
+                                {{ applicant.middle_name }}
+                                {{ applicant.last_name }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ applicant.email }}
+                        </td>
+
+                        <td>
+                            {{ applicant.phone_number }}
+                        </td>
+
                     </tr>
+
                     {% empty %}
+
                     <tr>
-                        <td colspan="3" style="text-align: center; color: #64748b; padding: 40px 0;">No active job seekers logged in system database.</td>
+
+                        <td
+                            colspan="3"
+                            class="empty-state"
+                        >
+                            No applicant records found in the system.
+                        </td>
+
                     </tr>
+
                     {% endfor %}
+
                 </tbody>
+
             </table>
+
         </div>
+
     </div>
 
-    <!-- JOBS DATA TABLES -->
+
+    <!-- =====================================================
+         JOB POSTS REPORT
+    ===================================================== -->
+
     <div class="data-card">
+
         <div class="data-card-header">
             <h3>Job Posts Report</h3>
         </div>
+
         <div class="table-responsive">
+
             <table>
+
                 <thead>
+
                     <tr>
                         <th>Company</th>
                         <th>Job Title</th>
@@ -388,119 +971,320 @@
                         <th>Deployment Location</th>
                         <th>Review Status</th>
                     </tr>
+
                 </thead>
+
                 <tbody>
+
                     {% for job in jobs %}
+
                     <tr>
-                        <td>{{ job.employer.company_name }}</td>
-                        <td><strong style="color: #0f172a;">{{ job.title }}</strong></td>
-                        <td style="font-weight: 600; color: #2563eb;">₱{{ job.salary }}</td>
-                        <td>{{ job.location }}</td>
+
                         <td>
-                            {% if job.status == 'approved' or job.get_status_display|lower == 'approved' %}
-                                <span class="badge-status active">Approved</span>
-                            {% elif job.status == 'pending' or job.get_status_display|lower == 'pending' %}
-                                <span class="badge-status pending">Pending</span>
-                            {% else %}
-                                <span class="badge-status rejected">{{ job.get_status_display }}</span>
-                            {% endif %}
+                            {{ job.employer.company_name }}
                         </td>
+
+                        <td>
+                            <strong>
+                                {{ job.title }}
+                            </strong>
+                        </td>
+
+                        <td
+                            style="
+                                font-weight: 700;
+                                color: #2563eb;
+                            "
+                        >
+                            ₱{{ job.salary }}
+                        </td>
+
+                        <td>
+                            {{ job.location }}
+                        </td>
+
+                        <td>
+
+                            {% if job.status == 'approved' or job.get_status_display|lower == 'approved' %}
+
+                                <span class="badge-status active">
+                                    Approved
+                                </span>
+
+                            {% elif job.status == 'pending' or job.get_status_display|lower == 'pending' %}
+
+                                <span class="badge-status pending">
+                                    Pending
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge-status rejected">
+                                    {{ job.get_status_display }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
                     </tr>
+
                     {% empty %}
+
                     <tr>
-                        <td colspan="5" style="text-align: center; color: #64748b; padding: 40px 0;">No job advertisements logged in system database.</td>
+
+                        <td
+                            colspan="5"
+                            class="empty-state"
+                        >
+                            No job advertisements found in the system.
+                        </td>
+
                     </tr>
+
                     {% endfor %}
+
                 </tbody>
+
             </table>
+
         </div>
+
     </div>
 
 </div>
 
-<!-- DATA INTEGRATION SCRIPT -->
+
+<!-- =========================================================
+     CHART DATA
+========================================================= -->
+
 <script>
-const activeGreen = '#10b981';
-const pendingAmber = '#f59e0b';
-const accentRed = '#ef4444';
-const primaryBlue = '#2563eb';
-const neutralGray = '#64748b';
 
-new Chart(document.getElementById('jobChart'), {
-    type: 'pie',
-    data: {
-        labels: ['Approved', 'Pending', 'Rejected'],
-        datasets: [{
-            data: [{{ approved_jobs }}, {{ pending_jobs }}, {{ rejected_jobs }}],
-            backgroundColor: [activeGreen, pendingAmber, accentRed],
-            borderWidth: 2,
-            borderColor: '#ffffff'
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: { padding: 16, font: { family: 'Inter, sans-serif', size: 12 } }
-            }
-        }
-    }
-});
+    const activeGreen = '#10b981';
+    const pendingAmber = '#f59e0b';
+    const accentRed = '#ef4444';
 
-new Chart(document.getElementById('employerChart'), {
-    type: 'doughnut',
-    data: {
-        labels: ['Active', 'Suspended'],
-        datasets: [{
-            data: [{{ active_employers }}, {{ suspended_employers }}],
-            backgroundColor: [activeGreen, accentRed],
-            borderWidth: 2,
-            borderColor: '#ffffff'
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: '72%',
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: { padding: 16, font: { family: 'Inter, sans-serif', size: 12 } }
-            }
-        }
-    }
-});
+    const primaryBlue = '#2563eb';
+    const neutralGray = '#64748b';
+    const teal = '#0891b2';
 
-new Chart(document.getElementById('overallChart'), {
-    type: 'bar',
-    data: {
-        labels: ['Employers', 'Applicants', 'Job Posts'],
-        datasets: [{
-            data: [{{ total_employers }}, {{ total_applicants }}, {{ total_jobs }}],
-            backgroundColor: [primaryBlue, neutralGray, '#3b82f6'],
-            borderRadius: 6
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { display: false }
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                grid: { color: '#f1f5f9' },
-                ticks: { color: '#64748b' }
+
+    /* =====================================================
+       JOB STATUS CHART
+    ===================================================== */
+
+    new Chart(
+        document.getElementById('jobChart'),
+        {
+            type: 'pie',
+
+            data: {
+                labels: [
+                    'Approved',
+                    'Pending',
+                    'Rejected'
+                ],
+
+                datasets: [{
+                    data: [
+                        {{ approved_jobs }},
+                        {{ pending_jobs }},
+                        {{ rejected_jobs }}
+                    ],
+
+                    backgroundColor: [
+                        activeGreen,
+                        pendingAmber,
+                        accentRed
+                    ],
+
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
             },
-            x: {
-                grid: { display: false },
-                ticks: { color: '#64748b' }
+
+            options: {
+
+                responsive: true,
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+                        position: 'bottom',
+
+                        labels: {
+                            padding: 16,
+
+                            font: {
+                                family: 'Inter, sans-serif',
+                                size: 12
+                            }
+                        }
+                    }
+
+                }
+
             }
         }
-    }
-});
+    );
+
+
+    /* =====================================================
+       EMPLOYER DISTRIBUTION CHART
+    ===================================================== */
+
+    new Chart(
+        document.getElementById('employerChart'),
+        {
+            type: 'doughnut',
+
+            data: {
+
+                labels: [
+                    'Active',
+                    'Suspended'
+                ],
+
+                datasets: [{
+
+                    data: [
+                        {{ active_employers }},
+                        {{ suspended_employers }}
+                    ],
+
+                    backgroundColor: [
+                        activeGreen,
+                        accentRed
+                    ],
+
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+                maintainAspectRatio: false,
+
+                cutout: '72%',
+
+                plugins: {
+
+                    legend: {
+
+                        position: 'bottom',
+
+                        labels: {
+
+                            padding: 16,
+
+                            font: {
+                                family: 'Inter, sans-serif',
+                                size: 12
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       OVERALL SYSTEM METRICS
+    ===================================================== */
+
+    new Chart(
+        document.getElementById('overallChart'),
+        {
+            type: 'bar',
+
+            data: {
+
+                labels: [
+                    'Employers',
+                    'Applicants',
+                    'Job Posts'
+                ],
+
+                datasets: [{
+
+                    data: [
+                        {{ total_employers }},
+                        {{ total_applicants }},
+                        {{ total_jobs }}
+                    ],
+
+                    backgroundColor: [
+                        primaryBlue,
+                        neutralGray,
+                        teal
+                    ],
+
+                    borderRadius: 6
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+                        display: false
+                    }
+
+                },
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        grid: {
+                            color: '#f1f5f9'
+                        },
+
+                        ticks: {
+                            color: '#64748b'
+                        }
+
+                    },
+
+                    x: {
+
+                        grid: {
+                            display: false
+                        },
+
+                        ticks: {
+                            color: '#64748b'
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
 </script>
+
 {% endblock %}

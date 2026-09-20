@@ -1,259 +1,967 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/PIODURAN.png' %}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'images/PIODURAN.png' %}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/PIODURAN.png' %}">
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="32x32"
+        href="{% static 'images/PIODURAN.png' %}"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="192x192"
+        href="{% static 'images/PIODURAN.png' %}"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        sizes="180x180"
+        href="{% static 'images/PIODURAN.png' %}"
+    >
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Employer Dashboard | PESO Portal</title>
-    
-    <!-- Google Fonts Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+
+    <!-- Google Fonts -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
 
     <style>
-        /* --- Formal Green Theme Variables --- */
+
+        /* =========================================================
+           GLOBAL THEME
+        ========================================================= */
+
         :root {
-            --gov-green: #064e3b;          /* Primary Deep Forest Green */
-            --gov-green-light: #059669;    /* Bright Accent Green */
-            --gov-green-surface: #ecfdf5;  /* Subtle Green Tint */
-            --gov-red: #b91c1c;
-            --text-dark: #0f172a;
-            --bg-canvas: #f8fafc;
-            --sidebar-width: 260px;
+
+            --primary: #059669;
+            --primary-dark: #047857;
+            --primary-light: #ecfdf5;
+            --primary-border: #a7f3d0;
+
+            --text: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+
+            --border: #e2e8f0;
+
+            --surface: #ffffff;
+            --surface-soft: #f8fafc;
+
+            --danger: #dc2626;
+            --danger-light: #fef2f2;
+
+            --sidebar-width: 250px;
+            --header-height: 70px;
         }
 
-        /* --- Global Resets & Baseline --- */
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-canvas);
-            color: var(--text-dark);
-            -webkit-font-smoothing: antialiased;
+
+        html {
+            scroll-behavior: smooth;
         }
 
-        /* --- Top Header Navigation Layer --- */
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                'Inter',
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                sans-serif;
+
+            background: var(--surface-soft);
+
+            color: var(--text);
+
+            -webkit-font-smoothing: antialiased;
+
+            text-rendering: optimizeLegibility;
+        }
+
+
+        a {
+            color: inherit;
+        }
+
+
+        button,
+        input,
+        textarea,
+        select {
+            font-family: inherit;
+        }
+
+
+        /* =========================================================
+           TOP NAVBAR
+        ========================================================= */
+
         .portal-navbar {
-            height: 70px;
-            background-color: var(--gov-green);
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 24px;
+
             position: fixed;
+
             top: 0;
             left: 0;
             right: 0;
-            z-index: 50;
-            box-shadow: 0 4px 12px rgba(6, 78, 59, 0.15);
+
+            height: var(--header-height);
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 0 28px;
+
+            background: #059669;
+
+            color: #ffffff;
+
+            z-index: 100;
+
+            box-shadow:
+                0 4px 14px rgba(5, 150, 105, 0.18);
         }
+
+
+        /* =========================================================
+           BRAND
+        ========================================================= */
 
         .portal-brand {
+
             display: flex;
+
             align-items: center;
-            gap: 12px;
+
+            gap: 13px;
+
+            min-width: 0;
         }
+
 
         .portal-logo {
-            height: 40px;
+
             width: auto;
+
+            height: 40px;
+
             object-fit: contain;
+
+            flex-shrink: 0;
         }
+
 
         .portal-brand h2 {
-            font-size: 1.25rem;
+
+            color: #ffffff;
+
+            font-size: 1.15rem;
+
             font-weight: 800;
+
             letter-spacing: -0.025em;
+
+            white-space: nowrap;
         }
+
+
+        /* =========================================================
+           EMPLOYER CENTER BADGE
+        ========================================================= */
 
         .portal-brand span {
-            font-size: 0.75rem;
-            background-color: var(--gov-red);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: 700;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            min-height: 27px;
+
+            padding: 4px 10px;
+
+            background: rgba(255, 255, 255, 0.14);
+
+            border: 1px solid rgba(255, 255, 255, 0.28);
+
+            border-radius: 6px;
+
+            color: #ffffff;
+
+            font-size: 0.68rem;
+
+            font-weight: 800;
+
+            letter-spacing: 0.04em;
+
             text-transform: uppercase;
+
+            white-space: nowrap;
         }
 
-        /* --- Dashboard Core Layout --- */
+
+        /* =========================================================
+           DASHBOARD LAYOUT
+        ========================================================= */
+
         .dashboard-container {
-            display: flex;
-            min-height: calc(100vh - 70px);
-            margin-top: 70px; 
+
             width: 100%;
+
+            min-height: 100vh;
+
+            padding-top: var(--header-height);
         }
 
-        /* --- Fixed Sidebar --- */
+
+        /* =========================================================
+           SIDEBAR
+        ========================================================= */
+
         .dashboard-sidebar {
-            width: var(--sidebar-width);
-            background-color: #ffffff;
-            border-right: 1px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 24px 16px;
+
             position: fixed;
-            top: 70px;
+
+            top: var(--header-height);
+
             bottom: 0;
+
             left: 0;
-            z-index: 40;
+
+            width: var(--sidebar-width);
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: space-between;
+
+            padding: 24px 14px;
+
+            background: #ffffff;
+
+            border-right: 1px solid var(--border);
+
+            z-index: 90;
+
+            overflow-y: auto;
         }
+
 
         .sidebar-menu {
+
             display: flex;
+
             flex-direction: column;
-            gap: 8px;
+
+            gap: 5px;
         }
+
+
+        /* =========================================================
+           SIDEBAR LINKS
+        ========================================================= */
 
         .sidebar-link {
+
+            position: relative;
+
             display: flex;
+
             align-items: center;
+
             gap: 12px;
-            padding: 12px 16px;
-            color: #475569;
-            font-weight: 600;
-            font-size: 0.95rem;
-            text-decoration: none;
+
+            width: 100%;
+
+            min-height: 46px;
+
+            padding: 11px 14px;
+
+            color: var(--text-secondary);
+
+            background: transparent;
+
+            border: 1px solid transparent;
+
             border-radius: 8px;
-            transition: all 0.2s ease;
+
+            font-size: 0.88rem;
+
+            font-weight: 600;
+
+            text-decoration: none;
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease,
+                border-color 0.2s ease,
+                transform 0.2s ease;
         }
+
 
         .sidebar-link svg {
+
             width: 20px;
+
             height: 20px;
+
+            flex-shrink: 0;
+
             color: #64748b;
-            transition: color 0.2s;
+
             fill: none;
+
             stroke: currentColor;
-            stroke-width: 2;
+
+            stroke-width: 1.8;
+
+            transition:
+                color 0.2s ease;
         }
+
 
         .sidebar-link:hover {
-            background-color: var(--gov-green-surface);
-            color: var(--gov-green-light);
+
+            background: var(--surface-soft);
+
+            color: var(--primary);
+
+            border-color: #f1f5f9;
         }
+
 
         .sidebar-link:hover svg {
-            color: var(--gov-green-light);
+
+            color: var(--primary);
         }
+
+
+        /* =========================================================
+           ACTIVE SIDEBAR
+        ========================================================= */
 
         .sidebar-link.active {
-            background-color: var(--gov-green-surface);
-            color: var(--gov-green);
-            border-left: 4px solid var(--gov-green-light);
-            border-radius: 0 8px 8px 0;
-            padding-left: 12px;
+
+            background: var(--primary-light);
+
+            border-color: var(--primary-border);
+
+            color: var(--primary-dark);
+
+            font-weight: 700;
         }
+
+
+        .sidebar-link.active::before {
+
+            content: "";
+
+            position: absolute;
+
+            left: -14px;
+
+            top: 8px;
+
+            bottom: 8px;
+
+            width: 3px;
+
+            background: var(--primary);
+
+            border-radius:
+                0 3px 3px 0;
+        }
+
 
         .sidebar-link.active svg {
-            color: var(--gov-green);
+
+            color: var(--primary);
         }
+
+
+        /* =========================================================
+           SIDEBAR FOOTER
+        ========================================================= */
+
+        .sidebar-footer {
+
+            padding-top: 18px;
+
+            margin-top: 20px;
+
+            border-top: 1px solid var(--border);
+        }
+
+
+        /* =========================================================
+           LOGOUT
+        ========================================================= */
 
         .sidebar-link.logout-link {
-            color: #dc2626;
+
+            color: var(--danger);
         }
+
 
         .sidebar-link.logout-link svg {
-            color: #dc2626;
+
+            color: var(--danger);
         }
+
 
         .sidebar-link.logout-link:hover {
-            background-color: #fef2f2;
+
+            background: var(--danger-light);
+
+            border-color: #fecaca;
+
+            color: var(--danger);
         }
 
-        /* --- Main Workspace Viewport --- */
+
+        /* =========================================================
+           MAIN CONTENT
+        ========================================================= */
+
         .dashboard-main {
-            flex: 1;
-            margin-left: var(--sidebar-width);
-            padding: 40px;
-            max-width: 1400px;
+
             width: calc(100% - var(--sidebar-width));
+
+            min-height:
+                calc(100vh - var(--header-height));
+
+            margin-left: var(--sidebar-width);
+
+            padding: 34px 38px;
+
+            background: var(--surface-soft);
         }
 
-        /* --- Responsive Styling --- */
-        @media (max-width: 768px) {
-            .dashboard-container {
-                flex-direction: column;
-            }
-            .dashboard-sidebar {
-                width: 100%;
-                position: relative;
-                top: 0;
-                bottom: auto;
-                border-right: none;
-                border-bottom: 1px solid #e2e8f0;
-                padding: 16px;
-                height: auto;
-            }
-            .dashboard-main {
-                margin-left: 0;
-                width: 100%;
-                padding: 24px 16px;
-            }
+
+        /* =========================================================
+           MAIN CONTENT WIDTH
+        ========================================================= */
+
+        .dashboard-main > * {
+
+            width: 100%;
+
+            max-width: 1380px;
+
+            margin-left: auto;
+
+            margin-right: auto;
         }
+
+
+        /* =========================================================
+           SIDEBAR SCROLLBAR
+        ========================================================= */
+
+        .dashboard-sidebar::-webkit-scrollbar {
+
+            width: 5px;
+        }
+
+
+        .dashboard-sidebar::-webkit-scrollbar-track {
+
+            background: transparent;
+        }
+
+
+        .dashboard-sidebar::-webkit-scrollbar-thumb {
+
+            background: #cbd5e1;
+
+            border-radius: 10px;
+        }
+
+
+        .dashboard-sidebar::-webkit-scrollbar-thumb:hover {
+
+            background: #94a3b8;
+        }
+
+
+        /* =========================================================
+           TABLET
+        ========================================================= */
+
+        @media (max-width: 900px) {
+
+            :root {
+                --sidebar-width: 220px;
+            }
+
+
+            .portal-navbar {
+
+                padding: 0 20px;
+            }
+
+
+            .portal-brand h2 {
+
+                font-size: 1rem;
+            }
+
+
+            .portal-brand span {
+
+                display: none;
+            }
+
+
+            .dashboard-main {
+
+                padding: 28px 24px;
+            }
+
+        }
+
+
+        /* =========================================================
+           MOBILE
+        ========================================================= */
+
+        @media (max-width: 768px) {
+
+            :root {
+                --header-height: 64px;
+            }
+
+
+            .portal-navbar {
+
+                height: var(--header-height);
+
+                padding: 0 16px;
+            }
+
+
+            .portal-logo {
+
+                height: 36px;
+            }
+
+
+            .portal-brand {
+
+                gap: 10px;
+            }
+
+
+            .portal-brand h2 {
+
+                font-size: 0.92rem;
+
+                overflow: hidden;
+
+                text-overflow: ellipsis;
+            }
+
+
+            .dashboard-container {
+
+                padding-top:
+                    var(--header-height);
+            }
+
+
+            .dashboard-sidebar {
+
+                position: relative;
+
+                top: auto;
+
+                left: auto;
+
+                bottom: auto;
+
+                width: 100%;
+
+                height: auto;
+
+                padding: 12px 14px;
+
+                border-right: none;
+
+                border-bottom:
+                    1px solid var(--border);
+
+                overflow: visible;
+            }
+
+
+            .sidebar-menu {
+
+                display: grid;
+
+                grid-template-columns:
+                    repeat(3, minmax(0, 1fr));
+
+                gap: 7px;
+            }
+
+
+            .sidebar-link {
+
+                justify-content: center;
+
+                flex-direction: column;
+
+                gap: 5px;
+
+                min-height: 66px;
+
+                padding: 9px 6px;
+
+                text-align: center;
+
+                font-size: 0.72rem;
+            }
+
+
+            .sidebar-link svg {
+
+                width: 19px;
+
+                height: 19px;
+            }
+
+
+            .sidebar-link.active::before {
+
+                left: 8px;
+
+                right: 8px;
+
+                top: auto;
+
+                bottom: 0;
+
+                width: auto;
+
+                height: 3px;
+
+                border-radius:
+                    3px 3px 0 0;
+            }
+
+
+            .sidebar-footer {
+
+                margin-top: 9px;
+
+                padding-top: 9px;
+            }
+
+
+            .sidebar-footer .sidebar-link {
+
+                flex-direction: row;
+
+                min-height: 44px;
+
+                justify-content: center;
+
+                gap: 8px;
+            }
+
+
+            .dashboard-main {
+
+                width: 100%;
+
+                margin-left: 0;
+
+                min-height: auto;
+
+                padding: 24px 16px 35px;
+            }
+
+        }
+
+
+        /* =========================================================
+           SMALL MOBILE
+        ========================================================= */
+
+        @media (max-width: 480px) {
+
+            .portal-navbar {
+
+                padding: 0 13px;
+            }
+
+
+            .portal-logo {
+
+                height: 33px;
+            }
+
+
+            .portal-brand h2 {
+
+                font-size: 0.82rem;
+            }
+
+
+            .dashboard-sidebar {
+
+                padding: 10px;
+            }
+
+
+            .sidebar-menu {
+
+                gap: 5px;
+            }
+
+
+            .sidebar-link {
+
+                min-height: 62px;
+
+                font-size: 0.68rem;
+            }
+
+
+            .dashboard-main {
+
+                padding: 20px 12px 30px;
+            }
+
+        }
+
     </style>
+
 </head>
+
+
 <body>
 
-    <!-- PORTAL STATIC TOP GLOBAL HEADER BAR -->
+
+    <!-- =========================================================
+         TOP GLOBAL HEADER
+    ========================================================== -->
+
     <nav class="portal-navbar">
+
         <div class="portal-brand">
-            <img src="{% static 'images/PESO.png' %}" alt="PESO Logo" class="portal-logo">
-            <h2>PESO Job Placement Portal</h2>
-            <span>Employer Center</span>
+
+            <img
+                src="{% static 'images/PESO.png' %}"
+                alt="PESO Logo"
+                class="portal-logo"
+            >
+
+            <h2>
+                PESO Job Placement Portal
+            </h2>
+
+            <span>
+                Employer Center
+            </span>
+
         </div>
+
     </nav>
 
+
+    <!-- =========================================================
+         DASHBOARD
+    ========================================================== -->
+
     <div class="dashboard-container">
-        <!-- STICKY SIDE NAVIGATION BAR -->
+
+
+        <!-- =====================================================
+             SIDEBAR
+        ====================================================== -->
+
         <aside class="dashboard-sidebar">
+
+
             <div class="sidebar-menu">
-                <a href="{% url 'employer-dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'employer-dashboard' %}active{% endif %}">
+
+
+                <!-- HOME -->
+
+                <a
+                    href="{% url 'employer-dashboard' %}"
+                    class="sidebar-link
+                    {% if request.resolver_match.url_name == 'employer-dashboard' %}
+                        active
+                    {% endif %}"
+                >
+
                     <svg viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                        />
+
                     </svg>
-                    Home
+
+                    <span>
+                        Home
+                    </span>
+
                 </a>
-                
-                <a href="{% url 'job-list' %}" class="sidebar-link {% if request.resolver_match.url_name == 'job-list' %}active{% endif %}">
+
+
+                <!-- JOB POST -->
+
+                <a
+                    href="{% url 'job-list' %}"
+                    class="sidebar-link
+                    {% if request.resolver_match.url_name == 'job-list' %}
+                        active
+                    {% endif %}"
+                >
+
                     <svg viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 4v16M4 12h16"
+                        />
+
                     </svg>
-                    Job Post
+
+                    <span>
+                        Job Post
+                    </span>
+
                 </a>
-                
-                <a href="{% url 'applicants' %}" class="sidebar-link {% if request.resolver_match.url_name == 'applicants' %}active{% endif %}">
+
+
+                <!-- APPLICANTS -->
+
+                <a
+                    href="{% url 'applicants' %}"
+                    class="sidebar-link
+                    {% if request.resolver_match.url_name == 'applicants' %}
+                        active
+                    {% endif %}"
+                >
+
                     <svg viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                        />
+
                     </svg>
-                    Applicants
+
+                    <span>
+                        Applicants
+                    </span>
+
                 </a>
+
+
             </div>
+
+
+            <!-- =================================================
+                 LOGOUT
+            ================================================== -->
 
             <div class="sidebar-footer">
-                <a href="{% url 'logout_user' %}" class="sidebar-link logout-link">
+
+                <a
+                    href="{% url 'logout_user' %}"
+                    class="sidebar-link logout-link"
+                >
+
                     <svg viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                        />
+
                     </svg>
-                    Logout
+
+                    <span>
+                        Logout
+                    </span>
+
                 </a>
+
             </div>
+
+
         </aside>
 
-        <!-- MAIN STAGE CONTEXT -->
+
+        <!-- =====================================================
+             MAIN CONTENT
+        ====================================================== -->
+
         <main class="dashboard-main">
-            {% block content %}{% endblock %}
+
+            {% block content %}
+            {% endblock %}
+
         </main>
+
+
     </div>
 
+
 </body>
+
 </html>

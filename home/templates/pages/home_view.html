@@ -10,136 +10,135 @@
    GLOBAL
 ========================================================= */
 
-html,
-body {
+:root {
+    --green: #059669;
+    --green-dark: #047857;
+    --green-light: #ecfdf5;
+    --green-border: #d1fae5;
+
+    --white: #ffffff;
+    --dark: #111827;
+    --gray-900: #1f2937;
+    --gray-700: #374151;
+    --gray-600: #4b5563;
+    --gray-500: #6b7280;
+    --gray-400: #9ca3af;
+    --gray-300: #d1d5db;
+    --gray-200: #e5e7eb;
+    --gray-100: #f3f4f6;
+    --gray-50: #f9fafb;
+}
+
+html {
     scroll-behavior: smooth;
 }
 
 body {
-    overflow-x: hidden;
+    margin: 0;
+    background: var(--white);
+    color: var(--dark);
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-html,
-body,
-[class*="hero"],
-[class*="bg"],
-[class*="main"] {
-    background-size: cover !important;
-    background-position: center center !important;
-    background-repeat: no-repeat !important;
-    background-attachment: fixed !important;
+* {
+    box-sizing: border-box;
 }
 
 
 /* =========================================================
-   HERO
+   COMMON
 ========================================================= */
 
-.hero-content-wrapper {
+.section-container {
+    width: min(1180px, calc(100% - 40px));
+    margin: 0 auto;
+}
 
-    width: 100%;
-    min-height: calc(100vh - 73px);
+.section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--green);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+}
 
+.section-label::before {
+    content: "";
+    width: 28px;
+    height: 2px;
+    background: var(--green);
+    display: block;
+}
+
+.section-title {
+    margin: 0;
+    color: var(--dark);
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.15;
+    font-weight: 800;
+}
+
+.section-title span {
+    color: var(--green);
+}
+
+.section-description {
+    margin: 16px 0 0;
+    max-width: 650px;
+    color: var(--gray-600);
+    font-size: 16px;
+    line-height: 1.75;
+}
+
+
+/* =========================================================
+   HERO SECTION
+========================================================= */
+
+.hero-section {
+    position: relative;
+    min-height: 82vh;
     display: flex;
     align-items: center;
-    justify-content: center;
-
-    padding: 70px 40px;
-
-    box-sizing: border-box;
-
-    position: relative;
-
+    background: var(--white);
     overflow: hidden;
-
+    padding: 70px 0;
 }
 
-
-/* =========================================================
-   HERO BACKGROUND DESIGN
-========================================================= */
-
-.hero-content-wrapper::before {
-
+.hero-section::before {
     content: "";
-
     position: absolute;
-
-    inset: 0;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,0.12),
-            rgba(255,255,255,0.02)
-        );
-
-    pointer-events: none;
-
-}
-
-
-.hero-content-wrapper::after {
-
-    content: "";
-
-    position: absolute;
-
-    width: 500px;
-    height: 500px;
-
-    right: -240px;
-    top: 50%;
-
-    transform: translateY(-50%);
-
-    border: 1px solid rgba(255,255,255,0.12);
-
+    top: -180px;
+    right: -180px;
+    width: 420px;
+    height: 420px;
     border-radius: 50%;
-
-    box-shadow:
-        0 0 0 80px rgba(255,255,255,0.025),
-        0 0 0 160px rgba(255,255,255,0.018);
-
-    pointer-events: none;
-
+    background: rgba(5, 150, 105, 0.05);
 }
 
-
-/* =========================================================
-   HERO DECORATIVE GRID
-========================================================= */
-
-.hero-grid-pattern {
-
+.hero-section::after {
+    content: "";
     position: absolute;
+    bottom: -180px;
+    left: -180px;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: rgba(5, 150, 105, 0.035);
+}
 
-    inset: 0;
+.hero-layout {
+    position: relative;
+    z-index: 2;
 
-    opacity: 0.12;
-
-    background-image:
-        linear-gradient(
-            rgba(255,255,255,0.15) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            90deg,
-            rgba(255,255,255,0.15) 1px,
-            transparent 1px
-        );
-
-    background-size: 55px 55px;
-
-    mask-image:
-        linear-gradient(
-            to right,
-            black,
-            transparent 70%
-        );
-
-    pointer-events: none;
-
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    align-items: center;
+    gap: 70px;
 }
 
 
@@ -147,922 +146,573 @@ body,
    HERO CONTENT
 ========================================================= */
 
-.hero-inner {
-
-    width: 100%;
-    max-width: 1180px;
-
-    position: relative;
-
-    z-index: 5;
-
+.hero-content {
+    max-width: 680px;
 }
-
-
-/* =========================================================
-   HERO CARD
-========================================================= */
-
-.hero-card {
-
-    width: 100%;
-    max-width: 1050px;
-
-    margin: 0 auto;
-
-    background: rgba(255,255,255,0.97);
-
-    border: 1px solid #e5e7eb;
-
-    border-radius: 18px;
-
-    padding: 65px 70px;
-
-    position: relative;
-
-    overflow: hidden;
-
-    box-shadow:
-        0 30px 80px rgba(0,0,0,0.20);
-
-}
-
-
-/* =========================================================
-   HERO CARD TOP LINE
-========================================================= */
-
-.hero-card::before {
-
-    content: "";
-
-    position: absolute;
-
-    left: 0;
-    right: 0;
-    top: 0;
-
-    height: 4px;
-
-    background: #1f2937;
-
-}
-
-
-/* =========================================================
-   HERO CARD DECORATION
-========================================================= */
-
-.hero-card::after {
-
-    content: "";
-
-    position: absolute;
-
-    width: 240px;
-    height: 240px;
-
-    right: -130px;
-    bottom: -130px;
-
-    border-radius: 50%;
-
-    border: 1px solid #e5e7eb;
-
-    box-shadow:
-        0 0 0 35px rgba(31,41,55,0.025),
-        0 0 0 70px rgba(31,41,55,0.018);
-
-}
-
-
-/* =========================================================
-   HERO EYEBROW
-========================================================= */
 
 .hero-eyebrow {
-
     display: inline-flex;
-
     align-items: center;
-
     gap: 9px;
 
+    padding: 8px 14px;
+
+    background: var(--green-light);
+    color: var(--green-dark);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    border-radius: 999px;
+
     margin-bottom: 22px;
+}
 
-    padding: 7px 12px;
+.hero-eyebrow-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+}
 
-    background: #f3f4f6;
+.hero-title {
+    margin: 0;
 
-    border: 1px solid #e5e7eb;
+    color: var(--dark);
 
-    border-radius: 6px;
-
-    color: #4b5563;
-
-    font-size: 0.72rem;
-
+    font-size: clamp(42px, 6vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -2.5px;
     font-weight: 800;
+}
 
-    letter-spacing: 0.08em;
+.hero-title span {
+    color: var(--green);
+}
 
-    text-transform: uppercase;
+.hero-description {
+    max-width: 650px;
 
+    margin: 25px 0 0;
+
+    color: var(--gray-600);
+
+    font-size: 18px;
+    line-height: 1.75;
+}
+
+.hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    margin-top: 32px;
+
+    flex-wrap: wrap;
 }
 
 
-.hero-eyebrow-dot {
+/* =========================================================
+   HERO BUTTONS
+========================================================= */
 
-    width: 7px;
-    height: 7px;
+.btn-primary-custom,
+.btn-secondary-custom {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    min-height: 50px;
+
+    padding: 0 22px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    border-radius: 7px;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.btn-primary-custom {
+    background: var(--green);
+    color: var(--white);
+    border: 1px solid var(--green);
+}
+
+.btn-primary-custom:hover {
+    background: var(--green-dark);
+    border-color: var(--green-dark);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(5, 150, 105, 0.18);
+}
+
+.btn-secondary-custom {
+    background: var(--white);
+    color: var(--gray-700);
+    border: 1px solid var(--gray-300);
+}
+
+.btn-secondary-custom:hover {
+    color: var(--green);
+    border-color: var(--green);
+    background: var(--white);
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   SVG
+========================================================= */
+
+.svg-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   HERO VISUAL
+   NO BORDER
+   NO CARD
+   NO SHADOW
+========================================================= */
+
+.hero-visual {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: transparent;
+
+    border: none;
+    box-shadow: none;
+
+    padding: 0;
+
+    min-height: 400px;
+}
+
+.hero-visual::before {
+    content: "";
+    position: absolute;
+
+    width: 320px;
+    height: 320px;
 
     border-radius: 50%;
 
-    background: #74BC44;
+    background: rgba(5, 150, 105, 0.045);
 
+    z-index: -1;
 }
 
+.hero-visual::after {
+    content: "";
+    position: absolute;
 
-/* =========================================================
-   HERO TITLE
-========================================================= */
+    width: 110px;
+    height: 110px;
 
-.hero-content-wrapper h2 {
+    right: 5%;
+    bottom: 5%;
 
-    position: relative;
+    border-radius: 50%;
 
-    z-index: 2;
+    border: 2px solid rgba(5, 150, 105, 0.12);
 
-    max-width: 900px;
-
-    margin: 0 auto 22px;
-
-    color: #111827;
-
-    font-size: clamp(2rem, 4vw, 3.35rem);
-
-    font-weight: 800;
-
-    line-height: 1.17;
-
-    letter-spacing: -0.045em;
-
+    z-index: -1;
 }
 
-
-/* =========================================================
-   HERO DESCRIPTION
-========================================================= */
-
-.hero-description {
-
-    position: relative;
-
-    z-index: 2;
-
-    max-width: 720px;
-
-    margin: 0 auto 32px;
-
-    color: #6b7280;
-
-    font-size: 1rem;
-
-    line-height: 1.75;
-
-}
-
-
-/* =========================================================
-   HERO ACTIONS
-========================================================= */
-
-.hero-actions {
-
-    position: relative;
-
-    z-index: 4;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    gap: 12px;
-
-    flex-wrap: wrap;
-
-}
-
-
-/* =========================================================
-   PRIMARY BUTTON
-========================================================= */
-
-.hero-actions .btn-pill-white {
-
-    min-width: 165px;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 9px;
-
-    padding: 12px 23px;
-
-    background: #1f2937;
-
-    color: #ffffff;
-
-    border: 1px solid #1f2937;
-
-    border-radius: 7px;
-
-    font-size: 0.88rem;
-
-    font-weight: 700;
-
-    text-decoration: none;
-
-    transition: all .2s ease;
-
-}
-
-
-.hero-actions .btn-pill-white:hover {
-
-    background: #111827;
-
-    border-color: #111827;
-
-    color: #ffffff;
-
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 8px 20px rgba(17,24,39,0.18);
-
-}
-
-
-/* =========================================================
-   SECONDARY BUTTON
-========================================================= */
-
-.hero-actions .btn-pill-outline {
-
-    min-width: 165px;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 9px;
-
-    padding: 12px 23px;
-
-    background: #ffffff;
-
-    color: #374151;
-
-    border: 1px solid #d1d5db;
-
-    border-radius: 7px;
-
-    font-size: 0.88rem;
-
-    font-weight: 700;
-
-    text-decoration: none;
-
-    transition: all .2s ease;
-
-}
-
-
-.hero-actions .btn-pill-outline:hover {
-
-    background: #f9fafb;
-
-    border-color: #9ca3af;
-
-    color: #111827;
-
-    transform: translateY(-2px);
-
-}
-
-
-/* =========================================================
-   HERO TRUST ROW
-========================================================= */
-
-.hero-trust-row {
-
-    position: relative;
-
-    z-index: 2;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    flex-wrap: wrap;
-
-    gap: 24px;
-
-    margin-top: 30px;
-
-    padding-top: 24px;
-
-    border-top: 1px solid #edf0f2;
-
-}
-
-
-.hero-trust-item {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-
-    color: #6b7280;
-
-    font-size: 0.76rem;
-
-    font-weight: 600;
-
-}
-
-
-.hero-trust-item svg {
-
-    color: #74BC44;
-
-}
-
-
-/* =========================================================
-   SECTION WRAPPERS
-========================================================= */
-
-.featured-jobs-wrapper,
-.stats-wrapper {
-
+.hero-image {
     width: 100%;
+    max-width: 500px;
+    height: auto;
+    max-height: 420px;
 
-    min-height: calc(100vh - 73px);
+    object-fit: contain;
 
-    display: flex;
+    display: block;
 
-    flex-direction: column;
-
-    justify-content: center;
-
-    padding: 75px 40px;
-
-    box-sizing: border-box;
-
-    position: relative;
-
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
 }
 
 
 /* =========================================================
-   SECTION HEADER
+   FEATURED JOBS
 ========================================================= */
+
+.featured-section {
+    padding: 90px 0;
+
+    background: var(--gray-50);
+
+    border-top: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--gray-200);
+}
 
 .section-heading-row {
-
-    width: 100%;
-
     display: flex;
-
     align-items: flex-end;
-
     justify-content: space-between;
+    gap: 30px;
 
-    gap: 20px;
-
-    margin-bottom: 28px;
-
+    margin-bottom: 40px;
 }
 
+.view-all-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
 
-.section-heading-content {
+    color: var(--green);
 
-    display: flex;
+    text-decoration: none;
 
-    align-items: flex-start;
+    font-size: 14px;
+    font-weight: 700;
 
-    gap: 13px;
-
+    white-space: nowrap;
 }
 
-
-.section-heading-line {
-
-    width: 4px;
-
-    min-width: 4px;
-
-    height: 46px;
-
-    background: #74BC44;
-
-    margin-top: 2px;
-
+.view-all-link:hover {
+    color: var(--green-dark);
 }
 
-
-.section-heading-content h3 {
-
-    margin: 0;
-
-    color: #ffffff;
-
-    font-size: 1.45rem;
-
-    font-weight: 800;
-
-    letter-spacing: -0.02em;
-
-}
-
-
-.section-heading-content p {
-
-    margin: 5px 0 0;
-
-    color: rgba(255,255,255,0.55);
-
-    font-size: 0.82rem;
-
-}
-
-
-/* =========================================================
-   JOB GRID
-========================================================= */
-
-.jobs-scroll-grid {
-
+.jobs-grid {
     display: grid;
-
-    grid-template-columns:
-        repeat(auto-fill, minmax(300px, 1fr));
-
-    gap: 20px;
-
-    width: 100%;
-
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
 }
-
-
-/* =========================================================
-   JOB CARD
-========================================================= */
 
 .job-card {
-
     position: relative;
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,0.075),
-            rgba(255,255,255,0.025)
-        );
+    background: var(--white);
 
-    border: 1px solid rgba(255,255,255,0.10);
+    border: 1px solid var(--gray-200);
 
-    border-radius: 14px;
-
-    padding: 23px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    min-height: 275px;
-
-    overflow: hidden;
-
-    backdrop-filter: blur(16px);
-
-    -webkit-backdrop-filter: blur(16px);
-
-    box-shadow:
-        0 10px 30px rgba(0,0,0,0.25);
+    padding: 28px;
 
     transition:
-        transform .25s ease,
-        border-color .25s ease,
-        box-shadow .25s ease;
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 
+    overflow: hidden;
 }
 
-
 .job-card::before {
-
     content: "";
 
     position: absolute;
 
-    left: 0;
     top: 0;
-
-    width: 100%;
+    left: 0;
+    right: 0;
 
     height: 3px;
 
-    background: #74BC44;
+    background: var(--green);
 
+    transform: scaleX(0);
+    transform-origin: left;
+
+    transition: transform 0.2s ease;
 }
-
 
 .job-card:hover {
+    transform: translateY(-5px);
 
-    transform: translateY(-6px);
+    border-color: var(--green-border);
 
-    border-color:
-        rgba(116,188,68,0.45);
-
-    box-shadow:
-        0 18px 40px rgba(0,0,0,0.35);
-
+    box-shadow: 0 15px 35px rgba(17, 24, 39, 0.08);
 }
 
-
-/* =========================================================
-   JOB CARD HEADER
-========================================================= */
-
-.job-card-header h4 {
-
-    color: #ffffff;
-
-    font-size: 1.05rem;
-
-    font-weight: 750;
-
-    line-height: 1.45;
-
-    margin: 0 0 10px;
-
+.job-card:hover::before {
+    transform: scaleX(1);
 }
 
+.job-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+}
 
-.company-name {
+.job-icon {
+    width: 48px;
+    height: 48px;
 
     display: flex;
-
     align-items: center;
-
-    gap: 8px;
-
-    color: rgba(255,255,255,0.60);
-
-    font-size: 0.80rem;
-
-}
-
-
-.company-name svg {
-
-    color: #74BC44;
-
-}
-
-
-/* =========================================================
-   JOB META
-========================================================= */
-
-.job-meta-list {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 11px;
-
-    margin-top: 21px;
-
-    padding-top: 17px;
-
-    border-top:
-        1px solid rgba(255,255,255,0.08);
-
-}
-
-
-.job-meta-item {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 9px;
-
-    color: rgba(255,255,255,0.67);
-
-    font-size: 0.81rem;
-
-}
-
-
-.job-meta-item svg {
-
-    color: #74BC44;
-
-    flex-shrink: 0;
-
-}
-
-
-/* =========================================================
-   APPLICANT BADGE
-========================================================= */
-
-.applicant-badge {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 7px;
-
-    width: fit-content;
-
-    padding: 5px 9px;
-
-    background:
-        rgba(116,188,68,0.08);
-
-    border:
-        1px solid rgba(116,188,68,0.18);
-
-    border-radius: 6px;
-
-    color: rgba(255,255,255,0.68);
-
-    font-size: 0.72rem;
-
-    font-weight: 600;
-
-}
-
-
-.applicant-badge svg {
-
-    color: #74BC44;
-
-}
-
-
-/* =========================================================
-   JOB FOOTER
-========================================================= */
-
-.job-card-footer {
-
-    margin-top: auto;
-
-    padding-top: 22px;
-
-}
-
-
-.btn-apply-card {
-
-    display: flex;
-
-    align-items: center;
-
     justify-content: center;
 
-    gap: 8px;
+    background: var(--green-light);
 
-    width: 100%;
+    color: var(--green);
 
-    padding: 11px 14px;
+    flex-shrink: 0;
+}
 
-    background: #ffffff;
+.job-icon svg {
+    width: 22px;
+    height: 22px;
+}
 
-    color: #111827;
+.job-title {
+    margin: 22px 0 7px;
 
-    border: 1px solid #ffffff;
+    color: var(--dark);
 
-    border-radius: 7px;
-
-    font-size: 0.79rem;
+    font-size: 19px;
+    line-height: 1.35;
 
     font-weight: 750;
+}
+
+.job-company {
+    margin: 0;
+
+    color: var(--green);
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.job-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+
+    margin-top: 20px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid var(--gray-200);
+}
+
+.job-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    color: var(--gray-600);
+
+    font-size: 13px;
+}
+
+.job-meta-item svg {
+    width: 16px;
+    height: 16px;
+
+    color: var(--green);
+
+    flex-shrink: 0;
+}
+
+.job-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 24px;
+}
+
+.applicant-count {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    color: var(--gray-500);
+
+    font-size: 12px;
+}
+
+.applicant-count svg {
+    width: 15px;
+    height: 15px;
+}
+
+.job-view-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    color: var(--green);
 
     text-decoration: none;
 
-    transition: all .2s ease;
-
+    font-size: 13px;
+    font-weight: 700;
 }
 
-
-.btn-apply-card:hover {
-
-    background: #74BC44;
-
-    border-color: #74BC44;
-
-    color: #ffffff;
-
+.job-view-btn:hover {
+    color: var(--green-dark);
 }
 
+.job-view-btn svg {
+    width: 15px;
+    height: 15px;
 
-.btn-apply-card svg {
-
-    transition: transform .2s ease;
-
+    transition: transform 0.2s ease;
 }
 
-
-.btn-apply-card:hover svg {
-
+.job-view-btn:hover svg {
     transform: translateX(3px);
-
 }
 
 
 /* =========================================================
-   EMPTY CARD
+   EMPTY JOB STATE
 ========================================================= */
 
-.empty-card {
-
+.empty-jobs {
     grid-column: 1 / -1;
 
     text-align: center;
 
-    padding: 65px 20px;
+    padding: 55px 25px;
 
-    background:
-        rgba(255,255,255,0.035);
+    background: var(--white);
 
-    border:
-        1px solid rgba(255,255,255,0.08);
-
-    border-radius: 14px;
-
+    border: 1px solid var(--gray-200);
 }
 
+.empty-jobs-icon {
+    width: 58px;
+    height: 58px;
 
-.empty-card h4 {
+    margin: 0 auto 17px;
 
-    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    margin-bottom: 8px;
+    background: var(--green-light);
 
+    color: var(--green);
 }
 
+.empty-jobs-icon svg {
+    width: 26px;
+    height: 26px;
+}
 
-.empty-card p {
+.empty-jobs h4 {
+    margin: 0 0 8px;
 
-    color: rgba(255,255,255,0.55);
+    color: var(--dark);
 
+    font-size: 20px;
+}
+
+.empty-jobs p {
     margin: 0;
 
-    font-size: .9rem;
+    color: var(--gray-500);
 
+    font-size: 14px;
 }
 
 
 /* =========================================================
-   STATISTICS
+   STATS
 ========================================================= */
 
-.stats-wrapper {
+.stats-section {
+    padding: 80px 0;
 
-    justify-content: center;
-
+    background: var(--white);
 }
-
 
 .stats-grid {
-
     display: grid;
 
-    grid-template-columns:
-        repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 
     gap: 20px;
-
-    width: 100%;
-
 }
 
-
 .stat-card {
-
     position: relative;
 
-    overflow: hidden;
+    background: var(--white);
 
-    background:
-        rgba(12,28,8,0.72);
-
-    border:
-        1px solid rgba(116,188,68,0.18);
-
-    border-radius: 14px;
+    border: 1px solid var(--gray-200);
 
     padding: 30px;
 
-    min-height: 155px;
-
     display: flex;
-
     align-items: center;
+    gap: 20px;
 
-    justify-content: space-between;
-
-    backdrop-filter: blur(12px);
-
-    transition: all .25s ease;
-
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
-
-
-.stat-card::before {
-
-    content: "";
-
-    position: absolute;
-
-    left: 0;
-    top: 0;
-
-    width: 3px;
-    height: 100%;
-
-    background: #74BC44;
-
-}
-
 
 .stat-card:hover {
+    transform: translateY(-3px);
 
-    transform: translateY(-4px);
+    border-color: var(--green-border);
 
-    border-color: #74BC44;
-
+    box-shadow: 0 12px 30px rgba(17, 24, 39, 0.06);
 }
 
+.stat-icon {
+    width: 56px;
+    height: 56px;
 
-.stat-num {
+    flex-shrink: 0;
 
-    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    font-size: 2.65rem;
+    background: var(--green-light);
 
-    font-weight: 800;
+    color: var(--green);
+}
 
+.stat-icon svg {
+    width: 26px;
+    height: 26px;
+}
+
+.stat-number {
+    margin: 0;
+
+    color: var(--dark);
+
+    font-size: 32px;
     line-height: 1;
 
+    font-weight: 800;
 }
-
 
 .stat-label {
+    margin: 7px 0 0;
 
-    color: rgba(255,255,255,0.65);
+    color: var(--gray-500);
 
-    font-size: .82rem;
-
-    font-weight: 600;
-
-    line-height: 1.4;
-
-    margin-top: 9px;
-
-}
-
-
-.arrow-icon {
-
-    color: #74BC44;
-
-    font-size: 2rem;
-
-    font-weight: 700;
-
+    font-size: 13px;
 }
 
 
@@ -1070,432 +720,173 @@ body,
    LEARN MORE
 ========================================================= */
 
-.learn-more-wrapper {
+.learn-more-section {
+    padding: 100px 0;
 
-    width: 100%;
+    background: var(--gray-50);
 
-    padding: 110px 40px;
-
-    background:
-        rgba(5,15,3,0.94);
-
-    box-sizing: border-box;
-
+    border-top: 1px solid var(--gray-200);
 }
-
-
-.learn-more-container {
-
-    max-width: 1200px;
-
-    width: 100%;
-
-    margin: auto;
-
-}
-
-
-/* =========================================================
-   LEARN MORE INTRO
-========================================================= */
 
 .learn-more-intro {
+    max-width: 800px;
 
-    max-width: 950px;
-
-    margin-bottom: 65px;
-
+    margin-bottom: 45px;
 }
 
-
-.learn-more-intro h2 {
-
-    color: #ffffff;
-
-    font-size: 2.45rem;
-
-    font-weight: 800;
-
-    line-height: 1.2;
-
-    margin: 0 0 20px;
-
-}
-
-
-.learn-more-intro h2 span {
-
-    color: #74BC44;
-
-}
-
-
-.learn-more-intro p {
-
-    color: rgba(255,255,255,0.70);
-
-    font-size: .96rem;
-
-    line-height: 1.8;
-
-    margin: 0;
-
-}
-
-
-/* =========================================================
-   INFO CARDS
-========================================================= */
-
-.portal-info-grid {
-
+.learn-more-grid {
     display: grid;
 
-    grid-template-columns:
-        repeat(3,1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 
-    gap: 20px;
-
-    margin-bottom: 80px;
-
+    gap: 22px;
 }
 
+.info-card {
+    background: var(--white);
 
-.portal-info-card {
-
-    position: relative;
-
-    background:
-        rgba(255,255,255,0.025);
-
-    border:
-        1px solid rgba(255,255,255,0.08);
+    border: 1px solid var(--gray-200);
 
     padding: 30px;
 
-    min-height: 225px;
-
-    transition: all .25s ease;
-
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
+.info-card:hover {
+    transform: translateY(-3px);
 
-.portal-info-card:hover {
+    border-color: var(--green-border);
 
-    transform: translateY(-4px);
-
-    border-color:
-        rgba(116,188,68,0.45);
-
+    box-shadow: 0 12px 30px rgba(17, 24, 39, 0.06);
 }
 
+.info-card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 
-.portal-info-icon {
+    margin-bottom: 18px;
+}
 
-    width: 45px;
-
-    height: 45px;
+.info-icon {
+    width: 50px;
+    height: 50px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
-    margin-bottom: 21px;
+    flex-shrink: 0;
 
-    color: #74BC44;
+    background: var(--green-light);
 
-    background:
-        rgba(116,188,68,0.08);
-
-    border:
-        1px solid rgba(116,188,68,0.15);
-
-    border-radius: 8px;
-
+    color: var(--green);
 }
 
-
-.portal-info-card h3 {
-
-    color: #ffffff;
-
-    font-size: 1.08rem;
-
-    margin: 0 0 12px;
-
-    font-weight: 750;
-
+.info-icon svg {
+    width: 23px;
+    height: 23px;
 }
 
-
-.portal-info-card p {
-
-    color: rgba(255,255,255,0.63);
-
-    font-size: .87rem;
-
-    line-height: 1.7;
-
+.info-card h4 {
     margin: 0;
 
+    color: var(--dark);
+
+    font-size: 19px;
+    font-weight: 750;
+}
+
+.info-card p {
+    margin: 0;
+
+    color: var(--gray-600);
+
+    font-size: 14px;
+    line-height: 1.75;
 }
 
 
 /* =========================================================
-   CONTENT SECTIONS
+   GOALS / FEATURES
 ========================================================= */
 
-.learn-content-section {
-
-    margin-bottom: 75px;
-
+.features-section {
+    margin-top: 45px;
 }
 
+.features-title {
+    margin: 0 0 22px;
 
-.learn-content-heading {
+    color: var(--dark);
 
-    display: flex;
+    font-size: 25px;
+    font-weight: 800;
+}
 
+.features-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+.feature-box {
+    background: var(--white);
+
+    border: 1px solid var(--gray-200);
+
+    padding: 25px;
+
+    transition:
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.feature-box:hover {
+    transform: translateY(-3px);
+
+    border-color: var(--green-border);
+}
+
+.feature-number {
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
 
-    gap: 13px;
+    width: 34px;
+    height: 34px;
 
-    margin-bottom: 22px;
+    margin-bottom: 18px;
 
-}
+    background: var(--green);
 
+    color: var(--white);
 
-.learn-content-heading span {
-
-    width: 4px;
-
-    height: 30px;
-
-    background: #74BC44;
-
-}
-
-
-.learn-content-heading h3 {
-
-    color: #ffffff;
-
-    font-size: 1.45rem;
-
+    font-size: 13px;
     font-weight: 800;
-
-    margin: 0;
-
 }
 
+.feature-box h5 {
+    margin: 0 0 9px;
 
-.learn-content-section > p {
+    color: var(--dark);
 
-    color: rgba(255,255,255,0.69);
-
-    max-width: 1050px;
-
-    font-size: .93rem;
-
-    line-height: 1.8;
-
-}
-
-
-/* =========================================================
-   WHY PORTAL
-========================================================= */
-
-.why-portal {
-
-    margin-bottom: 75px;
-
-    padding: 55px 0;
-
-    border-top:
-        1px solid rgba(116,188,68,0.15);
-
-    border-bottom:
-        1px solid rgba(116,188,68,0.15);
-
-}
-
-
-.why-portal p {
-
-    color: rgba(255,255,255,0.69);
-
-    max-width: 1050px;
-
-    font-size: .93rem;
-
-    line-height: 1.8;
-
-}
-
-
-/* =========================================================
-   GOALS
-========================================================= */
-
-.portal-goals {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(2,1fr);
-
-    gap: 0 35px;
-
-    max-width: 1000px;
-
-    margin-top: 28px;
-
-}
-
-
-.portal-goal {
-
-    color: rgba(255,255,255,0.68);
-
-    font-size: .87rem;
-
-    line-height: 1.5;
-
-    padding: 12px 0;
-
-    border-bottom:
-        1px solid rgba(255,255,255,0.06);
-
-}
-
-
-.portal-goal::before {
-
-    content: "✓";
-
-    color: #74BC44;
-
-    font-weight: 800;
-
-    margin-right: 10px;
-
-}
-
-
-/* =========================================================
-   FEATURE BOXES
-========================================================= */
-
-.portal-feature-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap: 20px;
-
-    margin-top: 30px;
-
-}
-
-
-.portal-feature-box {
-
-    background:
-        rgba(255,255,255,0.025);
-
-    border:
-        1px solid rgba(255,255,255,0.08);
-
-    padding: 28px;
-
-    transition: all .25s ease;
-
-}
-
-
-.portal-feature-box:hover {
-
-    border-color:
-        rgba(116,188,68,0.35);
-
-}
-
-
-.portal-feature-box h4 {
-
-    color: #74BC44;
-
-    font-size: .96rem;
-
+    font-size: 16px;
     font-weight: 750;
-
-    margin-bottom: 17px;
-
 }
 
+.feature-box p {
+    margin: 0;
 
-.portal-feature-box p {
+    color: var(--gray-600);
 
-    color: rgba(255,255,255,0.66);
-
-    font-size: .86rem;
-
+    font-size: 13px;
     line-height: 1.7;
-
-    margin: 0;
-
-}
-
-
-.portal-feature-box ul {
-
-    list-style: none;
-
-    padding: 0;
-
-    margin: 0;
-
-}
-
-
-.portal-feature-box li {
-
-    position: relative;
-
-    padding-left: 19px;
-
-    margin-bottom: 10px;
-
-    color: rgba(255,255,255,0.66);
-
-    font-size: .85rem;
-
-    line-height: 1.55;
-
-}
-
-
-.portal-feature-box li::before {
-
-    content: "";
-
-    position: absolute;
-
-    left: 0;
-
-    top: 8px;
-
-    width: 6px;
-
-    height: 6px;
-
-    background: #74BC44;
-
 }
 
 
@@ -1503,492 +894,383 @@ body,
    VISION
 ========================================================= */
 
-.portal-vision {
+.vision-section {
+    margin-top: 45px;
 
-    position: relative;
+    background: var(--white);
 
-    overflow: hidden;
+    border: 1px solid var(--green-border);
 
-    text-align: center;
-
-    padding: 75px 30px;
-
-    border:
-        1px solid rgba(116,188,68,0.20);
-
-    background:
-        rgba(116,188,68,0.035);
-
+    padding: 35px;
 }
 
+.vision-layout {
+    display: grid;
 
-.portal-vision::before {
+    grid-template-columns: 80px minmax(0, 1fr);
 
-    content: "";
+    gap: 25px;
 
-    position: absolute;
-
-    width: 260px;
-    height: 260px;
-
-    border: 1px solid rgba(116,188,68,0.08);
-
-    border-radius: 50%;
-
-    top: -150px;
-    left: -150px;
-
+    align-items: center;
 }
 
+.vision-icon {
+    width: 70px;
+    height: 70px;
 
-.portal-vision h3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    color: #74BC44;
+    background: var(--green-light);
 
-    font-size: .78rem;
-
-    text-transform: uppercase;
-
-    letter-spacing: .13em;
-
-    margin-bottom: 20px;
-
+    color: var(--green);
 }
 
+.vision-icon svg {
+    width: 32px;
+    height: 32px;
+}
 
-.portal-vision h2 {
+.vision-content h4 {
+    margin: 0 0 9px;
 
-    color: #ffffff;
+    color: var(--dark);
 
-    font-size: 2rem;
-
-    line-height: 1.4;
-
+    font-size: 23px;
     font-weight: 800;
-
-    max-width: 850px;
-
-    margin: 0 auto 20px;
-
 }
 
+.vision-content p {
+    margin: 0;
 
-.portal-vision p {
+    color: var(--gray-600);
 
-    color: rgba(255,255,255,0.66);
-
-    max-width: 800px;
-
-    margin: 0 auto 10px;
-
-    line-height: 1.7;
-
-    font-size: .9rem;
-
-}
-
-
-.vision-tagline {
-
-    color: #74BC44;
-
-    font-weight: 750;
-
-    margin-top: 28px;
-
-    font-size: .95rem;
-
+    font-size: 14px;
+    line-height: 1.8;
 }
 
 
 /* =========================================================
-   TABLET
+   RESPONSIVE
 ========================================================= */
 
-@media (max-width: 1000px) {
+@media (max-width: 992px) {
 
-    .stats-grid,
-    .portal-info-grid,
-    .portal-feature-grid {
+    .hero-layout {
+        grid-template-columns: 1fr;
 
-        grid-template-columns:
-            repeat(2,1fr);
+        gap: 40px;
 
+        text-align: center;
     }
 
+    .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .hero-description {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-actions {
+        justify-content: center;
+    }
+
+    .hero-visual {
+        min-height: auto;
+
+        order: -1;
+    }
+
+    .hero-image {
+        max-width: 380px;
+        max-height: 320px;
+    }
+
+    .jobs-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
-
-/* =========================================================
-   MOBILE
-========================================================= */
 
 @media (max-width: 768px) {
 
-    html,
-    body,
-    [class*="hero"],
-    [class*="bg"],
-    [class*="main"] {
-
-        background-attachment: scroll !important;
-
+    .section-container {
+        width: min(100% - 30px, 1180px);
     }
 
-
-    .hero-content-wrapper {
-
+    .hero-section {
         min-height: auto;
 
-        padding: 45px 18px;
-
+        padding: 60px 0 70px;
     }
 
+    .hero-title {
+        font-size: 46px;
 
-    .hero-card {
-
-        padding: 45px 24px;
-
-        border-radius: 12px;
-
+        letter-spacing: -1.5px;
     }
-
-
-    .hero-eyebrow {
-
-        font-size: .65rem;
-
-    }
-
-
-    .hero-content-wrapper h2 {
-
-        font-size: 1.9rem;
-
-        line-height: 1.3;
-
-    }
-
 
     .hero-description {
-
-        font-size: .88rem;
-
+        font-size: 16px;
     }
 
-
-    .hero-actions {
-
-        flex-direction: column;
-
-        width: 100%;
-
+    .hero-image {
+        max-width: 320px;
+        max-height: 280px;
     }
-
-
-    .hero-actions .btn-pill-white,
-    .hero-actions .btn-pill-outline {
-
-        width: 100%;
-
-        max-width: 300px;
-
-    }
-
-
-    .hero-trust-row {
-
-        flex-direction: column;
-
-        gap: 12px;
-
-    }
-
-
-    .featured-jobs-wrapper,
-    .stats-wrapper {
-
-        min-height: auto;
-
-        padding: 55px 18px;
-
-    }
-
 
     .section-heading-row {
-
         align-items: flex-start;
 
+        flex-direction: column;
+
+        margin-bottom: 30px;
     }
 
-
-    .section-heading-content h3 {
-
-        font-size: 1.15rem;
-
+    .jobs-grid {
+        grid-template-columns: 1fr;
     }
 
-
-    .section-heading-content p {
-
-        font-size: .75rem;
-
+    .learn-more-grid {
+        grid-template-columns: 1fr;
     }
 
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
 
-    .jobs-scroll-grid {
-
+    .vision-layout {
         grid-template-columns: 1fr;
 
+        text-align: center;
     }
 
+    .vision-icon {
+        margin: 0 auto;
+    }
+}
 
-    .stats-grid,
-    .portal-info-grid,
-    .portal-feature-grid,
-    .portal-goals {
 
-        grid-template-columns: 1fr;
+@media (max-width: 576px) {
 
+    .hero-section {
+        padding: 45px 0 60px;
     }
 
+    .hero-title {
+        font-size: 38px;
+
+        line-height: 1.08;
+    }
+
+    .hero-eyebrow {
+        font-size: 11px;
+
+        padding: 7px 11px;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+
+        width: 100%;
+    }
+
+    .btn-primary-custom,
+    .btn-secondary-custom {
+        width: 100%;
+    }
+
+    .hero-image {
+        max-width: 280px;
+        max-height: 240px;
+    }
+
+    .featured-section,
+    .stats-section,
+    .learn-more-section {
+        padding: 65px 0;
+    }
+
+    .job-card,
+    .info-card,
+    .feature-box {
+        padding: 23px;
+    }
 
     .stat-card {
-
-        min-height: 135px;
-
+        padding: 24px;
     }
 
-
-    .learn-more-wrapper {
-
-        padding: 75px 20px;
-
+    .stat-number {
+        font-size: 28px;
     }
 
-
-    .learn-more-intro h2 {
-
-        font-size: 1.85rem;
-
+    .vision-section {
+        padding: 25px;
     }
-
-
-    .portal-vision {
-
-        padding: 55px 20px;
-
-    }
-
-
-    .portal-vision h2 {
-
-        font-size: 1.5rem;
-
-    }
-
 }
 
 </style>
 
 
 <!-- =========================================================
-     HERO
+     HERO SECTION
 ========================================================= -->
 
-<section class="hero-content-wrapper">
+<section class="hero-section">
 
-    <div class="hero-grid-pattern"></div>
+    <div class="section-container">
 
-    <div class="hero-inner">
+        <div class="hero-layout">
 
-        <div class="hero-card">
+            <!-- HERO CONTENT -->
 
-            <div class="hero-eyebrow">
+            <div class="hero-content">
 
-                <span class="hero-eyebrow-dot"></span>
+                <div class="hero-eyebrow">
 
-                Pio Duran Local Employment Portal
+                    <span class="hero-eyebrow-dot"></span>
+
+                    Pio Duran Employment Service Office
+
+                </div>
+
+
+                <h1 class="hero-title">
+
+                    Find Your Next
+
+                    <span>Opportunity.</span>
+
+                </h1>
+
+
+                <p class="hero-description">
+
+                    Discover employment opportunities in Pio Duran,
+                    Albay. Connect with local employers, explore
+                    available jobs, and take the next step toward
+                    your career.
+
+                </p>
+
+
+                <div class="hero-actions">
+
+                    {% if request.user.role == "applicant" or not request.user.is_authenticated %}
+
+                        <a
+                            href="{% url 'browse-job' %}"
+                            class="btn-primary-custom"
+                        >
+
+                            <svg
+                                class="svg-icon"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.3-4.3"></path>
+                            </svg>
+
+                            Browse Jobs
+
+                        </a>
+
+                    {% else %}
+
+                        <a
+                            href="{% url 'employer-dashboard' %}"
+                            class="btn-primary-custom"
+                        >
+
+                            <svg
+                                class="svg-icon"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <rect
+                                    x="3"
+                                    y="4"
+                                    width="18"
+                                    height="16"
+                                    rx="2"
+                                ></rect>
+
+                                <path d="M8 4V2"></path>
+
+                                <path d="M16 4V2"></path>
+
+                                <path d="M3 10h18"></path>
+                            </svg>
+
+                            Employer Dashboard
+
+                        </a>
+
+                    {% endif %}
+
+
+                    <a
+                        href="#learn-more"
+                        class="btn-secondary-custom"
+                    >
+
+                        Learn More
+
+                        <svg
+                            class="svg-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M5 12h14"></path>
+                            <path d="m13 6 6 6-6 6"></path>
+                        </svg>
+
+                    </a>
+
+                </div>
 
             </div>
 
 
-            <h2>
+            <!-- HERO IMAGE
+                 NO BORDER
+                 NO CARD
+                 NO SHADOW
+            -->
 
-                Connecting people with meaningful
-                local employment opportunities.
+            <div class="hero-visual">
 
-            </h2>
-
-
-            <p class="hero-description">
-
-                Discover job opportunities, connect with local employers,
-                and take the next step in your career through the
-                Municipality of Pio Duran's employment portal.
-
-            </p>
-
-
-            <div class="hero-actions">
-
-                {% if request.user.role == "applicant" or not request.user.is_authenticated %}
-
-                    <a
-                        href="{% url 'browse-job' %}"
-                        class="btn-pill-white"
-                    >
-
-                        Browse Jobs
-
-                        <svg
-                            width="15"
-                            height="15"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-
-                            <line
-                                x1="5"
-                                y1="12"
-                                x2="19"
-                                y2="12"
-                            />
-
-                            <polyline
-                                points="12 5 19 12 12 19"
-                            />
-
-                        </svg>
-
-                    </a>
-
-                {% else %}
-
-                    <a
-                        href="{% url 'employer-dashboard' %}"
-                        class="btn-pill-white"
-                    >
-
-                        Dashboard
-
-                        <svg
-                            width="15"
-                            height="15"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-
-                            <line
-                                x1="5"
-                                y1="12"
-                                x2="19"
-                                y2="12"
-                            />
-
-                            <polyline
-                                points="12 5 19 12 12 19"
-                            />
-
-                        </svg>
-
-                    </a>
-
-                {% endif %}
-
-
-                <a
-                    href="#learn-more"
-                    class="btn-pill-outline"
+                <img
+                    src="{% static 'images/peso-hero.png' %}"
+                    alt="Pio Duran PESO"
+                    class="hero-image"
                 >
-
-                    Learn More
-
-                </a>
-
-            </div>
-
-
-            <div class="hero-trust-row">
-
-                <div class="hero-trust-item">
-
-                    <svg
-                        width="15"
-                        height="15"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-
-                        <path
-                            d="M20 6L9 17l-5-5"
-                        />
-
-                    </svg>
-
-                    Local Job Opportunities
-
-                </div>
-
-
-                <div class="hero-trust-item">
-
-                    <svg
-                        width="15"
-                        height="15"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-
-                        <path
-                            d="M20 6L9 17l-5-5"
-                        />
-
-                    </svg>
-
-                    Employer Connections
-
-                </div>
-
-
-                <div class="hero-trust-item">
-
-                    <svg
-                        width="15"
-                        height="15"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-
-                        <path
-                            d="M20 6L9 17l-5-5"
-                        />
-
-                    </svg>
-
-                    Career Resources
-
-                </div>
 
             </div>
 
@@ -1997,325 +1279,382 @@ body,
     </div>
 
 </section>
+
 
 
 <!-- =========================================================
      FEATURED JOBS
 ========================================================= -->
 
-<section
-    class="featured-jobs-wrapper"
-    id="featured-jobs"
->
+<section class="featured-section">
 
-    <div class="section-heading-row">
+    <div class="section-container">
 
-        <div class="section-heading-content">
-
-            <div class="section-heading-line"></div>
+        <div class="section-heading-row">
 
             <div>
 
-                <h3>
-                    Featured Job Vacancies
-                </h3>
+                <div class="section-label">
+                    Featured Opportunities
+                </div>
 
-                <p>
-                    Explore current employment opportunities from local employers.
+                <h2 class="section-title">
+                    Explore <span>Available Jobs</span>
+                </h2>
+
+                <p class="section-description">
+                    Browse some of the latest employment opportunities
+                    available from local employers in Pio Duran.
                 </p>
 
             </div>
+
+
+            <a
+                href="{% url 'browse-job' %}"
+                class="view-all-link"
+            >
+
+                View All Jobs
+
+                <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M5 12h14"></path>
+                    <path d="m13 6 6 6-6 6"></path>
+                </svg>
+
+            </a>
+
+        </div>
+
+
+        <div class="jobs-grid">
+
+            {% for job in featured_jobs %}
+
+                <article class="job-card">
+
+                    <div class="job-card-header">
+
+                        <div class="job-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <rect
+                                    x="3"
+                                    y="7"
+                                    width="18"
+                                    height="13"
+                                    rx="2"
+                                ></rect>
+
+                                <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+
+                                <path d="M3 12h18"></path>
+
+                                <path d="M10 12v2h4v-2"></path>
+                            </svg>
+
+                        </div>
+
+                    </div>
+
+
+                    <h3 class="job-title">
+                        {{ job.title }}
+                    </h3>
+
+
+                    <p class="job-company">
+                        {{ job.employer.company_name }}
+                    </p>
+
+
+                    <div class="job-meta">
+
+                        <div class="job-meta-item">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path>
+                                <circle cx="12" cy="10" r="2.5"></circle>
+                            </svg>
+
+                            {{ job.location }}
+
+                        </div>
+
+
+                        <div class="job-meta-item">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+
+                            {{ job.application_count }} applicants
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="job-footer">
+
+                        <span class="applicant-count">
+
+                            Local Employment
+
+                        </span>
+
+
+                        <a
+                            href="{% url 'job_details' job.id %}"
+                            class="job-view-btn"
+                        >
+
+                            View Job
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <path d="M5 12h14"></path>
+                                <path d="m13 6 6 6-6 6"></path>
+                            </svg>
+
+                        </a>
+
+                    </div>
+
+                </article>
+
+            {% empty %}
+
+                <div class="empty-jobs">
+
+                    <div class="empty-jobs-icon">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <rect
+                                x="3"
+                                y="7"
+                                width="18"
+                                height="13"
+                                rx="2"
+                            ></rect>
+
+                            <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+
+                            <path d="M12 11v5"></path>
+
+                            <path d="M9.5 13.5h5"></path>
+                        </svg>
+
+                    </div>
+
+                    <h4>
+                        No Featured Jobs Yet
+                    </h4>
+
+                    <p>
+                        New employment opportunities will appear here
+                        once they are available.
+                    </p>
+
+                </div>
+
+            {% endfor %}
 
         </div>
 
     </div>
 
-
-    <div class="jobs-scroll-grid">
-
-        {% for job in featured_jobs %}
-
-            <div class="job-card">
-
-                <div class="job-card-header">
-
-                    <h4>
-                        {{ job.title }}
-                    </h4>
-
-
-                    <div class="company-name">
-
-                        <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-
-                            <rect
-                                width="16"
-                                height="16"
-                                x="4"
-                                y="4"
-                                rx="2"
-                            />
-
-                            <path
-                                d="M9 22v-4h6v4"
-                            />
-
-                        </svg>
-
-
-                        {{ job.employer.company_name }}
-
-                    </div>
-
-                </div>
-
-
-                <div class="job-meta-list">
-
-                    <div class="job-meta-item">
-
-                        <svg
-                            width="15"
-                            height="15"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-
-                            <path
-                                d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0Z"
-                            />
-
-                            <circle
-                                cx="12"
-                                cy="10"
-                                r="3"
-                            />
-
-                        </svg>
-
-
-                        {{ job.location }}
-
-                    </div>
-
-
-                    <div class="applicant-badge">
-
-                        <svg
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-
-                            <path
-                                d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
-                            />
-
-                            <circle
-                                cx="9"
-                                cy="7"
-                                r="4"
-                            />
-
-                            <path
-                                d="M22 21v-2a4 4 0 0 0-3-3.87"
-                            />
-
-                            <path
-                                d="M16 3.13a4 4 0 0 1 0 7.75"
-                            />
-
-                        </svg>
-
-
-                        {{ job.application_count }}
-
-                        applicant{{ job.application_count|pluralize }}
-
-                    </div>
-
-                </div>
-
-
-                <div class="job-card-footer">
-
-                    <a
-                        href="{% url 'job_details' job.id %}"
-                        class="btn-apply-card"
-                    >
-
-                        View Opportunity
-
-                        <svg
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-
-                            <line
-                                x1="5"
-                                y1="12"
-                                x2="19"
-                                y2="12"
-                            />
-
-                            <polyline
-                                points="12 5 19 12 12 19"
-                            />
-
-                        </svg>
-
-                    </a>
-
-                </div>
-
-            </div>
-
-
-        {% empty %}
-
-            <div class="empty-card">
-
-                <h4>
-                    No Featured Jobs Available
-                </h4>
-
-                <p>
-                    There are currently no active job vacancies.
-                    Please check back soon.
-                </p>
-
-            </div>
-
-        {% endfor %}
-
-    </div>
-
 </section>
+
 
 
 <!-- =========================================================
      STATISTICS
 ========================================================= -->
 
-<section class="stats-wrapper">
+<section class="stats-section">
 
-    <div class="section-heading-row">
+    <div class="section-container">
 
-        <div class="section-heading-content">
-
-            <div class="section-heading-line"></div>
-
-            <div>
-
-                <h3>
-                    Employment Portal
-                </h3>
-
-                <p>
-                    Connecting applicants, employers, and the community.
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
+        <div class="stats-grid">
 
 
-    <div class="stats-grid">
+            <!-- APPLICANTS -->
 
-        <div class="stat-card">
+            <div class="stat-card">
 
-            <div>
+                <div class="stat-icon">
 
-                <div class="stat-num">
-                    {{ registered_applicants }}+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+
+                        <circle cx="9" cy="7" r="4"></circle>
+
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+
                 </div>
 
-                <div class="stat-label">
-                    Registered<br>
-                    Applicants
-                </div>
 
-            </div>
+                <div>
 
-            <span class="arrow-icon">
-                →
-            </span>
+                    <h3 class="stat-number">
+                        {{ registered_applicants }}
+                    </h3>
 
-        </div>
+                    <p class="stat-label">
+                        Registered Applicants
+                    </p>
 
-
-        <div class="stat-card">
-
-            <div>
-
-                <div class="stat-num">
-                    {{ active_job_vacancies }}+
-                </div>
-
-                <div class="stat-label">
-                    Active<br>
-                    Job Vacancies
                 </div>
 
             </div>
 
-            <span class="arrow-icon">
-                →
-            </span>
-
-        </div>
 
 
-        <div class="stat-card">
+            <!-- JOB VACANCIES -->
 
-            <div>
+            <div class="stat-card">
 
-                <div class="stat-num">
-                    {{ successful_placements }}
+                <div class="stat-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <rect
+                            x="3"
+                            y="7"
+                            width="18"
+                            height="13"
+                            rx="2"
+                        ></rect>
+
+                        <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+
+                        <path d="M3 12h18"></path>
+
+                        <path d="M10 12v2h4v-2"></path>
+                    </svg>
+
                 </div>
 
-                <div class="stat-label">
-                    Successful<br>
-                    Placements
+
+                <div>
+
+                    <h3 class="stat-number">
+                        {{ active_job_vacancies }}
+                    </h3>
+
+                    <p class="stat-label">
+                        Active Job Vacancies
+                    </p>
+
                 </div>
 
             </div>
 
-            <span class="arrow-icon">
-                →
-            </span>
+
+
+            <!-- PLACEMENTS -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path d="M20 6 9 17l-5-5"></path>
+                    </svg>
+
+                </div>
+
+
+                <div>
+
+                    <h3 class="stat-number">
+                        {{ successful_placements }}
+                    </h3>
+
+                    <p class="stat-label">
+                        Successful Placements
+                    </p>
+
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 
 </section>
+
 
 
 <!-- =========================================================
@@ -2323,815 +1662,367 @@ body,
 ========================================================= -->
 
 <section
-    class="learn-more-wrapper"
+    class="learn-more-section"
     id="learn-more"
 >
 
-    <div class="learn-more-container">
+    <div class="section-container">
 
-
-        <!-- INTRO -->
 
         <div class="learn-more-intro">
 
-            <h2>
+            <div class="section-label">
+                About the Portal
+            </div>
 
-                Learn More About Our
 
-                <span>
-                    Job Portal
-                </span>
-
+            <h2 class="section-title">
+                Connecting People With
+                <span>Opportunities</span>
             </h2>
 
 
-            <p>
+            <p class="section-description">
 
-                Welcome to the Job Application and Recruitment Portal
-                for Pio Duran — a community-focused platform designed
-                to make finding jobs and hiring employees easier,
-                faster, and more accessible.
-
-            </p>
-
-
-            <p style="margin-top:15px;">
-
-                Our goal is simple: help job seekers discover
-                opportunities and help local employers find the right
-                people for their jobs.
+                The Pio Duran Employment Service Office provides
+                a centralized platform that helps job seekers and
+                employers connect with each other while supporting
+                local employment initiatives.
 
             </p>
 
         </div>
 
 
-        <!-- USER TYPES -->
 
-        <div class="portal-info-grid">
+        <!-- INFORMATION CARDS -->
 
+        <div class="learn-more-grid">
 
-            <div class="portal-info-card">
 
-                <div class="portal-info-icon">
+            <!-- JOB SEEKERS -->
 
-                    <svg
-                        width="26"
-                        height="26"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
+            <div class="info-card">
 
-                        <circle
-                            cx="12"
-                            cy="8"
-                            r="4"
-                        />
+                <div class="info-card-header">
 
-                        <path
-                            d="M5 21a7 7 0 0 1 14 0"
-                        />
+                    <div class="info-icon">
 
-                    </svg>
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <circle cx="12" cy="8" r="4"></circle>
 
-                </div>
+                            <path d="M4 21a8 8 0 0 1 16 0"></path>
+                        </svg>
 
+                    </div>
 
-                <h3>
-                    Job Seekers
-                </h3>
-
-
-                <p>
-
-                    Create a professional profile, discover available
-                    opportunities, submit applications, and monitor
-                    application progress.
-
-                </p>
-
-            </div>
-
-
-            <div class="portal-info-card">
-
-                <div class="portal-info-icon">
-
-                    <svg
-                        width="26"
-                        height="26"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-
-                        <rect
-                            x="3"
-                            y="4"
-                            width="18"
-                            height="16"
-                            rx="2"
-                        />
-
-                        <path
-                            d="M8 4V2h8v2"
-                        />
-
-                        <path
-                            d="M8 12h8"
-                        />
-
-                        <path
-                            d="M8 16h5"
-                        />
-
-                    </svg>
-
-                </div>
-
-
-                <h3>
-                    Employers
-                </h3>
-
-
-                <p>
-
-                    Create company profiles, publish vacancies,
-                    review applicants, and manage recruitment
-                    information.
-
-                </p>
-
-            </div>
-
-
-            <div class="portal-info-card">
-
-                <div class="portal-info-icon">
-
-                    <svg
-                        width="26"
-                        height="26"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-
-                        <path
-                            d="M4 21V5"
-                        />
-
-                        <path
-                            d="M4 5l16-2v14L4 19"
-                        />
-
-                    </svg>
-
-                </div>
-
-
-                <h3>
-                    PESO Staff
-                </h3>
-
-
-                <p>
-
-                    Manage employment information, monitor vacancies,
-                    assist users, and generate useful employment reports.
-
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <!-- SYSTEM -->
-
-        <div class="learn-content-section">
-
-            <div class="learn-content-heading">
-
-                <span></span>
-
-                <h3>
-                    What Is This System?
-                </h3>
-
-            </div>
-
-
-            <p>
-
-                The Job Application and Recruitment Portal for Pio Duran
-                is a web-based platform created to support the local
-                employment community of Pio Duran, Albay.
-
-            </p>
-
-
-            <p>
-
-                The system allows job seekers to create profiles,
-                search for available jobs, and submit applications
-                online. Employers can create company profiles, post
-                job vacancies, and manage applicants.
-
-            </p>
-
-
-            <p>
-
-                PESO staff can monitor job opportunities, manage
-                applicant information, assist job seekers, and
-                generate useful employment reports.
-
-            </p>
-
-        </div>
-
-
-        <!-- WHY -->
-
-        <div class="why-portal">
-
-            <div class="learn-content-heading">
-
-                <span></span>
-
-                <h3>
-                    Why Was This System Created?
-                </h3>
-
-            </div>
-
-
-            <p>
-
-                Finding a job should not be difficult simply because
-                information is scattered.
-
-            </p>
-
-
-            <p>
-
-                Job opportunities may be posted across different
-                social media pages, groups, bulletin boards, or
-                personal contacts. At the same time, employers may
-                have difficulty reaching qualified applicants.
-
-            </p>
-
-
-            <p>
-
-                This system provides a centralized and organized
-                platform where job opportunities and applicants
-                can connect.
-
-            </p>
-
-
-            <div class="portal-goals">
-
-                <div class="portal-goal">
-                    Make job opportunities easier to find
-                </div>
-
-                <div class="portal-goal">
-                    Make applications more convenient
-                </div>
-
-                <div class="portal-goal">
-                    Help employers reach potential applicants
-                </div>
-
-                <div class="portal-goal">
-                    Organize applicant information
-                </div>
-
-                <div class="portal-goal">
-                    Reduce unnecessary paperwork
-                </div>
-
-                <div class="portal-goal">
-                    Improve applicant-employer communication
-                </div>
-
-                <div class="portal-goal">
-                    Support PESO employment assistance
-                </div>
-
-                <div class="portal-goal">
-                    Encourage local employment
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- USERS -->
-
-        <div class="learn-content-section">
-
-            <div class="learn-content-heading">
-
-                <span></span>
-
-                <h3>
-                    Who Can Use the Portal?
-                </h3>
-
-            </div>
-
-
-            <div class="portal-feature-grid">
-
-
-                <div class="portal-feature-box">
-
-                    <h4>
-                        Job Seekers
-                    </h4>
-
-                    <ul>
-
-                        <li>Create and manage your profile</li>
-
-                        <li>Add education and qualifications</li>
-
-                        <li>Add skills and work experience</li>
-
-                        <li>Search available jobs</li>
-
-                        <li>View job requirements</li>
-
-                        <li>Submit applications online</li>
-
-                        <li>Track application status</li>
-
-                    </ul>
-
-                </div>
-
-
-                <div class="portal-feature-box">
-
-                    <h4>
-                        Employers
-                    </h4>
-
-                    <ul>
-
-                        <li>Create company profiles</li>
-
-                        <li>Post job vacancies</li>
-
-                        <li>Specify qualifications</li>
-
-                        <li>Review applications</li>
-
-                        <li>View applicant profiles</li>
-
-                        <li>Shortlist applicants</li>
-
-                        <li>Manage recruitment information</li>
-
-                    </ul>
-
-                </div>
-
-
-                <div class="portal-feature-box">
-
-                    <h4>
-                        PESO Staff
-                    </h4>
-
-                    <ul>
-
-                        <li>Manage job seeker information</li>
-
-                        <li>Monitor vacancies</li>
-
-                        <li>Assist applicants</li>
-
-                        <li>Monitor recruitment activities</li>
-
-                        <li>Manage employer information</li>
-
-                        <li>Generate reports</li>
-
-                    </ul>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- COMMUNITY -->
-
-        <div class="learn-content-section">
-
-            <div class="learn-content-heading">
-
-                <span></span>
-
-                <h3>
-                    How Does It Help the Community?
-                </h3>
-
-            </div>
-
-
-            <p>
-
-                The portal is designed to become a digital bridge
-                between local talent and local employment opportunities.
-
-            </p>
-
-
-            <div class="portal-feature-grid">
-
-                <div class="portal-feature-box">
 
                     <h4>
                         For Job Seekers
                     </h4>
 
-                    <p>
-
-                        Easier access to job opportunities without
-                        searching through many different sources.
-
-                    </p>
-
                 </div>
 
 
-                <div class="portal-feature-box">
+                <p>
+
+                    Create your profile, discover available
+                    opportunities, submit applications, and
+                    connect with employers looking for qualified
+                    workers in Pio Duran and nearby areas.
+
+                </p>
+
+            </div>
+
+
+
+            <!-- EMPLOYERS -->
+
+            <div class="info-card">
+
+                <div class="info-card-header">
+
+                    <div class="info-icon">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <rect
+                                x="3"
+                                y="7"
+                                width="18"
+                                height="13"
+                                rx="2"
+                            ></rect>
+
+                            <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+
+                            <path d="M3 12h18"></path>
+
+                            <path d="M10 12v2h4v-2"></path>
+                        </svg>
+
+                    </div>
+
 
                     <h4>
                         For Employers
                     </h4>
 
-                    <p>
-
-                        A more organized way to advertise vacancies
-                        and connect with potential employees.
-
-                    </p>
-
                 </div>
 
 
-                <div class="portal-feature-box">
+                <p>
 
-                    <h4>
-                        For PESO
-                    </h4>
+                    Register your organization, publish job
+                    vacancies, review applications, and connect
+                    with qualified candidates through a centralized
+                    employment platform.
 
-                    <p>
-
-                        Better organization of employment information
-                        and employment assistance activities.
-
-                    </p>
-
-                </div>
+                </p>
 
             </div>
 
         </div>
 
 
-        <!-- DIFFERENCE -->
 
-        <div class="learn-content-section">
+        <!-- =====================================================
+             FEATURES
+        ====================================================== -->
 
-            <div class="learn-content-heading">
+        <div class="features-section">
 
-                <span></span>
-
-                <h3>
-                    What Makes Our Portal Different?
-                </h3>
-
-            </div>
-
-
-            <p>
-
-                Unlike large international career platforms, this
-                system focuses specifically on the Pio Duran community.
-
-            </p>
-
-
-            <p>
-
-                The vision is to create a platform where local
-                opportunities can reach local people, while local
-                talent can help build the local community.
-
-            </p>
-
-
-            <div class="portal-feature-grid">
-
-                <div class="portal-feature-box">
-
-                    <h4>
-                        Local Opportunities
-                    </h4>
-
-                    <p>
-
-                        Help residents discover employment opportunities
-                        available within and around the community.
-
-                    </p>
-
-                </div>
-
-
-                <div class="portal-feature-box">
-
-                    <h4>
-                        Career Resources
-                    </h4>
-
-                    <p>
-
-                        Give applicants a centralized place to manage
-                        their professional information.
-
-                    </p>
-
-                </div>
-
-
-                <div class="portal-feature-box">
-
-                    <h4>
-                        Community Employment
-                    </h4>
-
-                    <p>
-
-                        Strengthen connections between businesses,
-                        job seekers, and employment services.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- SAFETY -->
-
-        <div class="learn-content-section">
-
-            <div class="learn-content-heading">
-
-                <span></span>
-
-                <h3>
-                    Safety and Trust
-                </h3>
-
-            </div>
-
-
-            <p>
-
-                Because applications involve personal information,
-                protecting user data is an important part of the system.
-
-            </p>
-
-
-            <div class="portal-feature-grid">
-
-
-                <div class="portal-feature-box">
-
-                    <h4>
-                        Account Security
-                    </h4>
-
-                    <ul>
-
-                        <li>
-                            Secure account authentication
-                        </li>
-
-                        <li>
-                            Responsible handling of personal information
-                        </li>
-
-                        <li>
-                            Privacy-conscious profiles
-                        </li>
-
-                    </ul>
-
-                </div>
-
-
-                <div class="portal-feature-box">
-
-                    <h4>
-                        Employer Trust
-                    </h4>
-
-                    <ul>
-
-                        <li>
-                            Employer account management
-                        </li>
-
-                        <li>
-                            Reporting mechanisms
-                        </li>
-
-                        <li>
-                            Suspicious-posting reporting
-                        </li>
-
-                    </ul>
-
-                </div>
-
-
-                <div class="portal-feature-box">
-
-                    <h4>
-                        Data Protection
-                    </h4>
-
-                    <ul>
-
-                        <li>
-                            Secure information storage
-                        </li>
-
-                        <li>
-                            Data backups
-                        </li>
-
-                        <li>
-                            Responsible information management
-                        </li>
-
-                    </ul>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- FUTURE -->
-
-        <div class="learn-content-section">
-
-            <div class="learn-content-heading">
-
-                <span></span>
-
-                <h3>
-                    Future Opportunities for the Portal
-                </h3>
-
-            </div>
-
-
-            <p>
-
-                The system can continue to evolve based on the needs
-                of job seekers, employers, PESO staff, and the
-                local employment community.
-
-            </p>
-
-
-            <div class="portal-goals">
-
-                <div class="portal-goal">
-                    Job and application notifications
-                </div>
-
-                <div class="portal-goal">
-                    Online resume management
-                </div>
-
-                <div class="portal-goal">
-                    Applicant skills and qualifications
-                </div>
-
-                <div class="portal-goal">
-                    Advanced job search
-                </div>
-
-                <div class="portal-goal">
-                    PESO employment reports
-                </div>
-
-                <div class="portal-goal">
-                    Job fair announcements
-                </div>
-
-                <div class="portal-goal">
-                    Training opportunities
-                </div>
-
-                <div class="portal-goal">
-                    Employer verification
-                </div>
-
-                <div class="portal-goal">
-                    Secure applicant information
-                </div>
-
-                <div class="portal-goal">
-                    Mobile-friendly access
-                </div>
-
-                <div class="portal-goal">
-                    Employment statistics
-                </div>
-
-                <div class="portal-goal">
-                    Community employment insights
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- VISION -->
-
-        <div class="portal-vision">
-
-            <h3>
-                Our Vision
+            <h3 class="features-title">
+                What You Can Do
             </h3>
 
 
-            <h2>
-
-                A more connected, accessible, and organized
-                local employment community.
-
-            </h2>
+            <div class="features-grid">
 
 
-            <p>
+                <!-- FEATURE 1 -->
 
-                We envision a more connected, accessible, and organized
-                local employment community where finding a job does not
-                have to be complicated and where employers can discover
-                capable people from the community.
+                <div class="feature-box">
 
-            </p>
-
-
-            <p>
-
-                This portal aims to support job seekers, employers,
-                PESO, and the local community by bringing employment
-                opportunities into one accessible digital platform.
-
-            </p>
+                    <div class="feature-number">
+                        01
+                    </div>
 
 
-            <div class="vision-tagline">
+                    <h5>
+                        Discover Jobs
+                    </h5>
 
-                Find an Opportunity. Build Your Future.
-                Strengthen Our Community.
+
+                    <p>
+
+                        Easily browse available employment
+                        opportunities based on your interests,
+                        skills, and preferred location.
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- FEATURE 2 -->
+
+                <div class="feature-box">
+
+                    <div class="feature-number">
+                        02
+                    </div>
+
+
+                    <h5>
+                        Apply Online
+                    </h5>
+
+
+                    <p>
+
+                        Submit your application through the
+                        portal and keep track of your employment
+                        opportunities.
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- FEATURE 3 -->
+
+                <div class="feature-box">
+
+                    <div class="feature-number">
+                        03
+                    </div>
+
+
+                    <h5>
+                        Connect With Employers
+                    </h5>
+
+
+                    <p>
+
+                        Build connections between qualified
+                        applicants and local businesses with
+                        available positions.
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- FEATURE 4 -->
+
+                <div class="feature-box">
+
+                    <div class="feature-number">
+                        04
+                    </div>
+
+
+                    <h5>
+                        Post Vacancies
+                    </h5>
+
+
+                    <p>
+
+                        Employers can publish job opportunities
+                        and reach potential candidates through
+                        the employment portal.
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- FEATURE 5 -->
+
+                <div class="feature-box">
+
+                    <div class="feature-number">
+                        05
+                    </div>
+
+
+                    <h5>
+                        Manage Applications
+                    </h5>
+
+
+                    <p>
+
+                        Employers can review applications and
+                        manage their recruitment process in one
+                        centralized location.
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- FEATURE 6 -->
+
+                <div class="feature-box">
+
+                    <div class="feature-number">
+                        06
+                    </div>
+
+
+                    <h5>
+                        Support Local Employment
+                    </h5>
+
+
+                    <p>
+
+                        Help strengthen the local workforce by
+                        connecting residents with employment
+                        opportunities.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             VISION
+        ====================================================== -->
+
+        <div class="vision-section">
+
+            <div class="vision-layout">
+
+
+                <div class="vision-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="3"
+                        ></circle>
+
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06-1.42 1.42-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21h-2v-.08a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06-1.42-1.42.06-.06A1.65 1.65 0 0 0 8.6 15a1.65 1.65 0 0 0-1.51-1H7v-2h.09A1.65 1.65 0 0 0 8.6 11a1.65 1.65 0 0 0-.33-1.82l-.06-.06 1.42-1.42.06.06a1.65 1.65 0 0 0 1.82.33A1.65 1.65 0 0 0 12.51 6V5h2v1a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06 1.42 1.42-.06.06A1.65 1.65 0 0 0 18.6 11a1.65 1.65 0 0 0 1.51 1H20v2h-.09A1.65 1.65 0 0 0 19.4 15Z"></path>
+                    </svg>
+
+                </div>
+
+
+                <div class="vision-content">
+
+                    <h4>
+                        Our Vision
+                    </h4>
+
+
+                    <p>
+
+                        To create a more accessible and efficient
+                        local employment environment where job
+                        seekers can discover opportunities and
+                        employers can find qualified workers through
+                        a reliable digital platform.
+
+                    </p>
+
+                </div>
 
             </div>
 

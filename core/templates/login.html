@@ -1,320 +1,1054 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>PESO Admin Portal - Government Sign In</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/PIODURAN.png' %}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'images/PIODURAN.png' %}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/PIODURAN.png' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="32x32"
+        href="{% static 'images/PIODURAN.png' %}"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="192x192"
+        href="{% static 'images/PIODURAN.png' %}"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        sizes="180x180"
+        href="{% static 'images/PIODURAN.png' %}"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
     <style>
+
+        /* =========================================================
+           ROOT
+        ========================================================= */
+
         :root {
-            --bg-dark: #011409;
-            --card-bg: rgba(2, 36, 18, 0.85);
-            --card-border: rgba(255, 255, 255, 0.12);
-            --emerald-primary: #059669;
-            --emerald-hover: #047857;
-            --mint-accent: #34d399;
-            --text-sub: #a7f3d0;
-            --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+            --primary: #059669;
+            --primary-dark: #047857;
+            --primary-light: #ecfdf5;
+            --primary-border: #a7f3d0;
+
+            --text: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+
+            --border: #e2e8f0;
+
+            --background: #f8fafc;
+            --white: #ffffff;
+
+            --font-main:
+                'Inter',
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
         }
 
-        *, *::before, *::after {
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+
+        /* =========================================================
+           BODY
+        ========================================================= */
+
         body {
             min-height: 100vh;
             width: 100%;
-            background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at 50% 0%, #032b16 0%, #011409 75%);
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #ffffff 0%,
+                    #f8fafc 100%
+                );
+
             font-family: var(--font-main);
-            color: #ffffff;
+
+            color: var(--text);
+
             display: flex;
             flex-direction: column;
+
             -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
         }
 
-        /* Top Government Banner */
+
+        /* =========================================================
+           GOVERNMENT TOP BAR
+        ========================================================= */
+
         .gov-top-bar {
-            background: rgba(1, 13, 6, 0.9);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            color: rgba(255, 255, 255, 0.7);
+            width: 100%;
+
+            background: #ffffff;
+
+            border-bottom: 1px solid var(--border);
+
+            color: var(--text-muted);
+
             font-size: 0.78rem;
-            padding: 8px 16px;
+
+            padding: 9px 16px;
+
             text-align: center;
         }
 
+
         .gov-top-bar span {
-            color: var(--mint-accent);
-            font-weight: 500;
+            color: var(--primary);
+
+            font-weight: 700;
         }
 
-        /* Main Container & Card */
+
+        /* =========================================================
+           MAIN WRAPPER
+        ========================================================= */
+
         .main-wrapper {
             flex: 1;
+
             display: flex;
+
             align-items: center;
             justify-content: center;
+
             padding: 40px 20px;
         }
 
+
+        /* =========================================================
+           LOGIN CARD
+        ========================================================= */
+
         .login-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 40px 36px;
+            position: relative;
+
             width: 100%;
             max-width: 440px;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+
+            background: var(--white);
+
+            border: 1px solid var(--border);
+
+            border-radius: 16px;
+
+            padding: 40px 36px;
+
+            box-shadow:
+                0 10px 30px rgba(15, 23, 42, 0.06),
+                0 2px 8px rgba(15, 23, 42, 0.03);
+
+            overflow: hidden;
         }
 
-        /* Portal Header & Logos */
+
+        .login-card::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+            right: 0;
+
+            height: 5px;
+
+            background: #059669;
+        }
+
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
         .portal-header {
             text-align: center;
-            margin-bottom: 24px;
+
+            margin-bottom: 26px;
         }
+
 
         .logo-container {
             display: flex;
+
             align-items: center;
             justify-content: center;
+
             gap: 16px;
+
             margin-bottom: 20px;
         }
 
+
+        .logo-slot {
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            height: 58px;
+        }
+
+
         .logo-slot img {
             height: 52px;
+
             width: auto;
+
+            max-width: 120px;
+
             object-fit: contain;
         }
 
+
         .logo-divider {
-            height: 36px;
             width: 1px;
-            background: rgba(255, 255, 255, 0.2);
+
+            height: 38px;
+
+            background: #d1d5db;
         }
+
 
         .portal-header h2 {
             font-size: 1.5rem;
+
             font-weight: 800;
-            color: #ffffff;
-            letter-spacing: -0.02em;
+
+            color: var(--text);
+
+            letter-spacing: -0.025em;
+
+            line-height: 1.3;
         }
+
 
         .portal-header .subtitle {
-            font-size: 0.85rem;
-            color: var(--text-sub);
-            margin-top: 4px;
+            font-size: 0.84rem;
+
+            color: var(--text-muted);
+
+            margin-top: 6px;
+
+            line-height: 1.5;
         }
 
-        /* Security Notice */
+
+        /* =========================================================
+           SECURITY NOTICE
+        ========================================================= */
+
         .privacy-notice {
-            background: rgba(5, 150, 105, 0.15);
-            border: 1px solid rgba(52, 211, 153, 0.25);
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 4px;
+
+            background: var(--primary-light);
+
+            border: 1px solid var(--primary-border);
+
             border-radius: 10px;
-            padding: 12px 14px;
+
+            padding: 13px 14px;
+
             font-size: 0.78rem;
-            color: rgba(255, 255, 255, 0.85);
-            line-height: 1.4;
+
+            color: var(--text-secondary);
+
+            line-height: 1.5;
+
             margin-bottom: 24px;
         }
+
 
         .privacy-notice strong {
-            color: var(--mint-accent);
+            color: var(--primary-dark);
+
+            font-size: 0.75rem;
+
+            letter-spacing: 0.04em;
         }
 
-        /* Form Inputs */
+
+        /* =========================================================
+           FORM
+        ========================================================= */
+
         .form-group {
             display: flex;
+
             flex-direction: column;
-            gap: 18px;
+
+            gap: 19px;
+
             margin-bottom: 24px;
         }
+
 
         .field-label {
             display: block;
+
             font-size: 0.82rem;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.9);
+
+            font-weight: 700;
+
+            color: var(--text);
+
             margin-bottom: 8px;
         }
 
+
+        /* =========================================================
+           INPUT
+        ========================================================= */
+
+        .input-wrapper {
+            position: relative;
+
+            width: 100%;
+        }
+
+
         .input-wrapper input {
             width: 100%;
-            background: rgba(255, 255, 255, 0.07);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            padding: 12px 16px;
-            color: #ffffff;
+
+            height: 46px;
+
+            background: #ffffff;
+
+            border: 1px solid #cbd5e1;
+
+            border-radius: 8px;
+
+            padding: 0 14px;
+
+            color: var(--text);
+
             font-family: inherit;
+
             font-size: 0.9rem;
+
             outline: none;
-            transition: all 0.2s ease;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
         }
+
 
         .input-wrapper input::placeholder {
-            color: rgba(255, 255, 255, 0.35);
+            color: #94a3b8;
         }
+
+
+        .input-wrapper input:hover {
+            border-color: #94a3b8;
+        }
+
 
         .input-wrapper input:focus {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: var(--mint-accent);
-            box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.15);
+            background: #ffffff;
+
+            border-color: var(--primary);
+
+            box-shadow:
+                0 0 0 3px rgba(5, 150, 105, 0.10);
         }
 
-        /* Password Field Toggle Styling */
+
+        /* =========================================================
+           PASSWORD
+        ========================================================= */
+
         .password-container {
             position: relative;
+
             display: flex;
+
             align-items: center;
         }
+
 
         .password-container input {
             padding-right: 48px;
         }
 
+
         .toggle-password-btn {
             position: absolute;
-            right: 12px;
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-            padding: 4px;
+
+            top: 50%;
+            right: 10px;
+
+            transform: translateY(-50%);
+
+            width: 34px;
+            height: 34px;
+
             display: flex;
+
             align-items: center;
             justify-content: center;
-            transition: color 0.2s ease;
+
+            background: transparent;
+
+            border: none;
+
+            border-radius: 6px;
+
+            color: #64748b;
+
+            cursor: pointer;
+
+            padding: 0;
+
+            transition:
+                color 0.2s ease,
+                background 0.2s ease;
         }
+
 
         .toggle-password-btn:hover {
-            color: var(--mint-accent);
+            color: var(--primary);
+
+            background: var(--primary-light);
         }
+
+
+        .toggle-password-btn:focus-visible {
+            outline: 2px solid var(--primary);
+
+            outline-offset: 2px;
+        }
+
 
         .toggle-password-btn svg {
-            width: 20px;
-            height: 20px;
+            width: 19px;
+            height: 19px;
+
+            display: block;
         }
 
-        /* Submit Button */
+
+        /* =========================================================
+           LOGIN BUTTON
+        ========================================================= */
+
         .btn-gov {
             width: 100%;
-            background: var(--emerald-primary);
-            border: 1px solid var(--mint-accent);
+
+            height: 46px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 9px;
+
+            background: #059669;
+
+            border: 1px solid #059669;
+
             color: #ffffff;
-            padding: 12px;
-            border-radius: 99px;
+
+            padding: 0 18px;
+
+            border-radius: 8px;
+
+            font-family: inherit;
+
             font-size: 0.9rem;
+
             font-weight: 700;
+
             cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
+
+            transition:
+                background 0.2s ease,
+                border-color 0.2s ease,
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+
+            box-shadow:
+                0 4px 10px rgba(5, 150, 105, 0.16);
         }
+
 
         .btn-gov:hover {
-            background: var(--emerald-hover);
+            background: #047857;
+
+            border-color: #047857;
+
             transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(5, 150, 105, 0.4);
+
+            box-shadow:
+                0 7px 16px rgba(5, 150, 105, 0.22);
         }
+
+
+        .btn-gov:active {
+            transform: translateY(0);
+        }
+
+
+        /* =========================================================
+           LOADING STATE
+        ========================================================= */
+
+        .btn-gov.loading {
+            background: #047857;
+
+            border-color: #047857;
+
+            cursor: wait;
+
+            pointer-events: none;
+
+            transform: none;
+
+            box-shadow:
+                0 4px 10px rgba(5, 150, 105, 0.16);
+        }
+
+
+        .btn-spinner {
+            width: 17px;
+            height: 17px;
+
+            border: 2px solid rgba(255, 255, 255, 0.35);
+
+            border-top-color: #ffffff;
+
+            border-radius: 50%;
+
+            animation:
+                loginSpin 0.7s linear infinite;
+
+            flex-shrink: 0;
+        }
+
+
+        @keyframes loginSpin {
+
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 520px) {
+
+            .main-wrapper {
+                padding: 28px 16px;
+            }
+
+
+            .login-card {
+                padding: 34px 24px;
+
+                border-radius: 14px;
+            }
+
+
+            .portal-header h2 {
+                font-size: 1.35rem;
+            }
+
+
+            .portal-header .subtitle {
+                font-size: 0.8rem;
+            }
+
+
+            .logo-slot img {
+                height: 46px;
+
+                max-width: 105px;
+            }
+
+
+            .logo-divider {
+                height: 34px;
+            }
+
+        }
+
+
+        @media (max-width: 380px) {
+
+            .login-card {
+                padding: 32px 20px;
+            }
+
+
+            .logo-container {
+                gap: 12px;
+            }
+
+
+            .logo-slot img {
+                height: 42px;
+
+                max-width: 95px;
+            }
+
+        }
+
     </style>
+
 </head>
+
+
 <body>
 
-    <!-- Official Top Bar Marker -->
+
+    <!-- =========================================================
+         GOVERNMENT TOP BAR
+    ========================================================== -->
+
     <div class="gov-top-bar">
-        An official website of the Republic of the Philippines. <span>Learn how to identify secure portals.</span>
+
+        An official website of the Republic of the Philippines.
+
+        <span>
+            Learn how to identify secure portals.
+        </span>
+
     </div>
 
+
+    <!-- =========================================================
+         MAIN
+    ========================================================== -->
+
     <div class="main-wrapper">
+
         <div class="login-card">
-            
+
+
+            <!-- =====================================================
+                 HEADER
+            ====================================================== -->
+
             <div class="portal-header">
+
                 <div class="logo-container">
+
                     <div class="logo-slot">
-                        <img src="{% static 'images/PESO.png' %}" alt="PESO Logo" class="peso-logo">
+
+                        <img
+                            src="{% static 'images/PESO.png' %}"
+                            alt="PESO Logo"
+                        >
+
                     </div>
+
 
                     <div class="logo-divider"></div>
 
+
                     <div class="logo-slot">
-                        <img src="{% static 'images/PIODURAN.png' %}" alt="Pio Duran Logo" class="pioduran-logo">
+
+                        <img
+                            src="{% static 'images/PIODURAN.png' %}"
+                            alt="Pio Duran Logo"
+                        >
+
                     </div>
+
                 </div>
 
-                <h2>PESO Admin Portal</h2>
+
+                <h2>
+                    PESO Admin Portal
+                </h2>
+
+
                 <p class="subtitle">
                     Public Employment Service Office Access Link
                 </p>
+
             </div>
-            
-            <!-- Mandatory Government Data Protection Notice -->
+
+
+            <!-- =====================================================
+                 SECURITY NOTICE
+            ====================================================== -->
+
             <div class="privacy-notice">
-                <strong>SECURITY NOTICE:</strong> This system is restricted to authorized administrative personnel only. Unauthorized access attempts are monitored and prosecutable under the Data Privacy Act.
+
+                <strong>
+                    SECURITY NOTICE
+                </strong>
+
+                <span>
+                    This system is restricted to authorized
+                    administrative personnel only. Unauthorized
+                    access attempts are monitored and may be
+                    subject to applicable laws and regulations.
+                </span>
+
             </div>
-            
-            <form method="POST">
+
+
+            <!-- =====================================================
+                 LOGIN FORM
+            ====================================================== -->
+
+            <form
+                method="POST"
+                id="adminLoginForm"
+            >
+
                 {% csrf_token %}
+
+
                 <div class="form-group">
-                    
-                    <!-- Username Entry -->
+
+
+                    <!-- Username -->
+
                     <div>
-                        <label class="field-label" for="admin-username">Username</label>
+
+                        <label
+                            class="field-label"
+                            for="admin-username"
+                        >
+                            Username
+                        </label>
+
+
                         <div class="input-wrapper">
-                            <input type="text" id="admin-username" name="username" placeholder="Enter administrative username" required autocomplete="username">
+
+                            <input
+                                type="text"
+                                id="admin-username"
+                                name="username"
+                                placeholder="Enter administrative username"
+                                required
+                                autocomplete="username"
+                            >
+
                         </div>
+
                     </div>
-                    
-                    <!-- Password Entry with Clean SVG Toggle -->
+
+
+                    <!-- Password -->
+
                     <div>
-                        <label class="field-label" for="admin-password">Password</label>
+
+                        <label
+                            class="field-label"
+                            for="admin-password"
+                        >
+                            Password
+                        </label>
+
+
                         <div class="input-wrapper password-container">
-                            <input type="password" id="admin-password" name="password" placeholder="••••••••" required autocomplete="current-password">
-                            
-                            <button type="button" class="toggle-password-btn" onclick="toggleAdminPassword()" aria-label="Toggle password visibility">
-                                <svg id="adminEyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                    <circle cx="12" cy="12" r="3"></circle>
+
+                            <input
+                                type="password"
+                                id="admin-password"
+                                name="password"
+                                placeholder="Enter your password"
+                                required
+                                autocomplete="current-password"
+                            >
+
+
+                            <!-- Password Toggle -->
+
+                            <button
+                                type="button"
+                                class="toggle-password-btn"
+                                id="togglePassword"
+                                onclick="toggleAdminPassword()"
+                                aria-label="Show password"
+                                title="Show password"
+                            >
+
+                                <svg
+                                    id="adminEyeIcon"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                >
+
+                                    <path
+                                        d="M1 12s4-8 11-8
+                                           11 8 11 8-4 8-11 8
+                                           -11-8-11-8z"
+                                    ></path>
+
+                                    <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="3"
+                                    ></circle>
+
                                 </svg>
+
                             </button>
+
                         </div>
+
                     </div>
-                    
+
                 </div>
-                
-                <button type="submit" class="btn-gov">Log In</button>
+
+
+                <!-- =================================================
+                     LOGIN BUTTON
+                ================================================== -->
+
+                <button
+                    type="submit"
+                    class="btn-gov"
+                    id="loginButton"
+                >
+
+                    <span
+                        class="btn-spinner"
+                        id="loginSpinner"
+                        style="display: none;"
+                    ></span>
+
+                    <span id="loginButtonText">
+                        Log In
+                    </span>
+
+                </button>
+
             </form>
+
+
         </div>
+
     </div>
 
-    <script>
-        function toggleAdminPassword() {
-            const passwordInput = document.getElementById('admin-password');
-            const eyeIcon = document.getElementById('adminEyeIcon');
 
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================== -->
+
+    <script>
+
+
+        /* =========================================================
+           PASSWORD SHOW / HIDE
+        ========================================================= */
+
+        function toggleAdminPassword() {
+
+            const passwordInput =
+                document.getElementById("admin-password");
+
+            const eyeIcon =
+                document.getElementById("adminEyeIcon");
+
+            const toggleButton =
+                document.getElementById("togglePassword");
+
+
+            if (passwordInput.type === "password") {
+
+                passwordInput.type = "text";
+
+
+                /* Eye Off */
+
                 eyeIcon.innerHTML = `
-                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                    <line x1="1" y1="1" x2="23" y2="23"></line>
+
+                    <path
+                        d="M17.94 17.94
+                           A10.07 10.07 0 0 1 12 20
+                           C5 20 1 12 1 12
+                           A18.45 18.45 0 0 1 5.06 6.06"
+                    ></path>
+
+                    <path
+                        d="M9.9 4.24
+                           A9.12 9.12 0 0 1 12 4
+                           C19 4 23 12 23 12
+                           A18.5 18.5 0 0 1 18.94 17.94"
+                    ></path>
+
+                    <path
+                        d="M14.12 14.12
+                           A3 3 0 1 1 9.88 9.88"
+                    ></path>
+
+                    <line
+                        x1="1"
+                        y1="1"
+                        x2="23"
+                        y2="23"
+                    ></line>
+
                 `;
-            } else {
-                passwordInput.type = 'password';
-                eyeIcon.innerHTML = `
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                `;
+
+
+                toggleButton.setAttribute(
+                    "aria-label",
+                    "Hide password"
+                );
+
+                toggleButton.setAttribute(
+                    "title",
+                    "Hide password"
+                );
+
             }
+
+            else {
+
+                passwordInput.type = "password";
+
+
+                /* Eye */
+
+                eyeIcon.innerHTML = `
+
+                    <path
+                        d="M1 12s4-8 11-8
+                           11 8 11 8-4 8-11 8
+                           -11-8-11-8z"
+                    ></path>
+
+                    <circle
+                        cx="12"
+                        cy="12"
+                        r="3"
+                    ></circle>
+
+                `;
+
+
+                toggleButton.setAttribute(
+                    "aria-label",
+                    "Show password"
+                );
+
+                toggleButton.setAttribute(
+                    "title",
+                    "Show password"
+                );
+
+            }
+
         }
+
+
+        /* =========================================================
+           LOGIN LOADING EFFECT
+        ========================================================= */
+
+        const loginForm =
+            document.getElementById("adminLoginForm");
+
+        const loginButton =
+            document.getElementById("loginButton");
+
+        const loginSpinner =
+            document.getElementById("loginSpinner");
+
+        const loginButtonText =
+            document.getElementById("loginButtonText");
+
+
+        loginForm.addEventListener("submit", function () {
+
+            /*
+             * Change button to loading state
+             */
+
+            loginButton.classList.add("loading");
+
+            loginSpinner.style.display = "block";
+
+            loginButtonText.textContent = "Signing in...";
+
+
+            /*
+             * Prevent multiple clicks
+             */
+
+            loginButton.disabled = true;
+
+        });
+
+
     </script>
+
+
 </body>
+
 </html>

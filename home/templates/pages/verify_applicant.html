@@ -4,6 +4,34 @@
 
 <style>
 
+    /* =========================================================
+       MOBILE VERIFICATION PAGE
+    ========================================================= */
+
+    :root {
+        --primary: #059669;
+        --primary-dark: #047857;
+        --primary-light: #ecfdf5;
+        --primary-border: #a7f3d0;
+
+        --text: #0f172a;
+        --text-secondary: #475569;
+        --text-muted: #64748b;
+
+        --border: #e2e8f0;
+        --surface: #ffffff;
+        --surface-soft: #f8fafc;
+
+        --danger: #dc2626;
+        --danger-light: #fef2f2;
+        --danger-border: #fecaca;
+    }
+
+
+    /* =========================================================
+       WRAPPER
+    ========================================================= */
+
     .verification-wrapper {
         width: 100%;
         min-height: 70vh;
@@ -15,153 +43,443 @@
         padding: 40px 20px;
 
         box-sizing: border-box;
+
+        background: #ffffff;
     }
 
 
+    /* =========================================================
+       CARD
+    ========================================================= */
+
     .verification-card {
         width: 100%;
-        max-width: 450px;
+        max-width: 470px;
 
-        background: #011409;
+        background: var(--surface);
 
-        border: 1px solid rgba(116, 188, 68, 0.35);
+        border: 1px solid var(--border);
 
-        padding: 40px 30px;
+        border-radius: 16px;
+
+        padding: 42px 38px;
 
         box-sizing: border-box;
 
         text-align: center;
 
         box-shadow:
-            0 15px 40px rgba(0, 0, 0, 0.35);
+            0 12px 35px rgba(15, 23, 42, 0.07),
+            0 2px 8px rgba(15, 23, 42, 0.03);
+
+        position: relative;
+
+        overflow: hidden;
     }
 
+
+    /* =========================================================
+       TOP ACCENT
+    ========================================================= */
+
+    .verification-card::before {
+        content: "";
+
+        position: absolute;
+
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 4px;
+
+        background: var(--primary);
+    }
+
+
+    /* =========================================================
+       ICON
+    ========================================================= */
+
+    .verification-icon {
+        width: 62px;
+        height: 62px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        margin: 0 auto 22px;
+
+        background: var(--primary-light);
+
+        border: 1px solid var(--primary-border);
+
+        border-radius: 12px;
+
+        color: var(--primary);
+    }
+
+    .verification-icon svg {
+        width: 30px;
+        height: 30px;
+    }
+
+
+    /* =========================================================
+       TITLE
+    ========================================================= */
 
     .verification-card h2 {
-        margin: 0 0 12px;
+        margin: 0 0 10px;
 
-        color: #ffffff;
+        color: var(--text);
 
-        font-size: 28px;
+        font-size: 1.55rem;
 
-        font-weight: 700;
+        font-weight: 800;
+
+        letter-spacing: -0.02em;
     }
 
 
-    .verification-card p {
-        margin: 0 0 25px;
+    /* =========================================================
+       DESCRIPTION
+    ========================================================= */
 
-        color: rgba(255, 255, 255, 0.75);
+    .verification-description {
+        margin: 0 auto 26px;
+
+        max-width: 370px;
+
+        color: var(--text-muted);
+
+        font-size: 0.9rem;
 
         line-height: 1.6;
     }
 
 
-    .otp-input {
+    /* =========================================================
+       ERROR
+    ========================================================= */
+
+    .error-message {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+
+        margin-bottom: 20px;
+
+        padding: 12px 14px;
+
+        background: var(--danger-light);
+
+        border: 1px solid var(--danger-border);
+
+        border-radius: 8px;
+
+        color: #991b1b;
+
+        font-size: 0.84rem;
+
+        font-weight: 600;
+
+        line-height: 1.5;
+
+        text-align: left;
+    }
+
+    .error-message svg {
+        width: 18px;
+        height: 18px;
+
+        flex-shrink: 0;
+
+        margin-top: 1px;
+    }
+
+
+    /* =========================================================
+       OTP LABEL
+    ========================================================= */
+
+    .otp-label {
+        display: block;
+
+        margin-bottom: 11px;
+
+        color: var(--text-secondary);
+
+        font-size: 0.77rem;
+
+        font-weight: 800;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.05em;
+
+        text-align: left;
+    }
+
+
+    /* =========================================================
+       OTP BOXES
+    ========================================================= */
+
+    .otp-container {
         width: 100%;
+
+        display: flex;
+
+        justify-content: center;
+
+        gap: 10px;
+
+        margin-top: 2px;
+    }
+
+
+    .otp-box {
+        width: 52px;
+        height: 58px;
 
         box-sizing: border-box;
 
-        padding: 15px;
+        border: 1px solid var(--border);
+
+        border-radius: 9px;
 
         background: #ffffff;
 
-        border: 2px solid transparent;
+        color: var(--text);
 
-        color: #111111;
+        font-family: inherit;
 
-        font-size: 26px;
+        font-size: 1.45rem;
 
-        font-weight: 700;
+        font-weight: 800;
 
         text-align: center;
 
-        letter-spacing: 8px;
-
         outline: none;
+
+        caret-color: var(--primary);
+
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            background 0.2s ease,
+            transform 0.15s ease;
     }
 
 
-    .otp-input:focus {
-        border-color: #74BC44;
+    .otp-box:hover {
+        border-color: #cbd5e1;
     }
 
+
+    .otp-box:focus {
+        border-color: var(--primary);
+
+        background: var(--primary-light);
+
+        box-shadow:
+            0 0 0 3px rgba(5, 150, 105, 0.10);
+
+        transform: translateY(-1px);
+    }
+
+
+    .otp-box.filled {
+        border-color: var(--primary);
+
+        background: var(--primary-light);
+    }
+
+
+    /* =========================================================
+       VERIFY BUTTON
+    ========================================================= */
 
     .verify-button {
         width: 100%;
 
-        margin-top: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
 
-        padding: 15px;
+        gap: 8px;
 
-        border: none;
+        margin-top: 22px;
 
-        background: #74BC44;
+        padding: 13px 18px;
 
-        color: #011409;
+        min-height: 46px;
 
-        font-size: 16px;
+        border: 1px solid var(--primary);
 
-        font-weight: 700;
+        border-radius: 8px;
+
+        background: var(--primary);
+
+        color: #ffffff;
+
+        font-family: inherit;
+
+        font-size: 0.9rem;
+
+        font-weight: 750;
 
         cursor: pointer;
 
-        transition: 0.2s ease;
+        transition:
+            background 0.2s ease,
+            border-color 0.2s ease,
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+
+    .verify-button svg {
+        width: 18px;
+        height: 18px;
     }
 
 
     .verify-button:hover {
-        background: #5ea132;
+        background: var(--primary-dark);
+
+        border-color: var(--primary-dark);
+
+        transform: translateY(-1px);
+
+        box-shadow:
+            0 5px 14px rgba(5, 150, 105, 0.18);
     }
 
 
-    .error-message {
-        margin-bottom: 20px;
-
-        padding: 12px;
-
-        background: rgba(220, 53, 69, 0.15);
-
-        border: 1px solid rgba(220, 53, 69, 0.4);
-
-        color: #ff8f9b;
-
-        font-size: 14px;
+    .verify-button:active {
+        transform: translateY(0);
     }
 
+
+    /* =========================================================
+       SECURITY NOTE
+    ========================================================= */
 
     .verification-note {
-        margin-top: 20px !important;
+        display: flex;
 
-        font-size: 13px !important;
+        align-items: center;
 
-        color: rgba(255, 255, 255, 0.55) !important;
+        justify-content: center;
+
+        gap: 7px;
+
+        margin: 20px 0 0 !important;
+
+        padding-top: 18px;
+
+        border-top: 1px solid #f1f5f9;
+
+        color: var(--text-muted) !important;
+
+        font-size: 0.78rem !important;
+
+        line-height: 1.5;
     }
 
+
+    .verification-note svg {
+        width: 15px;
+        height: 15px;
+
+        color: var(--primary);
+
+        flex-shrink: 0;
+    }
+
+
+    /* =========================================================
+       MOBILE
+    ========================================================= */
 
     @media (max-width: 480px) {
 
         .verification-wrapper {
-            padding: 25px 15px;
+            min-height: 65vh;
+
+            padding: 25px 14px 40px;
         }
 
 
         .verification-card {
-            padding: 30px 20px;
+            padding: 34px 22px;
+        }
+
+
+        .verification-icon {
+            width: 56px;
+            height: 56px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .verification-icon svg {
+            width: 27px;
+            height: 27px;
         }
 
 
         .verification-card h2 {
-            font-size: 24px;
+            font-size: 1.35rem;
         }
 
 
-        .otp-input {
-            font-size: 22px;
-
-            letter-spacing: 5px;
+        .verification-description {
+            font-size: 0.85rem;
         }
 
+
+        .otp-container {
+            gap: 7px;
+        }
+
+
+        .otp-box {
+            width: 44px;
+            height: 52px;
+
+            font-size: 1.3rem;
+        }
+
+
+        .verify-button {
+            padding: 13px 15px;
+        }
+    }
+
+
+    @media (max-width: 350px) {
+
+        .verification-card {
+            padding: 30px 17px;
+        }
+
+
+        .otp-container {
+            gap: 5px;
+        }
+
+
+        .otp-box {
+            width: 39px;
+            height: 48px;
+
+            font-size: 1.2rem;
+        }
     }
 
 </style>
@@ -171,61 +489,478 @@
 
     <div class="verification-card">
 
+        <!-- =====================================================
+             VERIFICATION ICON
+        ====================================================== -->
+
+        <div class="verification-icon">
+
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.8"
+            >
+
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15 9V5a3 3 0 00-6 0v4"
+                />
+
+                <rect
+                    x="5"
+                    y="9"
+                    width="14"
+                    height="11"
+                    rx="2"
+                />
+
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 13v3"
+                />
+
+            </svg>
+
+        </div>
+
+
+        <!-- =====================================================
+             TITLE
+        ====================================================== -->
+
         <h2>
             Verify Your Mobile Number
         </h2>
 
 
-        <p>
-            We sent a 6-digit verification code
-            to your registered mobile number.
+        <!-- =====================================================
+             DESCRIPTION
+        ====================================================== -->
+
+        <p class="verification-description">
+            We sent a 6-digit verification code to your
+            registered mobile number. Enter the code below
+            to continue your registration.
         </p>
 
+
+        <!-- =====================================================
+             ERROR
+        ====================================================== -->
 
         {% if error %}
 
             <div class="error-message">
-                {{ error }}
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 9v3.5"
+                    />
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 16h.01"
+                    />
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+                    />
+
+                </svg>
+
+                <span>
+                    {{ error }}
+                </span>
+
             </div>
 
         {% endif %}
 
 
-        <form method="POST">
+        <!-- =====================================================
+             OTP FORM
+        ====================================================== -->
+
+        <form
+            method="POST"
+            id="otpForm"
+        >
 
             {% csrf_token %}
 
+            <label class="otp-label">
+                Verification Code
+            </label>
 
+
+            <!-- Hidden field submitted to Django -->
             <input
-                type="text"
+                type="hidden"
                 name="otp"
-                class="otp-input"
-                maxlength="6"
-                minlength="6"
-                pattern="[0-9]{6}"
-                inputmode="numeric"
-                autocomplete="one-time-code"
-                placeholder="000000"
-                required
+                id="otp"
             >
 
+
+            <!-- =================================================
+                 OTP BOXES
+            ================================================== -->
+
+            <div
+                class="otp-container"
+                id="otpContainer"
+            >
+
+                <input
+                    type="text"
+                    class="otp-box"
+                    maxlength="1"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                    aria-label="Digit 1"
+                >
+
+                <input
+                    type="text"
+                    class="otp-box"
+                    maxlength="1"
+                    inputmode="numeric"
+                    aria-label="Digit 2"
+                >
+
+                <input
+                    type="text"
+                    class="otp-box"
+                    maxlength="1"
+                    inputmode="numeric"
+                    aria-label="Digit 3"
+                >
+
+                <input
+                    type="text"
+                    class="otp-box"
+                    maxlength="1"
+                    inputmode="numeric"
+                    aria-label="Digit 4"
+                >
+
+                <input
+                    type="text"
+                    class="otp-box"
+                    maxlength="1"
+                    inputmode="numeric"
+                    aria-label="Digit 5"
+                >
+
+                <input
+                    type="text"
+                    class="otp-box"
+                    maxlength="1"
+                    inputmode="numeric"
+                    aria-label="Digit 6"
+                >
+
+            </div>
+
+
+            <!-- =================================================
+                 VERIFY BUTTON
+            ================================================== -->
 
             <button
                 type="submit"
                 class="verify-button"
             >
+
                 Verify Account
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M5 12l4 4L19 6"
+                    />
+
+                </svg>
+
             </button>
 
         </form>
 
 
+        <!-- =====================================================
+             SECURITY NOTE
+        ====================================================== -->
+
         <p class="verification-note">
+
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.8"
+            >
+
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 15v2"
+                />
+
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M17 9V7a5 5 0 00-10 0v2"
+                />
+
+                <rect
+                    x="5"
+                    y="9"
+                    width="14"
+                    height="11"
+                    rx="2"
+                />
+
+            </svg>
+
             Your verification code is valid for 5 minutes.
+
         </p>
 
     </div>
 
 </div>
+
+
+<script>
+
+    /* =========================================================
+       OTP BOX FUNCTIONALITY
+    ========================================================= */
+
+    const otpBoxes = document.querySelectorAll(".otp-box");
+    const hiddenOtp = document.getElementById("otp");
+    const otpForm = document.getElementById("otpForm");
+
+
+    function updateOtpValue() {
+
+        let code = "";
+
+        otpBoxes.forEach(function(box) {
+            code += box.value;
+        });
+
+        hiddenOtp.value = code;
+    }
+
+
+    function updateBoxState(box) {
+
+        if (box.value !== "") {
+            box.classList.add("filled");
+        } else {
+            box.classList.remove("filled");
+        }
+    }
+
+
+    otpBoxes.forEach(function(box, index) {
+
+        /* =============================================
+           INPUT
+        ============================================= */
+
+        box.addEventListener("input", function(event) {
+
+            let value = event.target.value;
+
+            /* Only numbers */
+            value = value.replace(/[^0-9]/g, "");
+
+            /* Keep only one digit */
+            event.target.value = value.substring(0, 1);
+
+            updateBoxState(event.target);
+
+            updateOtpValue();
+
+
+            /* Move to next box */
+            if (
+                value !== "" &&
+                index < otpBoxes.length - 1
+            ) {
+
+                otpBoxes[index + 1].focus();
+
+            }
+
+        });
+
+
+        /* =============================================
+           KEYDOWN
+        ============================================= */
+
+        box.addEventListener("keydown", function(event) {
+
+            /* Backspace */
+            if (
+                event.key === "Backspace" &&
+                box.value === "" &&
+                index > 0
+            ) {
+
+                otpBoxes[index - 1].focus();
+
+                otpBoxes[index - 1].value = "";
+
+                updateBoxState(otpBoxes[index - 1]);
+
+                updateOtpValue();
+
+            }
+
+
+            /* Arrow Left */
+            if (
+                event.key === "ArrowLeft" &&
+                index > 0
+            ) {
+
+                otpBoxes[index - 1].focus();
+
+            }
+
+
+            /* Arrow Right */
+            if (
+                event.key === "ArrowRight" &&
+                index < otpBoxes.length - 1
+            ) {
+
+                otpBoxes[index + 1].focus();
+
+            }
+
+        });
+
+
+        /* =============================================
+           PASTE
+        ============================================= */
+
+        box.addEventListener("paste", function(event) {
+
+            event.preventDefault();
+
+            const pastedData =
+                event.clipboardData
+                    .getData("text")
+                    .replace(/[^0-9]/g, "")
+                    .substring(0, 6);
+
+
+            if (!pastedData) {
+                return;
+            }
+
+
+            pastedData
+                .split("")
+                .forEach(function(digit, pastedIndex) {
+
+                    if (otpBoxes[pastedIndex]) {
+
+                        otpBoxes[pastedIndex].value = digit;
+
+                        updateBoxState(
+                            otpBoxes[pastedIndex]
+                        );
+
+                    }
+
+                });
+
+
+            updateOtpValue();
+
+
+            /* Focus last entered box */
+            const focusIndex =
+                Math.min(
+                    pastedData.length,
+                    otpBoxes.length
+                ) - 1;
+
+
+            if (focusIndex >= 0) {
+                otpBoxes[focusIndex].focus();
+            }
+
+        });
+
+    });
+
+
+    /* =========================================================
+       FORM VALIDATION
+    ========================================================= */
+
+    otpForm.addEventListener("submit", function(event) {
+
+        updateOtpValue();
+
+        const code = hiddenOtp.value;
+
+
+        if (!/^[0-9]{6}$/.test(code)) {
+
+            event.preventDefault();
+
+            otpBoxes[0].focus();
+
+            return;
+
+        }
+
+    });
+
+
+    /* =========================================================
+       AUTO FOCUS FIRST BOX
+    ========================================================= */
+
+    if (otpBoxes.length > 0) {
+
+        otpBoxes[0].focus();
+
+    }
+
+</script>
 
 {% endblock %}

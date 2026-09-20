@@ -10,6 +10,30 @@ Browse Jobs
 <style>
 
 /* =========================================================
+   COLOR SYSTEM
+========================================================= */
+
+:root {
+    --primary: #059669;
+    --primary-dark: #047857;
+    --primary-light: #ecfdf5;
+    --primary-border: #a7f3d0;
+
+    --text: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+
+    --border: #e2e8f0;
+    --border-light: #f1f5f9;
+
+    --background: #f8fafc;
+    --white: #ffffff;
+
+    --danger: #dc2626;
+}
+
+
+/* =========================================================
    BROWSE PAGE
 ========================================================= */
 
@@ -21,7 +45,7 @@ Browse Jobs
 
     box-sizing: border-box;
 
-    background: transparent;
+    background: var(--background);
 
     position: relative;
     z-index: 1;
@@ -62,9 +86,9 @@ Browse Jobs
 
     height: 100%;
 
-    background: rgba(1, 20, 9, 0.97);
+    background: var(--white);
 
-    border: 1px solid rgba(116, 188, 68, 0.28);
+    border: 1px solid var(--border);
 
     box-sizing: border-box;
 
@@ -72,7 +96,10 @@ Browse Jobs
     overflow-x: hidden;
 
     scrollbar-width: thin;
-    scrollbar-color: var(--primary-accent) transparent;
+    scrollbar-color: var(--primary) transparent;
+
+    box-shadow:
+        0 2px 8px rgba(15, 23, 42, 0.04);
 }
 
 .companies-card::-webkit-scrollbar,
@@ -93,7 +120,7 @@ Browse Jobs
 .recommendations-card::-webkit-scrollbar-thumb,
 .main-search-column::-webkit-scrollbar-thumb {
 
-    background: var(--primary-accent);
+    background: var(--primary);
 
     border-radius: 10px;
 }
@@ -109,12 +136,17 @@ Browse Jobs
 
 .companies-header {
     margin-bottom: 18px;
+
+    padding-bottom: 15px;
+
+    border-bottom: 1px solid var(--border);
 }
 
 .companies-title {
+
     margin: 0;
 
-    color: #ffffff;
+    color: var(--text);
 
     font-size: 1rem;
 
@@ -122,9 +154,10 @@ Browse Jobs
 }
 
 .companies-subtitle {
+
     margin-top: 5px;
 
-    color: rgba(255, 255, 255, 0.52);
+    color: var(--text-muted);
 
     font-size: 0.73rem;
 
@@ -137,6 +170,7 @@ Browse Jobs
 ========================================================= */
 
 .company-filter {
+
     display: flex;
 
     flex-direction: column;
@@ -152,15 +186,17 @@ Browse Jobs
 
     box-sizing: border-box;
 
-    background: rgba(255, 255, 255, 0.035);
+    background: #ffffff;
 
-    border: 1px solid rgba(116, 188, 68, 0.15);
+    border: 1px solid var(--border);
 
-    color: rgba(255, 255, 255, 0.70);
+    color: var(--text-secondary);
 
     font-family: inherit;
 
     font-size: 0.75rem;
+
+    font-weight: 600;
 
     text-align: left;
 
@@ -170,38 +206,47 @@ Browse Jobs
         background 0.2s ease,
         color 0.2s ease,
         border-color 0.2s ease,
-        transform 0.2s ease;
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .company-filter button:hover {
 
-    background: rgba(116, 188, 68, 0.16);
+    background: var(--primary-light);
 
-    color: #ffffff;
+    color: var(--primary-dark);
 
-    border-color: rgba(116, 188, 68, 0.55);
+    border-color: var(--primary-border);
 
     transform: translateX(2px);
 }
 
 .company-filter button.active {
 
-    background: rgba(116, 188, 68, 0.22);
+    background: var(--primary);
 
     color: #ffffff;
 
-    border-color: var(--primary-accent);
+    border-color: var(--primary);
+
+    box-shadow:
+        0 3px 8px rgba(5, 150, 105, 0.16);
 }
 
 .company-count {
 
     float: right;
 
-    color: var(--primary-accent);
+    color: var(--primary);
 
     font-size: 0.68rem;
 
     font-weight: 800;
+}
+
+.company-filter button.active .company-count {
+
+    color: #ffffff;
 }
 
 
@@ -223,7 +268,7 @@ Browse Jobs
     box-sizing: border-box;
 
     scrollbar-width: thin;
-    scrollbar-color: var(--primary-accent) transparent;
+    scrollbar-color: var(--primary) transparent;
 }
 
 
@@ -234,26 +279,30 @@ Browse Jobs
 .browse-page-header {
 
     margin-bottom: 20px;
+
+    padding: 2px 0;
 }
 
 .browse-page-title {
 
     margin: 0;
 
-    color: #ffffff;
+    color: var(--text);
 
     font-size: clamp(1.5rem, 3vw, 2rem);
 
     font-weight: 800;
 
     line-height: 1.2;
+
+    letter-spacing: -0.025em;
 }
 
 .browse-page-description {
 
     margin: 7px 0 0;
 
-    color: rgba(255, 255, 255, 0.58);
+    color: var(--text-muted);
 
     font-size: 0.8rem;
 
@@ -279,14 +328,14 @@ Browse Jobs
 
     padding-bottom: 10px;
 
-    border-bottom: 2px solid rgba(116, 188, 68, 0.28);
+    border-bottom: 2px solid var(--primary-border);
 }
 
 .jobs-title {
 
     margin: 0;
 
-    color: #ffffff;
+    color: var(--text);
 
     font-size: 1.15rem;
 
@@ -295,7 +344,7 @@ Browse Jobs
 
 .jobs-count {
 
-    color: var(--primary-accent);
+    color: var(--primary);
 
     font-size: 0.7rem;
 
@@ -324,17 +373,20 @@ Browse Jobs
 
     box-sizing: border-box;
 
-    background: rgba(1, 20, 9, 0.97);
+    background: #ffffff;
 
-    border: 1px solid rgba(116, 188, 68, 0.25);
+    border: 1px solid var(--border);
 
-    color: #ffffff;
+    color: var(--text);
 
     outline: none;
 
     font-family: inherit;
 
     font-size: 0.78rem;
+
+    box-shadow:
+        0 1px 3px rgba(15, 23, 42, 0.03);
 
     transition:
         border-color 0.2s ease,
@@ -343,15 +395,15 @@ Browse Jobs
 
 .search-input::placeholder {
 
-    color: rgba(255, 255, 255, 0.38);
+    color: #94a3b8;
 }
 
 .search-input:focus {
 
-    border-color: var(--primary-accent);
+    border-color: var(--primary);
 
     box-shadow:
-        0 0 0 2px rgba(116, 188, 68, 0.08);
+        0 0 0 3px rgba(5, 150, 105, 0.10);
 }
 
 
@@ -375,9 +427,9 @@ Browse Jobs
 
 .job-card {
 
-    background: rgba(1, 20, 9, 0.97);
+    background: #ffffff;
 
-    border: 1px solid rgba(116, 188, 68, 0.18);
+    border: 1px solid var(--border);
 
     padding: 17px;
 
@@ -392,14 +444,14 @@ Browse Jobs
 
 .job-card:hover {
 
-    background: #0b2413;
+    background: #ffffff;
 
-    border-color: rgba(116, 188, 68, 0.65);
+    border-color: var(--primary-border);
 
     transform: translateY(-2px);
 
     box-shadow:
-        0 8px 25px rgba(0, 0, 0, 0.28);
+        0 8px 24px rgba(15, 23, 42, 0.08);
 }
 
 
@@ -444,7 +496,7 @@ Browse Jobs
 
     background: #ffffff;
 
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid var(--border);
 
     cursor: pointer;
 }
@@ -459,14 +511,13 @@ Browse Jobs
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
-    background: rgba(116, 188, 68, 0.13);
+    background: var(--primary-light);
 
-    border: 1px solid rgba(116, 188, 68, 0.30);
+    border: 1px solid var(--primary-border);
 
-    color: var(--primary-accent);
+    color: var(--primary);
 
     font-size: 1rem;
 
@@ -482,7 +533,7 @@ Browse Jobs
 
     margin: 0;
 
-    color: #ffffff;
+    color: var(--text);
 
     font-size: 0.95rem;
 
@@ -495,11 +546,11 @@ Browse Jobs
 
     margin-top: 3px;
 
-    color: var(--primary-accent);
+    color: var(--primary);
 
     font-size: 0.72rem;
 
-    font-weight: 600;
+    font-weight: 700;
 
     white-space: nowrap;
 
@@ -523,7 +574,7 @@ Browse Jobs
 
     margin-bottom: 12px;
 
-    color: rgba(255, 255, 255, 0.55);
+    color: var(--text-muted);
 
     font-size: 0.7rem;
 }
@@ -546,7 +597,7 @@ Browse Jobs
 
     margin: 0 0 13px;
 
-    color: rgba(255, 255, 255, 0.64);
+    color: var(--text-secondary);
 
     font-size: 0.76rem;
 
@@ -578,12 +629,12 @@ Browse Jobs
 
     padding-top: 12px;
 
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid var(--border-light);
 }
 
 .job-vacancies {
 
-    color: rgba(255, 255, 255, 0.45);
+    color: var(--text-muted);
 
     font-size: 0.68rem;
 }
@@ -598,11 +649,11 @@ Browse Jobs
 
     padding: 8px 13px;
 
-    background: var(--primary-accent);
+    background: var(--primary);
 
-    color: #011409;
+    color: #ffffff;
 
-    border: 1px solid var(--primary-accent);
+    border: 1px solid var(--primary);
 
     text-decoration: none;
 
@@ -612,14 +663,19 @@ Browse Jobs
 
     transition:
         background 0.2s ease,
-        color 0.2s ease;
+        border-color 0.2s ease,
+        transform 0.2s ease;
 }
 
 .view-job-button:hover {
 
-    background: #8bd85a;
+    background: var(--primary-dark);
 
-    color: #011409;
+    border-color: var(--primary-dark);
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
 }
 
 
@@ -631,12 +687,7 @@ Browse Jobs
 
     padding: 18px;
 
-    background:
-        linear-gradient(
-            180deg,
-            rgba(8, 36, 17, 0.99),
-            rgba(1, 20, 9, 0.98)
-        );
+    background: #ffffff;
 }
 
 
@@ -650,14 +701,14 @@ Browse Jobs
 
     margin-bottom: 14px;
 
-    border-bottom: 2px solid rgba(116, 188, 68, 0.35);
+    border-bottom: 2px solid var(--primary-border);
 }
 
 .recommendations-title {
 
     margin: 0;
 
-    color: #ffffff;
+    color: var(--text);
 
     font-size: 1rem;
 
@@ -670,7 +721,7 @@ Browse Jobs
 
     margin: 5px 0 0;
 
-    color: rgba(255, 255, 255, 0.52);
+    color: var(--text-muted);
 
     font-size: 0.71rem;
 
@@ -704,11 +755,11 @@ Browse Jobs
 
     box-sizing: border-box;
 
-    background: #092314;
+    background: #ffffff;
 
-    border: 1px solid rgba(116, 188, 68, 0.28);
+    border: 1px solid var(--border);
 
-    border-left: 3px solid var(--primary-accent);
+    border-left: 3px solid var(--primary);
 
     transition:
         background 0.2s ease,
@@ -717,22 +768,18 @@ Browse Jobs
         box-shadow 0.2s ease;
 }
 
-
-/*
-   IMPORTANT:
-   Hover is deliberately NOT transparent.
-*/
-
 .recommendation-item:hover {
 
-    background: #123a1e;
+    background: #ffffff;
 
-    border-color: var(--primary-accent);
+    border-color: var(--primary-border);
+
+    border-left-color: var(--primary);
 
     transform: translateX(-3px);
 
     box-shadow:
-        0 7px 20px rgba(0, 0, 0, 0.35);
+        0 7px 20px rgba(15, 23, 42, 0.08);
 }
 
 
@@ -779,7 +826,7 @@ Browse Jobs
 
     background: #ffffff;
 
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid var(--border);
 
     cursor: pointer;
 }
@@ -797,11 +844,11 @@ Browse Jobs
 
     justify-content: center;
 
-    background: rgba(116, 188, 68, 0.16);
+    background: var(--primary-light);
 
-    border: 1px solid rgba(116, 188, 68, 0.35);
+    border: 1px solid var(--primary-border);
 
-    color: var(--primary-accent);
+    color: var(--primary);
 
     font-size: 0.9rem;
 
@@ -815,7 +862,7 @@ Browse Jobs
 
 .recommendation-company-name {
 
-    color: rgba(255, 255, 255, 0.52);
+    color: var(--text-muted);
 
     font-size: 0.65rem;
 
@@ -830,7 +877,7 @@ Browse Jobs
 
     margin: 3px 0 0;
 
-    color: #ffffff;
+    color: var(--text);
 
     font-size: 0.82rem;
 
@@ -848,13 +895,13 @@ Browse Jobs
 
     flex-shrink: 0;
 
-    padding: 4px 6px;
+    padding: 4px 7px;
 
-    background: rgba(116, 188, 68, 0.18);
+    background: var(--primary-light);
 
-    border: 1px solid rgba(116, 188, 68, 0.38);
+    border: 1px solid var(--primary-border);
 
-    color: var(--primary-accent);
+    color: var(--primary-dark);
 
     font-size: 0.62rem;
 
@@ -878,7 +925,7 @@ Browse Jobs
 
     margin-bottom: 10px;
 
-    color: rgba(255, 255, 255, 0.53);
+    color: var(--text-muted);
 
     font-size: 0.66rem;
 }
@@ -903,11 +950,11 @@ Browse Jobs
 
     padding: 3px 6px;
 
-    background: rgba(116, 188, 68, 0.13);
+    background: var(--primary-light);
 
-    border: 1px solid rgba(116, 188, 68, 0.27);
+    border: 1px solid var(--primary-border);
 
-    color: rgba(255, 255, 255, 0.72);
+    color: var(--primary-dark);
 
     font-size: 0.59rem;
 
@@ -933,11 +980,11 @@ Browse Jobs
 
     box-sizing: border-box;
 
-    background: var(--primary-accent);
+    background: var(--primary);
 
-    border: 1px solid var(--primary-accent);
+    border: 1px solid var(--primary);
 
-    color: #011409;
+    color: #ffffff;
 
     text-decoration: none;
 
@@ -947,14 +994,16 @@ Browse Jobs
 
     transition:
         background 0.2s ease,
-        color 0.2s ease;
+        border-color 0.2s ease;
 }
 
 .recommendation-button:hover {
 
-    background: #8bd85a;
+    background: var(--primary-dark);
 
-    color: #011409;
+    border-color: var(--primary-dark);
+
+    color: #ffffff;
 }
 
 
@@ -966,18 +1015,18 @@ Browse Jobs
 
     padding: 18px 12px;
 
-    background: rgba(116, 188, 68, 0.06);
+    background: var(--primary-light);
 
-    border: 1px solid rgba(116, 188, 68, 0.18);
+    border: 1px solid var(--primary-border);
 
-    border-left: 3px solid rgba(116, 188, 68, 0.55);
+    border-left: 3px solid var(--primary);
 }
 
 .no-recommendations-title {
 
     margin: 0 0 5px;
 
-    color: #ffffff;
+    color: var(--text);
 
     font-size: 0.75rem;
 
@@ -988,7 +1037,7 @@ Browse Jobs
 
     margin: 0;
 
-    color: rgba(255, 255, 255, 0.48);
+    color: var(--text-muted);
 
     font-size: 0.66rem;
 
@@ -1006,16 +1055,16 @@ Browse Jobs
 
     text-align: center;
 
-    background: rgba(1, 20, 9, 0.97);
+    background: #ffffff;
 
-    border: 1px solid rgba(116, 188, 68, 0.18);
+    border: 1px solid var(--border);
 }
 
 .no-jobs-title {
 
     margin: 0 0 6px;
 
-    color: #ffffff;
+    color: var(--text);
 
     font-size: 0.9rem;
 
@@ -1026,7 +1075,7 @@ Browse Jobs
 
     margin: 0;
 
-    color: rgba(255, 255, 255, 0.50);
+    color: var(--text-muted);
 
     font-size: 0.72rem;
 }
@@ -1044,9 +1093,9 @@ Browse Jobs
 
     text-align: center;
 
-    background: rgba(1, 20, 9, 0.97);
+    background: #ffffff;
 
-    border: 1px solid rgba(116, 188, 68, 0.18);
+    border: 1px solid var(--border);
 }
 
 .search-empty strong {
@@ -1055,14 +1104,14 @@ Browse Jobs
 
     margin-bottom: 5px;
 
-    color: #ffffff;
+    color: var(--text);
 
     font-size: 0.85rem;
 }
 
 .search-empty span {
 
-    color: rgba(255, 255, 255, 0.48);
+    color: var(--text-muted);
 
     font-size: 0.7rem;
 }
@@ -1090,7 +1139,7 @@ Browse Jobs
 
     box-sizing: border-box;
 
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(15, 23, 42, 0.78);
 }
 
 .logo-modal.show {
@@ -1108,9 +1157,12 @@ Browse Jobs
 
     box-sizing: border-box;
 
-    background: #011409;
+    background: #ffffff;
 
-    border: 1px solid rgba(116, 188, 68, 0.40);
+    border: 1px solid var(--border);
+
+    box-shadow:
+        0 20px 50px rgba(15, 23, 42, 0.20);
 
     text-align: center;
 }
@@ -1128,13 +1180,15 @@ Browse Jobs
     padding: 10px;
 
     box-sizing: border-box;
+
+    border: 1px solid var(--border-light);
 }
 
 .logo-modal-title {
 
     margin-top: 14px;
 
-    color: #ffffff;
+    color: var(--text);
 
     font-size: 0.9rem;
 
@@ -1152,11 +1206,11 @@ Browse Jobs
     width: 32px;
     height: 32px;
 
-    background: #0b2413;
+    background: #ffffff;
 
-    border: 1px solid rgba(116, 188, 68, 0.30);
+    border: 1px solid var(--border);
 
-    color: #ffffff;
+    color: var(--text-secondary);
 
     font-size: 1.1rem;
 
@@ -1165,9 +1219,11 @@ Browse Jobs
 
 .logo-modal-close:hover {
 
-    background: var(--primary-accent);
+    background: var(--primary);
 
-    color: #011409;
+    border-color: var(--primary);
+
+    color: #ffffff;
 }
 
 
@@ -1218,7 +1274,9 @@ Browse Jobs
 
         height: calc(100vh - 110px);
 
-        grid-template-columns: 210px minmax(0, 1fr);
+        grid-template-columns:
+            210px
+            minmax(0, 1fr);
 
         gap: 12px;
     }

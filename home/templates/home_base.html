@@ -1,3 +1,4 @@
+
 {% load static %}
 
 <!DOCTYPE html>
@@ -22,24 +23,24 @@
         rel="icon"
         type="image/png"
         sizes="32x32"
-        href="{% static 'images/PIODURAN.png' %}"
+        href="{% static 'images/PESO.png' %}"
     >
 
     <link
         rel="icon"
         type="image/png"
         sizes="192x192"
-        href="{% static 'images/PIODURAN.png' %}"
+        href="{% static 'images/PESO.png' %}"
     >
 
     <link
         rel="apple-touch-icon"
         sizes="180x180"
-        href="{% static 'images/PIODURAN.png' %}"
+        href="{% static 'images/PESO.png' %}"
     >
 
 
-    <!-- Fonts: Inter -->
+    <!-- Fonts -->
 
     <link
         rel="preconnect"
@@ -61,38 +62,42 @@
     <style>
 
         /* =========================================================
-           VARIABLES & THEME CONFIGURATION
+           VARIABLES
         ========================================================= */
 
         :root {
 
-            --bg-dark-green: #011409;
+            --primary-green: #4f9d32;
 
-            --primary-accent: #74BC44;
+            --primary-green-dark: #3d7f27;
 
-            --primary-accent-hover: #5ea132;
+            --light-green: #eef7e9;
 
-            --card-green: rgba(116, 188, 68, 0.15);
+            --border-color: #e5e7eb;
 
-            --card-green-hover: rgba(116, 188, 68, 0.25);
+            --background: #f7f8f6;
 
-            --stat-card-bg: rgba(12, 28, 8, 0.85);
+            --white: #ffffff;
 
-            --stat-card-border: rgba(116, 188, 68, 0.2);
+            --text-dark: #172019;
 
-            --text-main: #ffffff;
+            --text-muted: #6b7280;
 
-            --text-sub: #74BC44;
+            --font-main:
+                'Inter',
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                sans-serif;
 
-            --font-main: 'Inter', system-ui, -apple-system, sans-serif;
-
-            --transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition:
+                all 0.25s ease;
 
         }
 
 
         /* =========================================================
-           GLOBAL RESET & LAYOUT
+           GLOBAL RESET
         ========================================================= */
 
         *,
@@ -117,13 +122,18 @@
 
             overflow-x: hidden;
 
-            background-color: var(--bg-dark-green);
+            background: var(--background);
 
             font-family: var(--font-main);
 
-            color: var(--text-main);
+            color: var(--text-dark);
 
             -webkit-font-smoothing: antialiased;
+
+        }
+
+
+        body {
 
             display: flex;
 
@@ -133,7 +143,7 @@
 
 
         /* =========================================================
-           SITE HEADER & NAVIGATION
+           HEADER
         ========================================================= */
 
         .site-header {
@@ -156,21 +166,21 @@
 
             align-items: center;
 
-            background-color: rgba(12, 28, 8, 0.92);
+            background: #059669;
 
-            backdrop-filter: blur(12px);
+            {% comment %} backdrop-filter: blur(12px);
 
-            -webkit-backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px); {% endcomment %}
 
-            border-bottom: 2px solid var(--primary-accent);
+            {% comment %} border-bottom: 1px solid var(--border-color); {% endcomment %}
 
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            {% comment %} box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04); {% endcomment %}
 
         }
 
 
         /* =========================================================
-           BRAND / LOGO
+           BRAND
         ========================================================= */
 
         .brand {
@@ -225,9 +235,9 @@
 
         .brand-text h1 {
 
-            color: #ffffff;
+            color: white;
 
-            font-size: 1.35rem;
+            font-size: 1.25rem;
 
             font-weight: 800;
 
@@ -237,20 +247,18 @@
 
             margin: 0;
 
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
-
         }
 
 
         .brand-text span {
 
-            color: var(--primary-accent);
+            color: white;
 
             font-size: 0.68rem;
 
             font-weight: 600;
 
-            margin-top: 4px;
+            margin-top: 5px;
 
             letter-spacing: 0.03em;
 
@@ -269,7 +277,7 @@
 
             align-items: center;
 
-            gap: 24px;
+            gap: 28px;
 
             list-style: none;
 
@@ -278,7 +286,7 @@
 
         .navigation-menu a {
 
-            color: rgba(255, 255, 255, 0.9);
+            color: white;
 
             text-decoration: none;
 
@@ -286,9 +294,7 @@
 
             font-weight: 600;
 
-            transition: var(--transition-smooth);
-
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+            transition: var(--transition);
 
         }
 
@@ -296,37 +302,41 @@
         .navigation-menu a:hover,
         .navigation-menu a.active {
 
-            color: var(--primary-accent);
+            color: #0c966a;
 
         }
 
 
+        /* =========================================================
+           AUTH BUTTON
+        ========================================================= */
+
         .navigation-menu .nav-auth-btn {
 
-            padding: 8px 20px;
+            padding: 9px 20px;
 
-            border-radius: 99px;
+            border-radius: 7px;
 
-            background: var(--primary-accent);
+            background: white;
 
-            border: 1px solid var(--primary-accent);
+            border: 1px solid var(--primary-green);
 
-            color: #0d1e05;
+            color: #059669;
 
             font-weight: 700;
 
-            transition: var(--transition-smooth);
+            transition: var(--transition);
 
         }
 
 
         .navigation-menu .nav-auth-btn:hover {
 
-            background: #ffffff;
+            background: #059669;
 
-            border-color: #ffffff;
+            border-color: #059669;
 
-            color: #0d1e05;
+            color: #ffffff;
 
             transform: translateY(-1px);
 
@@ -334,7 +344,7 @@
 
 
         /* =========================================================
-           MOBILE HAMBURGER
+           MOBILE TOGGLE
         ========================================================= */
 
         .mobile-nav-toggle {
@@ -345,7 +355,7 @@
 
             border: none;
 
-            color: var(--primary-accent);
+            color: var(--primary-green);
 
             cursor: pointer;
 
@@ -355,103 +365,18 @@
 
 
         /* =========================================================
-           HEADER SEARCH OPTIONAL COMPONENT
-        ========================================================= */
-
-        .header-search {
-
-            position: relative;
-
-            display: flex;
-
-            align-items: center;
-
-        }
-
-
-        .header-search input {
-
-            background: rgba(116, 188, 68, 0.15);
-
-            border: 1px solid rgba(116, 188, 68, 0.3);
-
-            padding: 8px 36px 8px 16px;
-
-            border-radius: 20px;
-
-            color: #fff;
-
-            font-size: 0.82rem;
-
-            outline: none;
-
-            width: 160px;
-
-            transition: var(--transition-smooth);
-
-        }
-
-
-        .header-search input::placeholder {
-
-            color: rgba(255, 255, 255, 0.6);
-
-        }
-
-
-        .header-search input:focus {
-
-            width: 200px;
-
-            background: rgba(116, 188, 68, 0.25);
-
-            border-color: var(--primary-accent);
-
-        }
-
-
-        .header-search button {
-
-            position: absolute;
-
-            right: 8px;
-
-            background: none;
-
-            border: none;
-
-            color: var(--primary-accent);
-
-            cursor: pointer;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-        }
-
-
-        /* =========================================================
-           HERO & LANDING CONTAINER
+           MAIN / HERO
         ========================================================= */
 
         .hero-section {
 
             position: relative;
 
-            min-height: calc(100vh - 73px);
-
             width: 100%;
 
-            background-image: url("{% static 'images/0365e1a5-70f8-4784-910b-4fc16584816f.jpg' %}");
+            min-height: calc(100vh - 75px);
 
-            background-size: cover;
-
-            background-position: center right;
-
-            background-repeat: no-repeat;
+            background: #ffffff;
 
             padding: 60px;
 
@@ -459,12 +384,38 @@
 
             flex-direction: column;
 
-            justify-content: space-between;
-
             flex: 1;
 
         }
 
+
+        /*
+            No background image.
+            Clean white page with subtle green accent.
+        */
+
+        .hero-section::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 4px;
+
+            {% comment %} background: var(--primary-green); {% endcomment %}
+
+        }
+
+
+        /* =========================================================
+           HERO CONTENT
+        ========================================================= */
 
         .hero-content-wrapper {
 
@@ -472,7 +423,7 @@
 
             z-index: 10;
 
-            max-width: 620px;
+            max-width: 650px;
 
             margin-top: 20px;
 
@@ -483,39 +434,41 @@
 
             font-size: 2.3rem;
 
-            font-weight: 700;
+            font-weight: 750;
 
             line-height: 1.25;
 
-            letter-spacing: -0.02em;
+            letter-spacing: -0.03em;
 
             margin-bottom: 28px;
 
-            color: #ffffff;
-
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+            color: var(--text-dark);
 
         }
 
+
+        /* =========================================================
+           HERO ACTIONS
+        ========================================================= */
 
         .hero-actions {
 
             display: flex;
 
-            gap: 14px;
+            gap: 12px;
 
         }
 
 
         .btn-pill-white {
 
-            background: #ffffff;
+            background: var(--primary-green);
 
-            color: #0d1e05;
+            color: #ffffff;
 
-            padding: 10px 24px;
+            padding: 11px 24px;
 
-            border-radius: 99px;
+            border-radius: 7px;
 
             font-weight: 600;
 
@@ -523,20 +476,20 @@
 
             text-decoration: none;
 
-            transition: var(--transition-smooth);
+            transition: var(--transition);
 
-            border: 1px solid #ffffff;
+            border: 1px solid var(--primary-green);
 
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 4px 10px rgba(79, 157, 50, 0.15);
 
         }
 
 
         .btn-pill-white:hover {
 
-            background: var(--primary-accent);
+            background: var(--primary-green-dark);
 
-            border-color: var(--primary-accent);
+            border-color: var(--primary-green-dark);
 
             color: #ffffff;
 
@@ -547,15 +500,13 @@
 
         .btn-pill-outline {
 
-            background: rgba(0, 0, 0, 0.3);
+            background: #ffffff;
 
-            backdrop-filter: blur(4px);
+            color: var(--text-dark);
 
-            color: #ffffff;
+            padding: 11px 24px;
 
-            padding: 10px 24px;
-
-            border-radius: 99px;
+            border-radius: 7px;
 
             font-weight: 600;
 
@@ -563,20 +514,20 @@
 
             text-decoration: none;
 
-            border: 1.5px solid var(--primary-accent);
+            border: 1px solid #d1d5db;
 
-            transition: var(--transition-smooth);
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            transition: var(--transition);
 
         }
 
 
         .btn-pill-outline:hover {
 
-            background: var(--primary-accent);
+            background: var(--light-green);
 
-            color: #ffffff;
+            border-color: var(--primary-green);
+
+            color: var(--primary-green-dark);
 
             transform: translateY(-2px);
 
@@ -584,7 +535,7 @@
 
 
         /* =========================================================
-           FEATURED JOBS CARDS
+           FEATURED JOBS
         ========================================================= */
 
         .featured-jobs-wrapper {
@@ -600,15 +551,30 @@
 
         .section-title {
 
-            font-size: 1.1rem;
+            font-size: 1.05rem;
 
             font-weight: 700;
 
             margin-bottom: 18px;
 
-            color: var(--primary-accent);
+            color: var(--text-dark);
 
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+
+        .section-title::after {
+
+            content: "";
+
+            display: block;
+
+            width: 38px;
+
+            height: 3px;
+
+            margin-top: 8px;
+
+            background: var(--primary-green);
 
         }
 
@@ -617,22 +583,30 @@
 
             display: grid;
 
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(200px, 1fr)
+                );
 
             gap: 16px;
 
         }
 
 
+        /* =========================================================
+           JOB CARD
+        ========================================================= */
+
         .job-card {
 
-            background: var(--card-green);
+            background: #ffffff;
 
-            border: 1px solid rgba(116, 188, 68, 0.25);
+            border: 1px solid var(--border-color);
 
-            border-radius: 12px;
+            border-radius: 10px;
 
-            padding: 20px 16px;
+            padding: 20px 18px;
 
             display: flex;
 
@@ -640,22 +614,24 @@
 
             justify-content: space-between;
 
-            min-height: 130px;
+            min-height: 140px;
 
-            transition: var(--transition-smooth);
+            transition: var(--transition);
 
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.04);
 
         }
 
 
         .job-card:hover {
 
-            background: var(--card-green-hover);
-
-            border-color: var(--primary-accent);
+            border-color: rgba(79, 157, 50, 0.45);
 
             transform: translateY(-3px);
+
+            box-shadow:
+                0 10px 25px rgba(0, 0, 0, 0.08);
 
         }
 
@@ -666,9 +642,9 @@
 
             font-weight: 700;
 
-            color: #ffffff;
+            color: var(--text-dark);
 
-            margin-bottom: 4px;
+            margin-bottom: 5px;
 
         }
 
@@ -677,7 +653,7 @@
 
             font-size: 0.75rem;
 
-            color: rgba(255, 255, 255, 0.85);
+            color: var(--text-muted);
 
             margin-bottom: 16px;
 
@@ -686,9 +662,9 @@
 
         .job-card .btn-view-job {
 
-            background: #ffffff;
+            background: var(--light-green);
 
-            color: #0d1e05;
+            color: var(--primary-green-dark);
 
             text-decoration: none;
 
@@ -696,32 +672,30 @@
 
             font-weight: 700;
 
-            padding: 6px 14px;
+            padding: 7px 14px;
 
-            border-radius: 99px;
+            border-radius: 6px;
 
             text-align: center;
 
             align-self: flex-start;
 
-            transition: var(--transition-smooth);
+            transition: var(--transition);
 
         }
 
 
         .job-card .btn-view-job:hover {
 
-            background: var(--primary-accent);
+            background: var(--primary-green);
 
             color: #ffffff;
-
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 
         }
 
 
         /* =========================================================
-           PORTAL STATISTICS SECTION
+           STATISTICS
         ========================================================= */
 
         .stats-wrapper {
@@ -739,7 +713,11 @@
 
             display: grid;
 
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(200px, 1fr)
+                );
 
             gap: 16px;
 
@@ -748,13 +726,13 @@
 
         .stat-card {
 
-            background: var(--stat-card-bg);
+            background: #ffffff;
 
-            border: 1px solid var(--stat-card-border);
+            border: 1px solid var(--border-color);
 
-            border-radius: 14px;
+            border-radius: 10px;
 
-            padding: 20px 24px;
+            padding: 20px 22px;
 
             display: flex;
 
@@ -762,18 +740,19 @@
 
             justify-content: space-between;
 
-            backdrop-filter: blur(12px);
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.04);
 
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-
-            transition: var(--transition-smooth);
+            transition: var(--transition);
 
         }
 
 
         .stat-card:hover {
 
-            border-color: var(--primary-accent);
+            border-color: rgba(79, 157, 50, 0.45);
+
+            transform: translateY(-2px);
 
         }
 
@@ -784,7 +763,7 @@
 
             font-weight: 800;
 
-            color: #ffffff;
+            color: var(--text-dark);
 
             line-height: 1;
 
@@ -797,9 +776,9 @@
 
             font-weight: 600;
 
-            color: rgba(255, 255, 255, 0.75);
+            color: var(--text-muted);
 
-            margin-top: 4px;
+            margin-top: 6px;
 
             line-height: 1.2;
 
@@ -808,7 +787,7 @@
 
         .stat-card .arrow-icon {
 
-            color: var(--primary-accent);
+            color: var(--primary-green);
 
             font-size: 1.2rem;
 
@@ -816,20 +795,20 @@
 
 
         /* =========================================================
-           FOOTER STYLES
+           FOOTER
         ========================================================= */
 
         .site-footer {
 
-            background-color: #010d06;
+            background: #059669;
 
-            border-top: 1px solid rgba(116, 188, 68, 0.2);
+            border-top: 1px solid #273329;
 
             position: relative;
 
             z-index: 10;
 
-            padding: 40px 60px 24px 60px;
+            padding: 40px 60px 24px;
 
             color: rgba(255, 255, 255, 0.7);
 
@@ -868,9 +847,9 @@
 
         .footer-brand p {
 
-            color: var(--primary-accent);
+            color: rgba(255, 255, 255, 0.65);
 
-            line-height: 1.5;
+            line-height: 1.6;
 
             max-width: 360px;
 
@@ -916,21 +895,25 @@
 
             text-decoration: none;
 
-            transition: var(--transition-smooth);
+            transition: var(--transition);
 
         }
 
 
         .footer-col ul a:hover {
 
-            color: var(--primary-accent);
+            color: #8bcf68;
 
         }
 
 
+        /* =========================================================
+           FOOTER BOTTOM
+        ========================================================= */
+
         .footer-bottom {
 
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
 
             padding-top: 20px;
 
@@ -948,7 +931,7 @@
 
 
         /* =========================================================
-           RESPONSIVE BREAKPOINTS
+           RESPONSIVE
         ========================================================= */
 
         @media (max-width: 992px) {
@@ -986,15 +969,20 @@
 
                 width: 100%;
 
-                background: #0c1c08;
+                background: #ffffff;
 
                 flex-direction: column;
+
+                align-items: flex-start;
 
                 padding: 20px 30px;
 
                 gap: 16px;
 
-                border-bottom: 2px solid var(--primary-accent);
+                border-bottom: 1px solid var(--border-color);
+
+                box-shadow:
+                    0 8px 20px rgba(0, 0, 0, 0.06);
 
             }
 
@@ -1008,7 +996,7 @@
 
             .hero-content-wrapper h2 {
 
-                font-size: 1.8rem;
+                font-size: 1.9rem;
 
             }
 
@@ -1024,7 +1012,7 @@
 
             .site-footer {
 
-                padding: 30px 30px 20px 30px;
+                padding: 30px 30px 20px;
 
             }
 
@@ -1079,6 +1067,20 @@
             }
 
 
+            .hero-content-wrapper {
+
+                margin-top: 10px;
+
+            }
+
+
+            .hero-content-wrapper h2 {
+
+                font-size: 1.65rem;
+
+            }
+
+
             .hero-actions {
 
                 flex-direction: column;
@@ -1091,10 +1093,19 @@
 
                 text-align: center;
 
+                width: 100%;
+
             }
 
 
             .jobs-scroll-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .stats-grid {
 
                 grid-template-columns: 1fr;
 
@@ -1126,7 +1137,6 @@
     ========================================================= -->
 
     <header class="site-header">
-
 
         <!-- BRAND -->
 
@@ -1331,14 +1341,12 @@
 
 
     <!-- =========================================================
-         HERO MAIN SECTION
+         MAIN
     ========================================================= -->
 
     <main class="hero-section">
 
         {% block content %}
-
-        <!-- Child template content overrides or injects layout items here -->
 
         {% endblock %}
 
@@ -1346,7 +1354,7 @@
 
 
     <!-- =========================================================
-         SITE FOOTER
+         FOOTER
     ========================================================= -->
 
     <footer class="site-footer">
@@ -1368,7 +1376,7 @@
                 >
 
                     <img
-                        src="{% static 'images/PIODURAN.png' %}"
+                        src="{% static 'images/PESO.png' %}"
                         alt="Pio Duran Logo"
                         style="
                             width:48px;
@@ -1485,7 +1493,7 @@
         <div class="footer-bottom">
 
             <p>
-                &copy; {% now "Y" %}
+                © {% now "Y" %}
                 Public Employment Service Office - Pio Duran.
                 All rights reserved.
             </p>
@@ -1501,7 +1509,7 @@
 
 
     <!-- =========================================================
-         MOBILE NAVIGATION SCRIPT
+         MOBILE NAVIGATION
     ========================================================= -->
 
     <script>

@@ -1,268 +1,958 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/PIODURAN.png' %}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'images/PIODURAN.png' %}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/PIODURAN.png' %}">
+
+    <!-- =========================================================
+         FAVICON
+    ========================================================== -->
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="32x32"
+        href="{% static 'images/PIODURAN.png' %}"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="192x192"
+        href="{% static 'images/PIODURAN.png' %}"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        sizes="180x180"
+        href="{% static 'images/PIODURAN.png' %}"
+    >
+
+
+    <!-- =========================================================
+         META
+    ========================================================== -->
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+    <!-- =========================================================
+         TITLE
+    ========================================================== -->
+
     <title>PESO Admin Dashboard</title>
+
+
+    <!-- =========================================================
+         GOOGLE FONT
+    ========================================================== -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================================================
+         STYLES
+    ========================================================== -->
 
     <style>
+
+        /* =========================================================
+           GLOBAL VARIABLES
+        ========================================================== */
+
         :root {
-            --bg-dark: #011409;
-            --sidebar-bg: rgba(2, 36, 18, 0.92);
-            --sidebar-border: rgba(255, 255, 255, 0.08);
-            --emerald-primary: #059669;
-            --emerald-hover: #047857;
-            --mint-accent: #34d399;
+
+            --primary: #059669;
+            --primary-dark: #047857;
+            --primary-light: #ecfdf5;
+            --primary-border: #a7f3d0;
+
+            --text: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+
+            --border: #e2e8f0;
+
+            --surface: #ffffff;
+            --surface-soft: #f8fafc;
+
+            --danger: #dc2626;
+            --danger-light: #fef2f2;
+
             --sidebar-width: 260px;
-            --text-light: #ffffff;
-            --text-sub: #a7f3d0;
-            --text-muted: rgba(255, 255, 255, 0.65);
-            --card-bg: rgba(2, 36, 18, 0.7);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+
+            --font-main:
+                'Inter',
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
         }
 
-        *, *::before, *::after {
+
+        /* =========================================================
+           RESET
+        ========================================================== */
+
+        *,
+        *::before,
+        *::after {
+
             margin: 0;
             padding: 0;
+
             box-sizing: border-box;
         }
 
-        body {
-            background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at 50% 0%, #032b16 0%, #011409 75%);
-            color: var(--text-light);
-            font-family: var(--font-main);
-            min-height: 100vh;
-            display: flex;
-            -webkit-font-smoothing: antialiased;
+
+        html {
+
+            min-height: 100%;
         }
 
-        /* --- SIDEBAR NAVIGATION --- */
+
+        body {
+
+            min-height: 100vh;
+
+            background: var(--surface-soft);
+
+            color: var(--text);
+
+            font-family: var(--font-main);
+
+            -webkit-font-smoothing: antialiased;
+
+            text-rendering: optimizeLegibility;
+        }
+
+
+        a {
+
+            text-decoration: none;
+        }
+
+
+        button,
+        input,
+        select,
+        textarea {
+
+            font-family: inherit;
+        }
+
+
+        /* =========================================================
+           SIDEBAR
+        ========================================================== */
+
         .sidebar {
+
             width: var(--sidebar-width);
-            background-color: var(--sidebar-bg);
-            border-right: 1px solid var(--sidebar-border);
+
+            background: #059669;
+
             color: #ffffff;
+
             display: flex;
+
             flex-direction: column;
+
             position: fixed;
+
             top: 0;
             bottom: 0;
             left: 0;
-            z-index: 100;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+
+            z-index: 1000;
+
+            border-right: none;
+
+            box-shadow:
+                4px 0 18px rgba(15, 23, 42, 0.08);
         }
 
-        /* Institutional Brand Section inside Sidebar */
+
+        /* =========================================================
+           SIDEBAR BRAND
+        ========================================================== */
+
         .sidebar-brand {
-            padding: 24px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+            min-height: 82px;
+
+            padding: 18px 20px;
+
+            border-bottom:
+                1px solid rgba(255, 255, 255, 0.16);
+
             display: flex;
+
             align-items: center;
+
             gap: 12px;
         }
 
+
         .sidebar-brand-logo {
-            width: 42px;
-            height: 42px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 50%;
+
+            width: 46px;
+            height: 46px;
+
+            flex-shrink: 0;
+
+            background: #ffffff;
+
+            border: none;
+
+            border-radius: 10px;
+
             display: flex;
+
             align-items: center;
+
             justify-content: center;
-            padding: 4px;
+
+            padding: 5px;
         }
 
+
         .sidebar-brand-logo img {
+
             width: 100%;
             height: 100%;
+
             object-fit: contain;
         }
 
-        .sidebar-brand-text h1 {
-            font-size: 1rem;
-            font-weight: 800;
-            letter-spacing: 0.03em;
-            text-transform: uppercase;
-            color: #ffffff;
+
+        .sidebar-brand-text {
+
+            min-width: 0;
         }
+
+
+        .sidebar-brand-text h1 {
+
+            font-size: 0.95rem;
+
+            font-weight: 800;
+
+            letter-spacing: 0.01em;
+
+            color: #ffffff;
+
+            line-height: 1.3;
+
+            white-space: nowrap;
+        }
+
 
         .sidebar-brand-text p {
+
             font-size: 0.72rem;
-            color: var(--text-sub);
-            margin-top: 2px;
+
+            color: rgba(255, 255, 255, 0.78);
+
+            margin-top: 3px;
+
             font-weight: 500;
+
+            white-space: nowrap;
         }
 
-        /* Sidebar Navigation Items */
+
+        /* =========================================================
+           NAVIGATION CONTAINER
+        ========================================================== */
+
         .sidebar-menu {
+
             list-style: none;
-            padding: 20px 0;
+
+            padding: 18px 12px;
+
+            margin: 0;
+
             flex: 1;
+
+            overflow-y: auto;
         }
+
+
+        .sidebar-menu-item {
+
+            list-style: none;
+
+            margin-bottom: 4px;
+        }
+
+
+        /* =========================================================
+           NAVIGATION LINKS
+        ========================================================== */
 
         .sidebar-menu-item a {
+
             display: flex;
+
             align-items: center;
+
             gap: 12px;
-            padding: 14px 24px;
-            color: var(--text-muted);
+
+            min-height: 46px;
+
+            padding: 11px 14px;
+
+            color:
+                rgba(255, 255, 255, 0.78);
+
             text-decoration: none;
-            font-size: 0.92rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            border-left: 4px solid transparent;
+
+            font-size: 0.88rem;
+
+            font-weight: 600;
+
+            border-radius: 8px;
+
+            border-left:
+                3px solid transparent;
+
+            transition:
+                background-color 0.2s ease,
+                color 0.2s ease,
+                border-color 0.2s ease;
         }
+
+
+        /* =========================================================
+           SVG ICONS
+        ========================================================== */
 
         .sidebar-menu-item a svg {
-            width: 20px;
-            height: 20px;
-            stroke: var(--text-muted);
+
+            width: 19px;
+            height: 19px;
+
+            flex-shrink: 0;
+
+            stroke:
+                rgba(255, 255, 255, 0.78);
+
             fill: none;
-            transition: stroke 0.2s ease;
+
+            transition:
+                stroke 0.2s ease,
+                transform 0.2s ease;
         }
+
+
+        /* =========================================================
+           NAVIGATION HOVER
+        ========================================================== */
 
         .sidebar-menu-item a:hover {
-            background-color: rgba(5, 150, 105, 0.2);
+
+            background:
+                rgba(255, 255, 255, 0.12);
+
             color: #ffffff;
-            border-left-color: var(--mint-accent);
+
+            border-left-color: #ffffff;
         }
+
 
         .sidebar-menu-item a:hover svg {
-            stroke: var(--mint-accent);
+
+            stroke: #ffffff;
+
+            transform: translateX(1px);
         }
 
-        /* Active State Style */
+
+        /* =========================================================
+           ACTIVE NAVIGATION
+        ========================================================== */
+
         .sidebar-menu-item.active a {
-            background-color: rgba(5, 150, 105, 0.35);
+
+            background: #047857;
+
             color: #ffffff;
-            border-left-color: var(--mint-accent);
+
+            border-left-color: #ffffff;
+
             font-weight: 700;
+
+            box-shadow:
+                inset 0 0 0 1px
+                rgba(255, 255, 255, 0.05);
         }
+
 
         .sidebar-menu-item.active a svg {
-            stroke: var(--mint-accent);
+
+            stroke: #ffffff;
         }
 
-        /* Utility Footer Link (Logout) */
+
+        /* =========================================================
+           SIDEBAR FOOTER
+        ========================================================== */
+
         .sidebar-footer {
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 15px 0;
+
+            border-top:
+                1px solid rgba(255, 255, 255, 0.16);
+
+            padding: 12px;
+
+            background: #059669;
         }
+
+
+        .sidebar-footer .sidebar-menu-item {
+
+            margin: 0;
+        }
+
 
         .sidebar-footer a {
-            border-left-color: transparent !important;
+
+            color:
+                rgba(255, 255, 255, 0.78);
+
+            border-left-color:
+                transparent !important;
         }
-        
+
+
+        .sidebar-footer a svg {
+
+            stroke:
+                rgba(255, 255, 255, 0.78);
+        }
+
+
         .sidebar-footer a:hover {
-            background-color: rgba(220, 38, 38, 0.25) !important;
-            color: #fca5a5 !important;
+
+            background: #dc2626;
+
+            color: #ffffff;
         }
+
 
         .sidebar-footer a:hover svg {
-            stroke: #fca5a5 !important;
+
+            stroke: #ffffff;
         }
 
-        /* --- MAIN CONTENT CONTAINER --- */
-        .main-content {
-            margin-left: var(--sidebar-width);
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-            min-height: 100vh;
+
+        /* =========================================================
+           SIDEBAR SCROLLBAR
+        ========================================================== */
+
+        .sidebar-menu::-webkit-scrollbar {
+
+            width: 5px;
         }
+
+
+        .sidebar-menu::-webkit-scrollbar-track {
+
+            background: transparent;
+        }
+
+
+        .sidebar-menu::-webkit-scrollbar-thumb {
+
+            background:
+                rgba(255, 255, 255, 0.25);
+
+            border-radius: 10px;
+        }
+
+
+        .sidebar-menu::-webkit-scrollbar-thumb:hover {
+
+            background:
+                rgba(255, 255, 255, 0.40);
+        }
+
+
+        /* =========================================================
+           MAIN CONTENT
+        ========================================================== */
+
+        .main-content {
+
+            margin-left: var(--sidebar-width);
+
+            min-width: 0;
+
+            min-height: 100vh;
+
+            width:
+                calc(100% - var(--sidebar-width));
+
+            background: var(--surface-soft);
+        }
+
+
+        /* =========================================================
+           MOBILE SIDEBAR
+        ========================================================== */
+
+        @media (max-width: 992px) {
+
+            :root {
+
+                --sidebar-width: 220px;
+            }
+
+
+            .sidebar-brand {
+
+                padding: 16px;
+            }
+
+
+            .sidebar-brand-text h1 {
+
+                font-size: 0.86rem;
+            }
+
+
+            .sidebar-brand-text p {
+
+                font-size: 0.68rem;
+            }
+
+
+            .sidebar-menu-item a {
+
+                padding: 10px 12px;
+
+                font-size: 0.84rem;
+            }
+        }
+
+
+        @media (max-width: 768px) {
+
+            :root {
+
+                --sidebar-width: 0px;
+            }
+
+
+            .sidebar {
+
+                width: 250px;
+
+                transform: translateX(-100%);
+
+                transition:
+                    transform 0.25s ease;
+            }
+
+
+            .sidebar.open {
+
+                transform: translateX(0);
+            }
+
+
+            .main-content {
+
+                margin-left: 0;
+
+                width: 100%;
+            }
+        }
+
+
+        @media (max-width: 480px) {
+
+            .sidebar {
+
+                width: 85%;
+
+                max-width: 280px;
+            }
+        }
+
     </style>
+
 </head>
+
+
 <body>
 
-    <!-- SIDEBAR STAYS FIXED ON THE LEFT -->
+
+    <!-- =========================================================
+         SIDEBAR
+    ========================================================== -->
+
     <aside class="sidebar">
+
+
+        <!-- =====================================================
+             BRAND
+        ====================================================== -->
+
         <div class="sidebar-brand">
+
             <div class="sidebar-brand-logo">
-                <img src="{% static 'images/PESO.png' %}" alt="PESO">
+
+                <img
+                    src="{% static 'images/PESO.png' %}"
+                    alt="PESO"
+                >
+
             </div>
+
+
             <div class="sidebar-brand-text">
+
                 <h1>PESO Admin</h1>
+
                 <p>Pio Duran Portal</p>
+
             </div>
+
         </div>
 
-        <!-- MAIN CORE NAVIGATION LINKS -->
+
+        <!-- =====================================================
+             MAIN NAVIGATION
+        ====================================================== -->
+
         <ul class="sidebar-menu">
-            <li class="sidebar-menu-item">
-                <a href="{% url 'peso-dashboard' %}">
-                    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                    Home
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
-                <a href="{% url 'employer-list' %}">
-                    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-                    Employer
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
-                <a href="{% url 'applicant-list' %}">
-                    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                    Applicants
-                </a>
-            </li>
-            <li class="sidebar-menu-item">
-                <a href="{% url 'job-post-list' %}">
-                    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                    Job Post List
-                </a>
-            </li>
+
+
+            <!-- HOME -->
 
             <li class="sidebar-menu-item">
-                <a href="{% url 'reports' %}">
-                    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                    Reports
+
+                <a href="{% url 'peso-dashboard' %}">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+
+                        <path
+                            d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+                        ></path>
+
+                        <polyline
+                            points="9 22 9 12 15 12 15 22"
+                        ></polyline>
+
+                    </svg>
+
+                    <span>Home</span>
+
                 </a>
+
             </li>
+
+
+            <!-- EMPLOYER -->
+
+            <li class="sidebar-menu-item">
+
+                <a href="{% url 'employer-list' %}">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+
+                        <rect
+                            x="2"
+                            y="7"
+                            width="20"
+                            height="14"
+                            rx="2"
+                            ry="2"
+                        ></rect>
+
+                        <path
+                            d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"
+                        ></path>
+
+                    </svg>
+
+                    <span>Employer</span>
+
+                </a>
+
+            </li>
+
+
+            <!-- APPLICANTS -->
+
+            <li class="sidebar-menu-item">
+
+                <a href="{% url 'applicant-list' %}">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+
+                        <path
+                            d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"
+                        ></path>
+
+                        <circle
+                            cx="9"
+                            cy="7"
+                            r="4"
+                        ></circle>
+
+                        <path
+                            d="M23 21v-2a4 4 0 0 0-3-3.87"
+                        ></path>
+
+                        <path
+                            d="M16 3.13a4 4 0 0 1 0 7.75"
+                        ></path>
+
+                    </svg>
+
+                    <span>Applicants</span>
+
+                </a>
+
+            </li>
+
+
+            <!-- JOB POST LIST -->
+
+            <li class="sidebar-menu-item">
+
+                <a href="{% url 'job-post-list' %}">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+
+                        <path
+                            d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                        ></path>
+
+                        <polyline
+                            points="14 2 14 8 20 8"
+                        ></polyline>
+
+                        <line
+                            x1="16"
+                            y1="13"
+                            x2="8"
+                            y2="13"
+                        ></line>
+
+                        <line
+                            x1="16"
+                            y1="17"
+                            x2="8"
+                            y2="17"
+                        ></line>
+
+                        <polyline
+                            points="10 9 9 9 8 9"
+                        ></polyline>
+
+                    </svg>
+
+                    <span>Job Post List</span>
+
+                </a>
+
+            </li>
+
+
+            <!-- REPORTS -->
+
+            <li class="sidebar-menu-item">
+
+                <a href="{% url 'reports' %}">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+
+                        <line
+                            x1="18"
+                            y1="20"
+                            x2="18"
+                            y2="10"
+                        ></line>
+
+                        <line
+                            x1="12"
+                            y1="20"
+                            x2="12"
+                            y2="4"
+                        ></line>
+
+                        <line
+                            x1="6"
+                            y1="20"
+                            x2="6"
+                            y2="14"
+                        ></line>
+
+                    </svg>
+
+                    <span>Reports</span>
+
+                </a>
+
+            </li>
+
         </ul>
 
-        <!-- UTILITY FOOTER BLOCK (LOGOUT AREA) -->
+
+        <!-- =====================================================
+             LOGOUT
+        ====================================================== -->
+
         <div class="sidebar-footer">
-            <li class="sidebar-menu-item" style="list-style: none;">
+
+            <li class="sidebar-menu-item">
+
                 <a href="{% url 'logout' %}">
-                    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                    Log Out
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+
+                        <path
+                            d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"
+                        ></path>
+
+                        <polyline
+                            points="16 17 21 12 16 7"
+                        ></polyline>
+
+                        <line
+                            x1="21"
+                            y1="12"
+                            x2="9"
+                            y2="12"
+                        ></line>
+
+                    </svg>
+
+                    <span>Log Out</span>
+
                 </a>
+
             </li>
+
         </div>
+
     </aside>
 
-    <!-- SYSTEM DASHBOARD INTERFACE AREA -->
+
+    <!-- =========================================================
+         MAIN CONTENT
+    ========================================================== -->
+
     <main class="main-content">
-        {% block content %}{% endblock %}
+
+        {% block content %}
+
+        {% endblock %}
+
     </main>
 
-    <!-- AUTO-ACTIVATION SCRIPT -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const currentPath = window.location.pathname;
-            const menuItems = document.querySelectorAll(".sidebar-menu-item a");
 
-            menuItems.forEach(link => {
-                const href = link.getAttribute("href");
-                if (href && href !== "#" && currentPath === href) {
-                    link.parentElement.classList.add("active");
-                }
-            });
-        });
+    <!-- =========================================================
+         ACTIVE NAVIGATION
+    ========================================================== -->
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const currentPath =
+                    window.location.pathname;
+
+                const menuItems =
+                    document.querySelectorAll(
+                        ".sidebar-menu-item a"
+                    );
+
+
+                menuItems.forEach(
+                    function (link) {
+
+                        const href =
+                            link.getAttribute("href");
+
+
+                        if (
+                            href &&
+                            href !== "#" &&
+                            currentPath === href
+                        ) {
+
+                            link
+                                .parentElement
+                                .classList
+                                .add("active");
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
     </script>
+
+
 </body>
+
 </html>
