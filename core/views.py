@@ -18,7 +18,8 @@ from django.http import JsonResponse
 def keep_alive(request):
     return JsonResponse({
         "status": "ok",
-        "message": "Django API is alive",
+        "service": "Django API",
+        "timestamp": timezone.now().isoformat(),
     })
 
 def login_view(request):
