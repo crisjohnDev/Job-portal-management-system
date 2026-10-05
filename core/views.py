@@ -12,6 +12,14 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.utils import timezone
 from django.db import transaction
+from django.http import JsonResponse
+
+
+def keep_alive(request):
+    return JsonResponse({
+        "status": "ok",
+        "message": "Django API is alive",
+    })
 
 def login_view(request):
     create_default_admin()

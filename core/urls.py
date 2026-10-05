@@ -16,4 +16,5 @@ urlpatterns = [
     path("applicants/", views.applicant_list, name="applicant-list"),
     path("reports/", views.reports, name="reports"),
     path("admin/applicants/delete-selected/", views.delete_selected_applicants, name="delete-selected-applicants"),
+    path("api/keep-alive/", views.keep_alive, name="keep_alive"),
 ]
