@@ -5,17 +5,17 @@
 {% block content %}
 <style>
     :root {
-        --report-blue: #2563eb;
-        --report-blue-dark: #1d4ed8;
-        --report-bg: #f8fafc;
-        --report-border: #e2e8f0;
-        --report-text: #1e293b;
-        --report-muted: #64748b;
+        --blue: #2563eb;
+        --blue-dark: #1e40af;
+        --border: #e2e8f0;
+        --text: #1e293b;
+        --muted: #64748b;
+        --background: #f8fafc;
     }
 
     .reports-page {
         padding: 16px;
-        color: var(--report-text);
+        color: var(--text);
         font-size: 13px;
     }
 
@@ -31,16 +31,17 @@
     .reports-title {
         margin: 0;
         font-size: 22px;
-        font-weight: 700;
+        font-weight: 800;
     }
 
     .reports-subtitle {
         margin: 4px 0 0;
-        color: var(--report-muted);
+        color: var(--muted);
         font-size: 12px;
     }
 
-    .report-actions {
+    .report-actions,
+    .report-filter-actions {
         display: flex;
         align-items: center;
         flex-wrap: wrap;
@@ -54,28 +55,29 @@
         gap: 6px;
         min-height: 34px;
         padding: 7px 12px;
-        border: 1px solid var(--report-border);
+        border: 1px solid var(--border);
         border-radius: 6px;
         background: #fff;
-        color: var(--report-text);
+        color: var(--text);
         font-size: 12px;
-        font-weight: 600;
+        font-weight: 700;
         text-decoration: none;
         cursor: pointer;
     }
 
+    .report-btn:hover {
+        border-color: var(--blue);
+    }
+
     .report-btn-primary {
         color: #fff;
-        background: var(--report-blue);
-        border-color: var(--report-blue);
+        background: var(--blue);
+        border-color: var(--blue);
     }
 
     .report-btn-primary:hover {
-        background: var(--report-blue-dark);
-    }
-
-    .report-btn:hover {
-        border-color: var(--report-blue);
+        color: #fff;
+        background: var(--blue-dark);
     }
 
     .report-filter {
@@ -86,7 +88,7 @@
         padding: 12px;
         margin-bottom: 16px;
         background: #fff;
-        border: 1px solid var(--report-border);
+        border: 1px solid var(--border);
         border-radius: 8px;
     }
 
@@ -94,13 +96,13 @@
         display: flex;
         flex-direction: column;
         gap: 5px;
-        min-width: 160px;
+        min-width: 165px;
     }
 
     .report-filter-group label {
+        color: #475569;
         font-size: 11px;
         font-weight: 700;
-        color: #475569;
     }
 
     .report-filter-group input {
@@ -109,31 +111,40 @@
         padding: 6px 9px;
         border: 1px solid #cbd5e1;
         border-radius: 5px;
-        font-size: 12px;
         background: #fff;
+        font-size: 12px;
     }
 
-    .report-error {
+    .report-filter-help {
         width: 100%;
-        color: #b91c1c;
-        font-size: 12px;
-        font-weight: 600;
+        color: var(--muted);
+        font-size: 11px;
     }
 
-    .report-summary {
-        margin-bottom: 16px;
+    .report-alert {
         padding: 10px 12px;
-        background: #eff6ff;
-        border: 1px solid #bfdbfe;
-        border-radius: 7px;
-        color: #1e40af;
+        margin-bottom: 14px;
+        border: 1px solid;
+        border-radius: 6px;
         font-size: 12px;
+    }
+
+    .report-alert-error {
+        color: #991b1b;
+        background: #fef2f2;
+        border-color: #fecaca;
+    }
+
+    .report-alert-info {
+        color: #1e40af;
+        background: #eff6ff;
+        border-color: #bfdbfe;
     }
 
     .report-section-title {
         margin: 0 0 10px;
         font-size: 15px;
-        font-weight: 700;
+        font-weight: 800;
     }
 
     .report-kpis {
@@ -147,16 +158,16 @@
         min-width: 0;
         padding: 12px;
         background: #fff;
-        border: 1px solid var(--report-border);
+        border: 1px solid var(--border);
         border-radius: 8px;
         box-shadow: 0 1px 2px rgb(15 23 42 / 4%);
     }
 
     .report-kpi-label {
         margin-bottom: 6px;
-        color: var(--report-muted);
+        color: var(--muted);
         font-size: 11px;
-        font-weight: 600;
+        font-weight: 700;
     }
 
     .report-kpi-value {
@@ -168,25 +179,14 @@
 
     .report-kpi-note {
         margin-top: 5px;
-        color: var(--report-muted);
+        color: var(--muted);
         font-size: 10px;
     }
 
-    .report-blue {
-        color: #2563eb;
-    }
-
-    .report-green {
-        color: #15803d;
-    }
-
-    .report-orange {
-        color: #c2410c;
-    }
-
-    .report-red {
-        color: #b91c1c;
-    }
+    .blue { color: #2563eb; }
+    .green { color: #15803d; }
+    .orange { color: #c2410c; }
+    .red { color: #b91c1c; }
 
     .report-charts {
         display: grid;
@@ -200,15 +200,37 @@
         padding: 12px;
         margin-bottom: 16px;
         background: #fff;
-        border: 1px solid var(--report-border);
+        border: 1px solid var(--border);
         border-radius: 8px;
         break-inside: avoid;
     }
 
     .report-chart-container {
         position: relative;
-        height: 230px;
         width: 100%;
+        height: 230px;
+    }
+
+    .report-table-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+
+    .report-table-heading .report-section-title {
+        margin: 0;
+    }
+
+    .report-record-count {
+        padding: 4px 8px;
+        color: #1e40af;
+        background: #eff6ff;
+        border-radius: 5px;
+        font-size: 11px;
+        font-weight: 700;
     }
 
     .report-table-wrap {
@@ -226,24 +248,20 @@
     .report-table th,
     .report-table td {
         padding: 8px 9px;
-        border-bottom: 1px solid var(--report-border);
+        border-bottom: 1px solid var(--border);
         text-align: left;
         vertical-align: middle;
     }
 
     .report-table th {
-        background: #eff6ff;
         color: #1e40af;
-        font-weight: 700;
+        background: #eff6ff;
+        font-weight: 800;
         white-space: nowrap;
     }
 
     .report-table tbody tr:hover {
         background: #f8fafc;
-    }
-
-    .report-table td {
-        overflow-wrap: anywhere;
     }
 
     .report-status {
@@ -280,13 +298,13 @@
 
     .report-empty {
         padding: 18px !important;
-        color: var(--report-muted);
+        color: var(--muted);
         text-align: center !important;
     }
 
     .report-footer {
         padding: 10px 0;
-        color: var(--report-muted);
+        color: var(--muted);
         font-size: 10px;
         text-align: right;
     }
@@ -310,8 +328,13 @@
             font-size: 19px;
         }
 
-        .report-kpis {
-            gap: 8px;
+        .report-filter-group {
+            width: 100%;
+        }
+
+        .report-actions,
+        .report-filter-actions {
+            width: 100%;
         }
 
         .report-kpi {
@@ -321,22 +344,9 @@
         .report-kpi-value {
             font-size: 20px;
         }
-
-        .report-filter-group {
-            width: 100%;
-        }
-
-        .report-actions {
-            width: 100%;
-        }
     }
 
-    /*
-    ==========================================================
-    EXCEL-STYLE PRINT LAYOUT
-    ==========================================================
-    */
-
+    /* Excel-style print layout */
     @page {
         size: A4 landscape;
         margin: 10mm;
@@ -345,7 +355,7 @@
     @media print {
         html,
         body {
-            width: 100%;
+            width: 100% !important;
             margin: 0 !important;
             padding: 0 !important;
             background: #fff !important;
@@ -356,7 +366,6 @@
             print-color-adjust: exact !important;
         }
 
-        /* Hide dashboard navigation and interactive controls. */
         header,
         nav,
         aside,
@@ -364,77 +373,67 @@
         .sidebar,
         .navbar,
         .topbar,
-        .reports-no-print,
         .report-filter,
         .report-actions,
-        button,
-        .btn,
-        form button {
+        .report-filter-actions,
+        .no-print,
+        button {
             display: none !important;
         }
 
         .reports-page {
             width: 100% !important;
             max-width: none !important;
-            margin: 0 !important;
             padding: 0 !important;
-            color: #000 !important;
+            margin: 0 !important;
             font-size: 9px !important;
         }
 
         .reports-header {
             display: block !important;
-            margin: 0 0 10px !important;
-            padding: 0 0 8px !important;
+            padding-bottom: 8px !important;
+            margin-bottom: 8px !important;
             border-bottom: 2px solid #1f4e78 !important;
         }
 
         .reports-title {
-            margin: 0 !important;
-            color: #1f1f1f !important;
             font-size: 19px !important;
-            font-weight: 700 !important;
+            color: #1f1f1f !important;
         }
 
         .reports-subtitle {
-            margin-top: 4px !important;
-            color: #555 !important;
             font-size: 9px !important;
+            color: #555 !important;
         }
 
-        .report-summary {
-            margin: 0 0 10px !important;
+        .report-alert {
             padding: 6px 8px !important;
-            color: #000 !important;
-            background: #eaf2f8 !important;
-            border: 1px solid #7f9db9 !important;
+            margin-bottom: 8px !important;
             border-radius: 0 !important;
             font-size: 9px !important;
         }
 
         .report-section-title {
-            margin: 8px 0 5px !important;
             padding: 5px 6px !important;
+            margin: 8px 0 5px !important;
             color: #fff !important;
             background: #1f4e78 !important;
             border: 1px solid #17365d !important;
+            border-radius: 0 !important;
             font-size: 10px !important;
-            font-weight: 700 !important;
             break-after: avoid;
         }
 
         .report-kpis {
-            display: grid !important;
             grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
             gap: 0 !important;
-            margin: 0 0 10px !important;
+            margin-bottom: 10px !important;
             border-top: 1px solid #7f7f7f !important;
             border-left: 1px solid #7f7f7f !important;
         }
 
         .report-kpi {
             padding: 7px !important;
-            min-width: 0 !important;
             background: #fff !important;
             border: 0 !important;
             border-right: 1px solid #7f7f7f !important;
@@ -445,16 +444,13 @@
         }
 
         .report-kpi-label {
-            margin-bottom: 4px !important;
             color: #333 !important;
             font-size: 8px !important;
-            font-weight: 700 !important;
         }
 
         .report-kpi-value {
             color: #000 !important;
             font-size: 16px !important;
-            font-weight: 700 !important;
         }
 
         .report-kpi-note {
@@ -462,8 +458,14 @@
             font-size: 8px !important;
         }
 
+        .blue,
+        .green,
+        .orange,
+        .red {
+            color: #000 !important;
+        }
+
         .report-charts {
-            display: grid !important;
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             gap: 8px !important;
             margin-bottom: 10px !important;
@@ -472,29 +474,40 @@
         .report-panel {
             padding: 0 !important;
             margin: 0 0 10px !important;
-            background: #fff !important;
             border: 0 !important;
             border-radius: 0 !important;
             box-shadow: none !important;
-            break-inside: avoid;
+            background: #fff !important;
+            break-inside: auto;
         }
 
         .report-chart-container {
-            height: 165px !important;
-            max-height: 165px !important;
+            height: 150px !important;
+            max-height: 150px !important;
+        }
+
+        .report-table-heading {
+            margin-bottom: 5px !important;
+        }
+
+        .report-record-count {
+            padding: 0 !important;
+            color: #000 !important;
+            background: #fff !important;
+            font-size: 8px !important;
         }
 
         .report-table-wrap {
-            overflow: visible !important;
             width: 100% !important;
+            overflow: visible !important;
         }
 
         .report-table {
             width: 100% !important;
             border-collapse: collapse !important;
             table-layout: auto !important;
-            background: #fff !important;
             color: #000 !important;
+            background: #fff !important;
             font-size: 8px !important;
         }
 
@@ -520,7 +533,6 @@
 
         .report-table th {
             background: #d9eaf7 !important;
-            color: #000 !important;
             font-weight: 700 !important;
             white-space: normal !important;
         }
@@ -529,18 +541,13 @@
             background: #f2f2f2 !important;
         }
 
-        .report-table tbody tr:hover {
-            background: transparent !important;
-        }
-
         .report-status {
             padding: 0 !important;
             border: 0 !important;
             border-radius: 0 !important;
-            background: transparent !important;
             color: #000 !important;
+            background: transparent !important;
             font-size: 8px !important;
-            font-weight: 700 !important;
         }
 
         .report-empty {
@@ -559,20 +566,16 @@
             color: #000 !important;
             text-decoration: none !important;
         }
-
-        canvas {
-            max-width: 100% !important;
-        }
     }
 </style>
 
-<div class="reports-page" id="reportsPage">
+<div class="reports-page">
 
     <div class="reports-header">
         <div>
             <h1 class="reports-title">Reports</h1>
             <p class="reports-subtitle">
-                System summary and records report
+                System summary, employer records, applicant records, and job post records
             </p>
         </div>
 
@@ -587,14 +590,15 @@
         </div>
     </div>
 
-    <form method="GET" class="report-filter" id="reportFilter">
+    <!-- DATE FILTER -->
+    <form method="GET" action="{{ request.path }}" class="report-filter" id="reportFilter">
         <div class="report-filter-group">
             <label for="date_from">Date From</label>
             <input
                 type="date"
-                name="date_from"
                 id="date_from"
-                value="{{ request.GET.date_from|default:'' }}"
+                name="date_from"
+                value="{{ date_from|default:'' }}"
             >
         </div>
 
@@ -602,111 +606,99 @@
             <label for="date_to">Date To</label>
             <input
                 type="date"
-                name="date_to"
                 id="date_to"
-                value="{{ request.GET.date_to|default:'' }}"
+                name="date_to"
+                value="{{ date_to|default:'' }}"
             >
         </div>
 
-        <button
-            type="submit"
-            class="report-btn report-btn-primary"
-        >
-            Generate Report
-        </button>
+        <div class="report-filter-actions">
+            <button type="submit" class="report-btn report-btn-primary">
+                Generate Report
+            </button>
 
-        <a href="{{ request.path }}" class="report-btn">
-            Reset
-        </a>
+            <a href="{{ request.path }}" class="report-btn">
+                Reset
+            </a>
+        </div>
 
-        {% if date_error %}
-            <div class="report-error">
-                {{ date_error }}
-            </div>
-        {% endif %}
+        <div class="report-filter-help">
+            The selected date range is applied to Employer Records, Applicant Records,
+            Job Post Records, and the summary counts.
+        </div>
     </form>
 
-    {% if report_generated %}
-        <div class="report-summary">
-            <strong>Report Period:</strong>
-            {{ date_from|default:"All available dates" }}
-            {% if date_to %}
-                to {{ date_to }}
-            {% endif %}
-            <br>
-            <strong>Generated:</strong>
-            {{ report_date|default:"Current report" }}
+    {% if date_error %}
+        <div class="report-alert report-alert-error">
+            {{ date_error }}
         </div>
     {% endif %}
 
+    {% if report_generated and not date_error %}
+        <div class="report-alert report-alert-info">
+            <strong>Filtered Report</strong><br>
+            From: {{ date_from|default:"Earliest available date" }}
+            &nbsp; | &nbsp;
+            To: {{ date_to|default:"Latest available date" }}
+            <br>
+            Generated: {{ report_date|default:"—" }}
+        </div>
+    {% endif %}
+
+    <!-- SUMMARY CARDS -->
     <h2 class="report-section-title">System Summary</h2>
 
     <div class="report-kpis">
         <div class="report-kpi">
             <div class="report-kpi-label">Total Employers</div>
-            <div class="report-kpi-value report-blue">
-                {{ total_employers|default:0 }}
-            </div>
-            <div class="report-kpi-note">Registered employers</div>
+            <div class="report-kpi-value blue">{{ total_employers|default:0 }}</div>
+            <div class="report-kpi-note">Employers in selected period</div>
         </div>
 
         <div class="report-kpi">
             <div class="report-kpi-label">Active Employers</div>
-            <div class="report-kpi-value report-green">
-                {{ active_employers|default:0 }}
-            </div>
-            <div class="report-kpi-note">Currently active</div>
+            <div class="report-kpi-value green">{{ active_employers|default:0 }}</div>
+            <div class="report-kpi-note">Active filtered records</div>
         </div>
 
         <div class="report-kpi">
             <div class="report-kpi-label">Suspended Employers</div>
-            <div class="report-kpi-value report-red">
-                {{ suspended_employers|default:0 }}
-            </div>
-            <div class="report-kpi-note">Inactive or suspended</div>
+            <div class="report-kpi-value red">{{ suspended_employers|default:0 }}</div>
+            <div class="report-kpi-note">Inactive filtered records</div>
         </div>
 
         <div class="report-kpi">
             <div class="report-kpi-label">Total Applicants</div>
-            <div class="report-kpi-value report-blue">
-                {{ total_applicants|default:0 }}
-            </div>
-            <div class="report-kpi-note">Registered applicants</div>
+            <div class="report-kpi-value blue">{{ total_applicants|default:0 }}</div>
+            <div class="report-kpi-note">Applicants in selected period</div>
         </div>
 
         <div class="report-kpi">
             <div class="report-kpi-label">Total Jobs</div>
-            <div class="report-kpi-value report-blue">
-                {{ total_jobs|default:0 }}
-            </div>
-            <div class="report-kpi-note">Posted job listings</div>
+            <div class="report-kpi-value blue">{{ total_jobs|default:0 }}</div>
+            <div class="report-kpi-note">Jobs in selected period</div>
         </div>
 
         <div class="report-kpi">
             <div class="report-kpi-label">Approved Jobs</div>
-            <div class="report-kpi-value report-green">
-                {{ approved_jobs|default:0 }}
-            </div>
-            <div class="report-kpi-note">Approved listings</div>
+            <div class="report-kpi-value green">{{ approved_jobs|default:0 }}</div>
+            <div class="report-kpi-note">Approved filtered records</div>
         </div>
 
         <div class="report-kpi">
             <div class="report-kpi-label">Pending Jobs</div>
-            <div class="report-kpi-value report-orange">
-                {{ pending_jobs|default:0 }}
-            </div>
-            <div class="report-kpi-note">Awaiting review</div>
+            <div class="report-kpi-value orange">{{ pending_jobs|default:0 }}</div>
+            <div class="report-kpi-note">Pending filtered records</div>
         </div>
 
         <div class="report-kpi">
             <div class="report-kpi-label">Rejected Jobs</div>
-            <div class="report-kpi-value report-red">
-                {{ rejected_jobs|default:0 }}
-            </div>
-            <div class="report-kpi-note">Rejected listings</div>
+            <div class="report-kpi-value red">{{ rejected_jobs|default:0 }}</div>
+            <div class="report-kpi-note">Rejected filtered records</div>
         </div>
     </div>
 
+    <!-- CHARTS -->
     <h2 class="report-section-title">Visual Analytics</h2>
 
     <div class="report-charts">
@@ -725,14 +717,20 @@
         </div>
     </div>
 
+    <!-- EMPLOYER RECORDS -->
     <div class="report-panel">
-        <h2 class="report-section-title">Employer Records</h2>
+        <div class="report-table-heading">
+            <h2 class="report-section-title">Employer Records</h2>
+            <span class="report-record-count">
+                {{ employers|length }} records
+            </span>
+        </div>
 
         <div class="report-table-wrap">
             <table class="report-table">
                 <thead>
                     <tr>
-                        <th style="width: 45px;">No.</th>
+                        <th>No.</th>
                         <th>Company Name</th>
                         <th>Business Permit No.</th>
                         <th>Contact No.</th>
@@ -749,20 +747,16 @@
                             <td>{{ employer.contact_no|default:"—" }}</td>
                             <td>
                                 {% if employer.is_active %}
-                                    <span class="report-status status-active">
-                                        Active
-                                    </span>
+                                    <span class="report-status status-active">Active</span>
                                 {% else %}
-                                    <span class="report-status status-suspended">
-                                        Suspended
-                                    </span>
+                                    <span class="report-status status-suspended">Suspended</span>
                                 {% endif %}
                             </td>
                         </tr>
                     {% empty %}
                         <tr>
                             <td colspan="5" class="report-empty">
-                                No employer records found.
+                                No employer records found for the selected date range.
                             </td>
                         </tr>
                     {% endfor %}
@@ -771,14 +765,20 @@
         </div>
     </div>
 
+    <!-- APPLICANT RECORDS -->
     <div class="report-panel">
-        <h2 class="report-section-title">Applicant Records</h2>
+        <div class="report-table-heading">
+            <h2 class="report-section-title">Applicant Records</h2>
+            <span class="report-record-count">
+                {{ applicants|length }} records
+            </span>
+        </div>
 
         <div class="report-table-wrap">
             <table class="report-table">
                 <thead>
                     <tr>
-                        <th style="width: 45px;">No.</th>
+                        <th>No.</th>
                         <th>Applicant Name</th>
                         <th>Email</th>
                         <th>Phone Number</th>
@@ -802,7 +802,7 @@
                     {% empty %}
                         <tr>
                             <td colspan="4" class="report-empty">
-                                No applicant records found.
+                                No applicant records found for the selected date range.
                             </td>
                         </tr>
                     {% endfor %}
@@ -811,14 +811,20 @@
         </div>
     </div>
 
+    <!-- JOB POST RECORDS -->
     <div class="report-panel">
-        <h2 class="report-section-title">Job Post Records</h2>
+        <div class="report-table-heading">
+            <h2 class="report-section-title">Job Post Records</h2>
+            <span class="report-record-count">
+                {{ jobs|length }} records
+            </span>
+        </div>
 
         <div class="report-table-wrap">
             <table class="report-table">
                 <thead>
                     <tr>
-                        <th style="width: 45px;">No.</th>
+                        <th>No.</th>
                         <th>Job Title</th>
                         <th>Employer</th>
                         <th>Location</th>
@@ -832,9 +838,7 @@
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>{{ job.title|default:"—" }}</td>
-                            <td>
-                                {{ job.employer.company_name|default:"—" }}
-                            </td>
+                            <td>{{ job.employer.company_name|default:"—" }}</td>
                             <td>{{ job.location|default:"—" }}</td>
                             <td>{{ job.salary|default:"—" }}</td>
                             <td>
@@ -862,7 +866,7 @@
                     {% empty %}
                         <tr>
                             <td colspan="6" class="report-empty">
-                                No job records found.
+                                No job post records found for the selected date range.
                             </td>
                         </tr>
                     {% endfor %}
@@ -891,7 +895,7 @@ document.addEventListener("DOMContentLoaded", function () {
             dateFrom.value > dateTo.value
         ) {
             event.preventDefault();
-            alert("The start date must not be later than the end date.");
+            alert("Date From cannot be later than Date To.");
             dateFrom.focus();
         }
     });
@@ -919,10 +923,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 plugins: {
                     legend: {
                         position: "bottom",
-                        labels: {
-                            boxWidth: 10,
-                            font: { size: 10 }
-                        }
+                        labels: { boxWidth: 10, font: { size: 10 } }
                     }
                 }
             }
@@ -961,15 +962,12 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    let printChartsReady = false;
-
     window.addEventListener("beforeprint", function () {
         if (typeof Chart !== "undefined") {
             Object.values(Chart.instances).forEach(function (chart) {
                 chart.resize();
             });
         }
-        printChartsReady = true;
     });
 });
 </script>

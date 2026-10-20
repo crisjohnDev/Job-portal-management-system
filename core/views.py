@@ -447,159 +447,211 @@ def applicant_list(request):
         "applicants": applicants
     })
 
+def get_date_field(model, candidates):
+    """
+    Return the first valid date/datetime field path
+    available on a model, including supported related fields.
+    """
+    for path in candidates:
+        current_model = model
+        valid = True
+
+        for part in path.split("__"):
+            try:
+                field = current_model._meta.get_field(part)
+            except Exception:
+                valid = False
+                break
+
+            if field.is_relation and field.related_model:
+                current_model = field.related_model
+            elif part != path.split("__")[-1]:
+                valid = False
+                break
+
+        if valid:
+            return path
+
+    return None
+
+
+def filter_by_date(queryset, date_field, date_from, date_to):
+    """
+    Apply an inclusive date range to a queryset.
+    The end date includes the entire selected day.
+    """
+    if not date_field:
+        return queryset.none()
+
+    filters = {}
+
+    if date_from:
+        filters[f"{date_field}__date__gte"] = date_from
+
+    if date_to:
+        filters[f"{date_field}__date__lte"] = date_to
+
+    if filters:
+        queryset = queryset.filter(**filters)
+
+    return queryset
+
+
 @login_required(login_url="login_user")
 def reports(request):
-    # =========================================================
-    # 1. READ DATE FILTERS
-    # =========================================================
-    date_from = request.GET.get("date_from", "").strip()
-    date_to = request.GET.get("date_to", "").strip()
-
-    start_date = None
-    end_date = None
+    date_from = None
+    date_to = None
     date_error = ""
 
+    date_from_value = request.GET.get("date_from", "").strip()
+    date_to_value = request.GET.get("date_to", "").strip()
+
+    # Parse the dates submitted by the filter form.
     try:
-        if date_from:
-            start_date = datetime.strptime(
-                date_from, "%Y-%m-%d"
+        if date_from_value:
+            date_from = datetime.strptime(
+                date_from_value, "%Y-%m-%d"
             ).date()
 
-        if date_to:
-            end_date = datetime.strptime(
-                date_to, "%Y-%m-%d"
+        if date_to_value:
+            date_to = datetime.strptime(
+                date_to_value, "%Y-%m-%d"
             ).date()
-
-        if start_date and end_date and start_date > end_date:
-            date_error = (
-                "From Date cannot be later than To Date."
-            )
 
     except ValueError:
-        date_error = "Please select valid dates."
+        date_error = "Please enter valid dates."
 
-    valid_dates = not date_error
+    if (
+        not date_error
+        and date_from
+        and date_to
+        and date_from > date_to
+    ):
+        date_error = "The start date cannot be later than the end date."
 
-    # =========================================================
-    # 2. BASE QUERYSETS
-    # =========================================================
+    # Base querysets.
     employers = Employer.objects.all().order_by("-created_at")
-
     applicants = Applicant.objects.all()
-
     jobs = JobPost.objects.select_related(
         "employer"
     ).all().order_by("-created_at")
 
-    # =========================================================
-    # 3. FILTER RECORDS BY DATE
-    #
-    # Assumes Employer and JobPost have created_at fields.
-    # Assumes Applicant is related to User through `user`.
-    # =========================================================
-    if valid_dates:
-        if start_date:
-            employers = employers.filter(
-                created_at__date__gte=start_date
+    # Identify the actual date fields available in each model.
+    employer_date_field = get_date_field(
+        Employer,
+        [
+            "created_at",
+            "date_joined",
+            "registered_at",
+        ],
+    )
+
+    applicant_date_field = get_date_field(
+        Applicant,
+        [
+            "created_at",
+            "date_joined",
+            "registered_at",
+            "user__date_joined",
+        ],
+    )
+
+    job_date_field = get_date_field(
+        JobPost,
+        [
+            "created_at",
+            "posted_at",
+            "date_posted",
+        ],
+    )
+
+    if not date_error and (date_from or date_to):
+        # Filter each table independently using its own date field.
+        employers = filter_by_date(
+            employers,
+            employer_date_field,
+            date_from,
+            date_to,
+        )
+
+        applicants = filter_by_date(
+            applicants,
+            applicant_date_field,
+            date_from,
+            date_to,
+        )
+
+        jobs = filter_by_date(
+            jobs,
+            job_date_field,
+            date_from,
+            date_to,
+        )
+
+        # Warn if a model has no recognized date field.
+        missing_models = []
+
+        if not employer_date_field:
+            missing_models.append("Employer")
+
+        if not applicant_date_field:
+            missing_models.append("Applicant")
+
+        if not job_date_field:
+            missing_models.append("JobPost")
+
+        if missing_models:
+            date_error = (
+                "Date filtering needs a valid date field for: "
+                + ", ".join(missing_models)
+                + ". Please check those models."
             )
 
-            applicants = applicants.filter(
-                user__date_joined__date__gte=start_date
-            )
-
-            jobs = jobs.filter(
-                created_at__date__gte=start_date
-            )
-
-        if end_date:
-            employers = employers.filter(
-                created_at__date__lte=end_date
-            )
-
-            applicants = applicants.filter(
-                user__date_joined__date__lte=end_date
-            )
-
-            jobs = jobs.filter(
-                created_at__date__lte=end_date
-            )
-
-    else:
-        # Invalid date ranges must not return the unfiltered report.
+    elif date_error:
+        # Invalid date input: don't display misleading records.
         employers = employers.none()
         applicants = applicants.none()
         jobs = jobs.none()
 
-    # =========================================================
-    # 4. CALCULATE SUMMARY COUNTS
-    # =========================================================
+    # Counts use the same filtered querysets as the tables.
     total_employers = employers.count()
-
-    active_employers = employers.filter(
-        is_active=True
-    ).count()
-
-    suspended_employers = employers.filter(
-        is_active=False
-    ).count()
+    active_employers = employers.filter(is_active=True).count()
+    suspended_employers = employers.filter(is_active=False).count()
 
     total_applicants = applicants.count()
 
     total_jobs = jobs.count()
+    approved_jobs = jobs.filter(status="approved").count()
+    pending_jobs = jobs.filter(status="pending").count()
+    rejected_jobs = jobs.filter(status="rejected").count()
 
-    approved_jobs = jobs.filter(
-        status="approved"
-    ).count()
-
-    pending_jobs = jobs.filter(
-        status="pending"
-    ).count()
-
-    rejected_jobs = jobs.filter(
-        status="rejected"
-    ).count()
-
-    # =========================================================
-    # 5. TEMPLATE CONTEXT
-    # =========================================================
     context = {
-        # Filtered records
-        "employers": employers,
-        "applicants": applicants,
-        "jobs": jobs,
-
-        # Employer metrics
         "total_employers": total_employers,
         "active_employers": active_employers,
         "suspended_employers": suspended_employers,
-
-        # Applicant metrics
         "total_applicants": total_applicants,
-
-        # Job metrics
         "total_jobs": total_jobs,
         "approved_jobs": approved_jobs,
         "pending_jobs": pending_jobs,
         "rejected_jobs": rejected_jobs,
 
-        # Date filter values
-        "date_from": date_from,
-        "date_to": date_to,
-        "date_error": date_error,
+        "employers": employers,
+        "applicants": applicants,
+        "jobs": jobs,
 
-        # Report metadata
-        "report_generated": (
-            valid_dates and bool(date_from or date_to)
+        "date_from": date_from_value,
+        "date_to": date_to_value,
+        "date_error": date_error,
+        "report_generated": bool(date_from_value or date_to_value),
+        "report_date": timezone.localtime().strftime(
+            "%B %d, %Y %I:%M %p"
         ),
-        "report_start": start_date,
-        "report_end": end_date,
-        "report_date": timezone.localdate(),
     }
 
     return render(
         request,
         "pages/reports.html",
-        context
+        context,
     )
 
 
