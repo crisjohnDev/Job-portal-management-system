@@ -1,1290 +1,976 @@
-{% extends 'base.html' %}
+
+{% extends "base.html" %}
 {% load static %}
 
 {% block content %}
-
-<!-- Chart.js Dependency -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <style>
-    /* =========================================================
-       REPORTS PAGE
-    ========================================================= */
+    :root {
+        --report-blue: #2563eb;
+        --report-blue-dark: #1d4ed8;
+        --report-bg: #f8fafc;
+        --report-border: #e2e8f0;
+        --report-text: #1e293b;
+        --report-muted: #64748b;
+    }
 
-    .content-header {
+    .reports-page {
+        padding: 16px;
+        color: var(--report-text);
+        font-size: 13px;
+    }
+
+    .reports-header {
         display: flex;
+        align-items: center;
         justify-content: space-between;
-        align-items: center;
-        padding: 24px 32px;
-        background: #ffffff;
-        border-bottom: 1px solid #e2e8f0;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
-    }
-
-    .page-title h2 {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #0f172a;
-        letter-spacing: -0.02em;
-        margin: 0;
-    }
-
-    .admin-profile {
-        display: flex;
-        align-items: center;
+        flex-wrap: wrap;
         gap: 12px;
-        color: #64748b;
-        font-size: 0.9rem;
+        margin-bottom: 16px;
     }
 
-    .admin-profile strong {
-        color: #0f172a;
+    .reports-title {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 700;
     }
 
-    .profile-badge {
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        background: #ecfdf5;
-        border: 1px solid #a7f3d0;
+    .reports-subtitle {
+        margin: 4px 0 0;
+        color: var(--report-muted);
+        font-size: 12px;
+    }
+
+    .report-actions {
         display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .report-btn {
+        display: inline-flex;
         align-items: center;
         justify-content: center;
+        gap: 6px;
+        min-height: 34px;
+        padding: 7px 12px;
+        border: 1px solid var(--report-border);
+        border-radius: 6px;
+        background: #fff;
+        color: var(--report-text);
+        font-size: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
     }
 
-    .profile-badge svg {
-        width: 20px;
-        height: 20px;
-        stroke: #059669;
-        fill: none;
+    .report-btn-primary {
+        color: #fff;
+        background: var(--report-blue);
+        border-color: var(--report-blue);
     }
 
+    .report-btn-primary:hover {
+        background: var(--report-blue-dark);
+    }
 
-    /* =========================================================
-       WORKSPACE
-    ========================================================= */
+    .report-btn:hover {
+        border-color: var(--report-blue);
+    }
 
-    .dashboard-workspace {
-        padding: 32px;
-        background-color: #f8fafc;
+    .report-filter {
+        display: flex;
+        align-items: end;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 12px;
+        margin-bottom: 16px;
+        background: #fff;
+        border: 1px solid var(--report-border);
+        border-radius: 8px;
+    }
+
+    .report-filter-group {
         display: flex;
         flex-direction: column;
-        gap: 28px;
-        min-height: calc(100vh - 87px);
+        gap: 5px;
+        min-width: 160px;
     }
 
+    .report-filter-group label {
+        font-size: 11px;
+        font-weight: 700;
+        color: #475569;
+    }
 
-    /* =========================================================
-       KPI SUMMARY GRID
-    ========================================================= */
+    .report-filter-group input {
+        width: 100%;
+        min-height: 34px;
+        padding: 6px 9px;
+        border: 1px solid #cbd5e1;
+        border-radius: 5px;
+        font-size: 12px;
+        background: #fff;
+    }
 
-    .stats-grid {
+    .report-error {
+        width: 100%;
+        color: #b91c1c;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .report-summary {
+        margin-bottom: 16px;
+        padding: 10px 12px;
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 7px;
+        color: #1e40af;
+        font-size: 12px;
+    }
+
+    .report-section-title {
+        margin: 0 0 10px;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .report-kpis {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 16px;
+        gap: 10px;
+        margin-bottom: 18px;
     }
 
-    .stat-card {
-        position: relative;
-        min-height: 135px;
-        padding: 22px;
-        border: none;
-        border-radius: 14px;
-        overflow: hidden;
-
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-
-        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
-
-        transition:
-            transform 0.2s ease,
-            box-shadow 0.2s ease;
+    .report-kpi {
+        min-width: 0;
+        padding: 12px;
+        background: #fff;
+        border: 1px solid var(--report-border);
+        border-radius: 8px;
+        box-shadow: 0 1px 2px rgb(15 23 42 / 4%);
     }
 
-    .stat-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+    .report-kpi-label {
+        margin-bottom: 6px;
+        color: var(--report-muted);
+        font-size: 11px;
+        font-weight: 600;
     }
 
-
-    /* Decorative circles */
-
-    .stat-card::before {
-        content: "";
-        position: absolute;
-        width: 110px;
-        height: 110px;
-        border-radius: 50%;
-        right: -35px;
-        top: -35px;
-        background: rgba(255, 255, 255, 0.10);
-        pointer-events: none;
-    }
-
-    .stat-card::after {
-        content: "";
-        position: absolute;
-        width: 75px;
-        height: 75px;
-        border-radius: 50%;
-        right: 25px;
-        bottom: -45px;
-        background: rgba(255, 255, 255, 0.07);
-        pointer-events: none;
-    }
-
-
-    /* =========================================================
-       SOLID CARD COLORS
-    ========================================================= */
-
-    .stat-card.total-employers {
-        background: #2563eb;
-        color: #ffffff;
-    }
-
-    .stat-card.active-employers {
-        background: #059669;
-        color: #ffffff;
-    }
-
-    .stat-card.suspended-employers {
-        background: #dc2626;
-        color: #ffffff;
-    }
-
-    .stat-card.total-applicants {
-        background: #7c3aed;
-        color: #ffffff;
-    }
-
-    .stat-card.total-jobs {
-        background: #0891b2;
-        color: #ffffff;
-    }
-
-    .stat-card.approved-jobs {
-        background: #047857;
-        color: #ffffff;
-    }
-
-    .stat-card.pending-jobs {
-        background: #d97706;
-        color: #ffffff;
-    }
-
-    .stat-card.rejected-jobs {
-        background: #b91c1c;
-        color: #ffffff;
-    }
-
-
-    /* =========================================================
-       STAT CARD CONTENT
-    ========================================================= */
-
-    .stat-label {
-        position: relative;
-        z-index: 2;
-
-        font-size: 0.76rem;
-        font-weight: 700;
-        color: rgba(255, 255, 255, 0.82);
-
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-
-        margin-bottom: 9px;
-    }
-
-    .stat-value {
-        position: relative;
-        z-index: 2;
-
-        font-size: 2rem;
+    .report-kpi-value {
+        font-size: 23px;
+        line-height: 1.2;
         font-weight: 800;
-        line-height: 1;
-
-        color: #ffffff !important;
+        overflow-wrap: anywhere;
     }
 
-    .stat-description {
-        position: relative;
-        z-index: 2;
-
-        margin-top: 10px;
-
-        font-size: 0.74rem;
-        font-weight: 500;
-
-        color: rgba(255, 255, 255, 0.72);
+    .report-kpi-note {
+        margin-top: 5px;
+        color: var(--report-muted);
+        font-size: 10px;
     }
 
+    .report-blue {
+        color: #2563eb;
+    }
 
-    /* =========================================================
-       GRAPHICAL DATA GRID
-    ========================================================= */
+    .report-green {
+        color: #15803d;
+    }
 
-    .charts-grid {
+    .report-orange {
+        color: #c2410c;
+    }
+
+    .report-red {
+        color: #b91c1c;
+    }
+
+    .report-charts {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 24px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 18px;
     }
 
-
-    /* =========================================================
-       DATA CARDS
-    ========================================================= */
-
-    .data-card {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 16px;
-        overflow: hidden;
-
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    .report-panel {
+        min-width: 0;
+        padding: 12px;
+        margin-bottom: 16px;
+        background: #fff;
+        border: 1px solid var(--report-border);
+        border-radius: 8px;
+        break-inside: avoid;
     }
 
-    .data-card-header {
-        padding: 20px 24px;
-        border-bottom: 1px solid #e2e8f0;
-        background: #ffffff;
-    }
-
-    .data-card-header h3 {
-        font-size: 1.05rem;
-        font-weight: 700;
-        color: #0f172a;
-        margin: 0;
-    }
-
-
-    /* =========================================================
-       CHART
-    ========================================================= */
-
-    .chart-container {
-        padding: 20px;
+    .report-chart-container {
         position: relative;
-        height: 280px;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        height: 230px;
+        width: 100%;
     }
 
-    .chart-container canvas {
-        max-width: 100%;
-    }
-
-
-    /* =========================================================
-       TABLE
-    ========================================================= */
-
-    .table-responsive {
+    .report-table-wrap {
         width: 100%;
         overflow-x: auto;
     }
 
-    table {
+    .report-table {
         width: 100%;
         border-collapse: collapse;
+        background: #fff;
+        font-size: 11px;
+    }
+
+    .report-table th,
+    .report-table td {
+        padding: 8px 9px;
+        border-bottom: 1px solid var(--report-border);
         text-align: left;
-        font-size: 0.9rem;
-    }
-
-    th {
-        background: #f8fafc;
-        color: #475569;
-
-        padding: 14px 24px;
-
-        font-weight: 600;
-        font-size: 0.78rem;
-
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-
-        border-bottom: 1px solid #e2e8f0;
-
-        white-space: nowrap;
-    }
-
-    td {
-        padding: 16px 24px;
-
-        border-bottom: 1px solid #f1f5f9;
-
-        color: #334155;
-
         vertical-align: middle;
     }
 
-    tr:last-child td {
-        border-bottom: none;
-    }
-
-    tr:hover td {
-        background-color: #f8fafc;
-    }
-
-    td strong {
-        color: #0f172a;
+    .report-table th {
+        background: #eff6ff;
+        color: #1e40af;
         font-weight: 700;
-    }
-
-
-    /* =========================================================
-       CODE / PERMIT NUMBER
-    ========================================================= */
-
-    .permit-code {
-        font-family: monospace;
-        background: #f1f5f9;
-        color: #334155;
-
-        padding: 3px 7px;
-
-        border-radius: 4px;
-
-        font-size: 0.85rem;
-    }
-
-
-    /* =========================================================
-       STATUS BADGES
-    ========================================================= */
-
-    .badge-status {
-        display: inline-flex;
-        align-items: center;
-
-        padding: 5px 11px;
-
-        border-radius: 20px;
-
-        font-size: 0.74rem;
-        font-weight: 700;
-
-        text-transform: capitalize;
-
         white-space: nowrap;
     }
 
-    .badge-status.active {
-        background: #d1fae5;
-        color: #065f46;
-        border: 1px solid #a7f3d0;
+    .report-table tbody tr:hover {
+        background: #f8fafc;
     }
 
-    .badge-status.pending {
-        background: #fef3c7;
+    .report-table td {
+        overflow-wrap: anywhere;
+    }
+
+    .report-status {
+        display: inline-block;
+        padding: 3px 7px;
+        border-radius: 4px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: capitalize;
+        white-space: nowrap;
+    }
+
+    .status-approved,
+    .status-active {
+        color: #166534;
+        background: #dcfce7;
+    }
+
+    .status-pending {
         color: #92400e;
-        border: 1px solid #fde68a;
+        background: #fef3c7;
     }
 
-    .badge-status.suspended,
-    .badge-status.rejected {
-        background: #fee2e2;
+    .status-rejected,
+    .status-suspended {
         color: #991b1b;
-        border: 1px solid #fecaca;
+        background: #fee2e2;
     }
 
-
-    /* =========================================================
-       EMPTY STATE
-    ========================================================= */
-
-    .empty-state {
-        text-align: center;
-        color: #64748b;
-        padding: 40px 20px !important;
+    .status-default {
+        color: #334155;
+        background: #e2e8f0;
     }
 
+    .report-empty {
+        padding: 18px !important;
+        color: var(--report-muted);
+        text-align: center !important;
+    }
 
-    /* =========================================================
-       RESPONSIVE
-    ========================================================= */
+    .report-footer {
+        padding: 10px 0;
+        color: var(--report-muted);
+        font-size: 10px;
+        text-align: right;
+    }
 
-    @media (max-width: 1200px) {
-
-        .stats-grid {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-        }
-
-        .charts-grid {
+    @media (max-width: 900px) {
+        .report-kpis {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
-    }
-
-
-    @media (max-width: 1000px) {
-
-        .stats-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-
-        .charts-grid {
+        .report-charts {
             grid-template-columns: 1fr;
         }
-
     }
-
-
-    @media (max-width: 768px) {
-
-        .content-header {
-            padding: 20px;
-            align-items: flex-start;
-            gap: 16px;
-        }
-
-        .page-title h2 {
-            font-size: 1.25rem;
-        }
-
-        .admin-profile {
-            font-size: 0.8rem;
-        }
-
-        .profile-badge {
-            width: 34px;
-            height: 34px;
-        }
-
-        .dashboard-workspace {
-            padding: 20px;
-            gap: 20px;
-        }
-
-        .stats-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 14px;
-        }
-
-        .stat-card {
-            min-height: 125px;
-            padding: 19px;
-        }
-
-        .stat-value {
-            font-size: 1.8rem;
-        }
-
-        .data-card-header {
-            padding: 18px;
-        }
-
-        th,
-        td {
-            padding: 13px 16px;
-        }
-
-    }
-
 
     @media (max-width: 520px) {
-
-        .content-header {
-            padding: 18px;
+        .reports-page {
+            padding: 10px;
         }
 
-        .admin-profile span {
-            display: none;
+        .reports-title {
+            font-size: 19px;
         }
 
-        .dashboard-workspace {
-            padding: 14px;
+        .report-kpis {
+            gap: 8px;
         }
 
-        .stats-grid {
-            grid-template-columns: 1fr;
-            gap: 12px;
+        .report-kpi {
+            padding: 10px;
         }
 
-        .stat-card {
-            min-height: 115px;
-            border-radius: 12px;
+        .report-kpi-value {
+            font-size: 20px;
         }
 
-        .data-card {
-            border-radius: 12px;
+        .report-filter-group {
+            width: 100%;
         }
 
-        .chart-container {
-            height: 260px;
-            padding: 15px;
+        .report-actions {
+            width: 100%;
+        }
+    }
+
+    /*
+    ==========================================================
+    EXCEL-STYLE PRINT LAYOUT
+    ==========================================================
+    */
+
+    @page {
+        size: A4 landscape;
+        margin: 10mm;
+    }
+
+    @media print {
+        html,
+        body {
+            width: 100%;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: #fff !important;
+            color: #000 !important;
+            font-family: Arial, Helvetica, sans-serif !important;
+            font-size: 9px !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
 
+        /* Hide dashboard navigation and interactive controls. */
+        header,
+        nav,
+        aside,
+        footer,
+        .sidebar,
+        .navbar,
+        .topbar,
+        .reports-no-print,
+        .report-filter,
+        .report-actions,
+        button,
+        .btn,
+        form button {
+            display: none !important;
+        }
+
+        .reports-page {
+            width: 100% !important;
+            max-width: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            color: #000 !important;
+            font-size: 9px !important;
+        }
+
+        .reports-header {
+            display: block !important;
+            margin: 0 0 10px !important;
+            padding: 0 0 8px !important;
+            border-bottom: 2px solid #1f4e78 !important;
+        }
+
+        .reports-title {
+            margin: 0 !important;
+            color: #1f1f1f !important;
+            font-size: 19px !important;
+            font-weight: 700 !important;
+        }
+
+        .reports-subtitle {
+            margin-top: 4px !important;
+            color: #555 !important;
+            font-size: 9px !important;
+        }
+
+        .report-summary {
+            margin: 0 0 10px !important;
+            padding: 6px 8px !important;
+            color: #000 !important;
+            background: #eaf2f8 !important;
+            border: 1px solid #7f9db9 !important;
+            border-radius: 0 !important;
+            font-size: 9px !important;
+        }
+
+        .report-section-title {
+            margin: 8px 0 5px !important;
+            padding: 5px 6px !important;
+            color: #fff !important;
+            background: #1f4e78 !important;
+            border: 1px solid #17365d !important;
+            font-size: 10px !important;
+            font-weight: 700 !important;
+            break-after: avoid;
+        }
+
+        .report-kpis {
+            display: grid !important;
+            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+            gap: 0 !important;
+            margin: 0 0 10px !important;
+            border-top: 1px solid #7f7f7f !important;
+            border-left: 1px solid #7f7f7f !important;
+        }
+
+        .report-kpi {
+            padding: 7px !important;
+            min-width: 0 !important;
+            background: #fff !important;
+            border: 0 !important;
+            border-right: 1px solid #7f7f7f !important;
+            border-bottom: 1px solid #7f7f7f !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            break-inside: avoid;
+        }
+
+        .report-kpi-label {
+            margin-bottom: 4px !important;
+            color: #333 !important;
+            font-size: 8px !important;
+            font-weight: 700 !important;
+        }
+
+        .report-kpi-value {
+            color: #000 !important;
+            font-size: 16px !important;
+            font-weight: 700 !important;
+        }
+
+        .report-kpi-note {
+            color: #555 !important;
+            font-size: 8px !important;
+        }
+
+        .report-charts {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 8px !important;
+            margin-bottom: 10px !important;
+        }
+
+        .report-panel {
+            padding: 0 !important;
+            margin: 0 0 10px !important;
+            background: #fff !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            break-inside: avoid;
+        }
+
+        .report-chart-container {
+            height: 165px !important;
+            max-height: 165px !important;
+        }
+
+        .report-table-wrap {
+            overflow: visible !important;
+            width: 100% !important;
+        }
+
+        .report-table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            table-layout: auto !important;
+            background: #fff !important;
+            color: #000 !important;
+            font-size: 8px !important;
+        }
+
+        .report-table thead {
+            display: table-header-group;
+        }
+
+        .report-table tr {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .report-table th,
+        .report-table td {
+            padding: 4px 5px !important;
+            border: 1px solid #7f7f7f !important;
+            border-radius: 0 !important;
+            text-align: left !important;
+            vertical-align: top !important;
+            color: #000 !important;
+            overflow-wrap: anywhere !important;
+        }
+
+        .report-table th {
+            background: #d9eaf7 !important;
+            color: #000 !important;
+            font-weight: 700 !important;
+            white-space: normal !important;
+        }
+
+        .report-table tbody tr:nth-child(even) td {
+            background: #f2f2f2 !important;
+        }
+
+        .report-table tbody tr:hover {
+            background: transparent !important;
+        }
+
+        .report-status {
+            padding: 0 !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            color: #000 !important;
+            font-size: 8px !important;
+            font-weight: 700 !important;
+        }
+
+        .report-empty {
+            padding: 8px !important;
+            text-align: center !important;
+        }
+
+        .report-footer {
+            padding-top: 8px !important;
+            border-top: 1px solid #7f7f7f !important;
+            color: #333 !important;
+            font-size: 8px !important;
+        }
+
+        a {
+            color: #000 !important;
+            text-decoration: none !important;
+        }
+
+        canvas {
+            max-width: 100% !important;
+        }
     }
 </style>
 
+<div class="reports-page" id="reportsPage">
 
-<!-- =========================================================
-     CONTENT HEADER
-========================================================= -->
+    <div class="reports-header">
+        <div>
+            <h1 class="reports-title">Reports</h1>
+            <p class="reports-subtitle">
+                System summary and records report
+            </p>
+        </div>
 
-<header class="content-header">
-
-    <div class="page-title">
-        <h2>System Reports</h2>
-    </div>
-
-    <div class="admin-profile">
-
-        <span>
-            Welcome,
-            <strong>Admin Portal</strong>
-        </span>
-
-        <div class="profile-badge">
-
-            <svg
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+        <div class="report-actions">
+            <button
+                type="button"
+                class="report-btn"
+                onclick="window.print()"
             >
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-
+                Print Report
+            </button>
         </div>
-
     </div>
 
-</header>
-
-
-<!-- =========================================================
-     WORKSPACE
-========================================================= -->
-
-<div class="dashboard-workspace">
-
-
-    <!-- =====================================================
-         SUMMARY CARDS
-    ===================================================== -->
-
-    <div class="stats-grid">
-
-
-        <!-- Total Employers -->
-
-        <div class="stat-card total-employers">
-
-            <div class="stat-label">
-                Total Employers
-            </div>
-
-            <div class="stat-value">
-                {{ total_employers }}
-            </div>
-
-            <div class="stat-description">
-                All registered employers
-            </div>
-
+    <form method="GET" class="report-filter" id="reportFilter">
+        <div class="report-filter-group">
+            <label for="date_from">Date From</label>
+            <input
+                type="date"
+                name="date_from"
+                id="date_from"
+                value="{{ request.GET.date_from|default:'' }}"
+            >
         </div>
 
-
-        <!-- Active Employers -->
-
-        <div class="stat-card active-employers">
-
-            <div class="stat-label">
-                Active Employers
-            </div>
-
-            <div class="stat-value">
-                {{ active_employers }}
-            </div>
-
-            <div class="stat-description">
-                Currently active accounts
-            </div>
-
+        <div class="report-filter-group">
+            <label for="date_to">Date To</label>
+            <input
+                type="date"
+                name="date_to"
+                id="date_to"
+                value="{{ request.GET.date_to|default:'' }}"
+            >
         </div>
 
+        <button
+            type="submit"
+            class="report-btn report-btn-primary"
+        >
+            Generate Report
+        </button>
 
-        <!-- Suspended Employers -->
+        <a href="{{ request.path }}" class="report-btn">
+            Reset
+        </a>
 
-        <div class="stat-card suspended-employers">
-
-            <div class="stat-label">
-                Suspended Employers
+        {% if date_error %}
+            <div class="report-error">
+                {{ date_error }}
             </div>
+        {% endif %}
+    </form>
 
-            <div class="stat-value">
-                {{ suspended_employers }}
+    {% if report_generated %}
+        <div class="report-summary">
+            <strong>Report Period:</strong>
+            {{ date_from|default:"All available dates" }}
+            {% if date_to %}
+                to {{ date_to }}
+            {% endif %}
+            <br>
+            <strong>Generated:</strong>
+            {{ report_date|default:"Current report" }}
+        </div>
+    {% endif %}
+
+    <h2 class="report-section-title">System Summary</h2>
+
+    <div class="report-kpis">
+        <div class="report-kpi">
+            <div class="report-kpi-label">Total Employers</div>
+            <div class="report-kpi-value report-blue">
+                {{ total_employers|default:0 }}
             </div>
-
-            <div class="stat-description">
-                Suspended accounts
-            </div>
-
+            <div class="report-kpi-note">Registered employers</div>
         </div>
 
-
-        <!-- Total Applicants -->
-
-        <div class="stat-card total-applicants">
-
-            <div class="stat-label">
-                Total Applicants
+        <div class="report-kpi">
+            <div class="report-kpi-label">Active Employers</div>
+            <div class="report-kpi-value report-green">
+                {{ active_employers|default:0 }}
             </div>
-
-            <div class="stat-value">
-                {{ total_applicants }}
-            </div>
-
-            <div class="stat-description">
-                Registered job seekers
-            </div>
-
+            <div class="report-kpi-note">Currently active</div>
         </div>
 
-
-        <!-- Total Jobs -->
-
-        <div class="stat-card total-jobs">
-
-            <div class="stat-label">
-                Total Job Posts
+        <div class="report-kpi">
+            <div class="report-kpi-label">Suspended Employers</div>
+            <div class="report-kpi-value report-red">
+                {{ suspended_employers|default:0 }}
             </div>
-
-            <div class="stat-value">
-                {{ total_jobs }}
-            </div>
-
-            <div class="stat-description">
-                All submitted job posts
-            </div>
-
+            <div class="report-kpi-note">Inactive or suspended</div>
         </div>
 
-
-        <!-- Approved Jobs -->
-
-        <div class="stat-card approved-jobs">
-
-            <div class="stat-label">
-                Approved Jobs
+        <div class="report-kpi">
+            <div class="report-kpi-label">Total Applicants</div>
+            <div class="report-kpi-value report-blue">
+                {{ total_applicants|default:0 }}
             </div>
-
-            <div class="stat-value">
-                {{ approved_jobs }}
-            </div>
-
-            <div class="stat-description">
-                Approved positions
-            </div>
-
+            <div class="report-kpi-note">Registered applicants</div>
         </div>
 
-
-        <!-- Pending Jobs -->
-
-        <div class="stat-card pending-jobs">
-
-            <div class="stat-label">
-                Pending Jobs
+        <div class="report-kpi">
+            <div class="report-kpi-label">Total Jobs</div>
+            <div class="report-kpi-value report-blue">
+                {{ total_jobs|default:0 }}
             </div>
-
-            <div class="stat-value">
-                {{ pending_jobs }}
-            </div>
-
-            <div class="stat-description">
-                Awaiting review
-            </div>
-
+            <div class="report-kpi-note">Posted job listings</div>
         </div>
 
-
-        <!-- Rejected Jobs -->
-
-        <div class="stat-card rejected-jobs">
-
-            <div class="stat-label">
-                Rejected Jobs
+        <div class="report-kpi">
+            <div class="report-kpi-label">Approved Jobs</div>
+            <div class="report-kpi-value report-green">
+                {{ approved_jobs|default:0 }}
             </div>
-
-            <div class="stat-value">
-                {{ rejected_jobs }}
-            </div>
-
-            <div class="stat-description">
-                Rejected job posts
-            </div>
-
+            <div class="report-kpi-note">Approved listings</div>
         </div>
 
+        <div class="report-kpi">
+            <div class="report-kpi-label">Pending Jobs</div>
+            <div class="report-kpi-value report-orange">
+                {{ pending_jobs|default:0 }}
+            </div>
+            <div class="report-kpi-note">Awaiting review</div>
+        </div>
+
+        <div class="report-kpi">
+            <div class="report-kpi-label">Rejected Jobs</div>
+            <div class="report-kpi-value report-red">
+                {{ rejected_jobs|default:0 }}
+            </div>
+            <div class="report-kpi-note">Rejected listings</div>
+        </div>
     </div>
 
+    <h2 class="report-section-title">Visual Analytics</h2>
 
-    <!-- =====================================================
-         CHARTS
-    ===================================================== -->
-
-    <div class="charts-grid">
-
-
-        <!-- Job Status -->
-
-        <div class="data-card">
-
-            <div class="data-card-header">
-                <h3>Job Status Allocation</h3>
-            </div>
-
-            <div class="chart-container">
-                <canvas id="jobChart"></canvas>
-            </div>
-
-        </div>
-
-
-        <!-- Employer Distribution -->
-
-        <div class="data-card">
-
-            <div class="data-card-header">
-                <h3>Employer Distribution</h3>
-            </div>
-
-            <div class="chart-container">
+    <div class="report-charts">
+        <div class="report-panel">
+            <h3 class="report-section-title">Employer Status</h3>
+            <div class="report-chart-container">
                 <canvas id="employerChart"></canvas>
             </div>
-
         </div>
 
-
-        <!-- Overall Metrics -->
-
-        <div class="data-card">
-
-            <div class="data-card-header">
-                <h3>Overall System Metrics</h3>
+        <div class="report-panel">
+            <h3 class="report-section-title">Job Status</h3>
+            <div class="report-chart-container">
+                <canvas id="jobChart"></canvas>
             </div>
-
-            <div
-                class="chart-container"
-                style="display: block;"
-            >
-                <canvas id="overallChart"></canvas>
-            </div>
-
         </div>
-
     </div>
 
+    <div class="report-panel">
+        <h2 class="report-section-title">Employer Records</h2>
 
-    <!-- =====================================================
-         EMPLOYER REPORT
-    ===================================================== -->
-
-    <div class="data-card">
-
-        <div class="data-card-header">
-            <h3>Employer Report</h3>
-        </div>
-
-        <div class="table-responsive">
-
-            <table>
-
+        <div class="report-table-wrap">
+            <table class="report-table">
                 <thead>
-
                     <tr>
+                        <th style="width: 45px;">No.</th>
                         <th>Company Name</th>
                         <th>Business Permit No.</th>
-                        <th>Contact Number</th>
-                        <th>System Status</th>
+                        <th>Contact No.</th>
+                        <th>Status</th>
                     </tr>
-
                 </thead>
 
                 <tbody>
-
                     {% for employer in employers %}
-
-                    <tr>
-
-                        <td>
-                            <strong>
-                                {{ employer.company_name }}
-                            </strong>
-                        </td>
-
-                        <td>
-                            <code class="permit-code">
-                                {{ employer.business_permit_no }}
-                            </code>
-                        </td>
-
-                        <td>
-                            {{ employer.contact_no }}
-                        </td>
-
-                        <td>
-
-                            {% if employer.is_active %}
-
-                                <span class="badge-status active">
-                                    Active
-                                </span>
-
-                            {% else %}
-
-                                <span class="badge-status suspended">
-                                    Suspended
-                                </span>
-
-                            {% endif %}
-
-                        </td>
-
-                    </tr>
-
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ employer.company_name|default:"—" }}</td>
+                            <td>{{ employer.business_permit_no|default:"—" }}</td>
+                            <td>{{ employer.contact_no|default:"—" }}</td>
+                            <td>
+                                {% if employer.is_active %}
+                                    <span class="report-status status-active">
+                                        Active
+                                    </span>
+                                {% else %}
+                                    <span class="report-status status-suspended">
+                                        Suspended
+                                    </span>
+                                {% endif %}
+                            </td>
+                        </tr>
                     {% empty %}
-
-                    <tr>
-
-                        <td
-                            colspan="4"
-                            class="empty-state"
-                        >
-                            No employer records found in the system.
-                        </td>
-
-                    </tr>
-
+                        <tr>
+                            <td colspan="5" class="report-empty">
+                                No employer records found.
+                            </td>
+                        </tr>
                     {% endfor %}
-
                 </tbody>
-
             </table>
-
         </div>
-
     </div>
 
+    <div class="report-panel">
+        <h2 class="report-section-title">Applicant Records</h2>
 
-    <!-- =====================================================
-         APPLICANT REPORT
-    ===================================================== -->
-
-    <div class="data-card">
-
-        <div class="data-card-header">
-            <h3>Applicant Report</h3>
-        </div>
-
-        <div class="table-responsive">
-
-            <table>
-
+        <div class="report-table-wrap">
+            <table class="report-table">
                 <thead>
-
                     <tr>
-                        <th>Full Name</th>
-                        <th>Email Address</th>
-                        <th>Phone Account</th>
+                        <th style="width: 45px;">No.</th>
+                        <th>Applicant Name</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
                     </tr>
-
                 </thead>
 
                 <tbody>
-
                     {% for applicant in applicants %}
-
-                    <tr>
-
-                        <td>
-                            <strong>
-                                {{ applicant.first_name }}
-                                {{ applicant.middle_name }}
-                                {{ applicant.last_name }}
-                            </strong>
-                        </td>
-
-                        <td>
-                            {{ applicant.email }}
-                        </td>
-
-                        <td>
-                            {{ applicant.phone_number }}
-                        </td>
-
-                    </tr>
-
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                {{ applicant.first_name|default:"" }}
+                                {% if applicant.middle_name %}
+                                    {{ applicant.middle_name }}
+                                {% endif %}
+                                {{ applicant.last_name|default:"" }}
+                            </td>
+                            <td>{{ applicant.email|default:"—" }}</td>
+                            <td>{{ applicant.phone_number|default:"—" }}</td>
+                        </tr>
                     {% empty %}
-
-                    <tr>
-
-                        <td
-                            colspan="3"
-                            class="empty-state"
-                        >
-                            No applicant records found in the system.
-                        </td>
-
-                    </tr>
-
+                        <tr>
+                            <td colspan="4" class="report-empty">
+                                No applicant records found.
+                            </td>
+                        </tr>
                     {% endfor %}
-
                 </tbody>
-
             </table>
-
         </div>
-
     </div>
 
+    <div class="report-panel">
+        <h2 class="report-section-title">Job Post Records</h2>
 
-    <!-- =====================================================
-         JOB POSTS REPORT
-    ===================================================== -->
-
-    <div class="data-card">
-
-        <div class="data-card-header">
-            <h3>Job Posts Report</h3>
-        </div>
-
-        <div class="table-responsive">
-
-            <table>
-
+        <div class="report-table-wrap">
+            <table class="report-table">
                 <thead>
-
                     <tr>
-                        <th>Company</th>
+                        <th style="width: 45px;">No.</th>
                         <th>Job Title</th>
-                        <th>Remuneration Rate</th>
-                        <th>Deployment Location</th>
-                        <th>Review Status</th>
+                        <th>Employer</th>
+                        <th>Location</th>
+                        <th>Salary</th>
+                        <th>Status</th>
                     </tr>
-
                 </thead>
 
                 <tbody>
-
                     {% for job in jobs %}
-
-                    <tr>
-
-                        <td>
-                            {{ job.employer.company_name }}
-                        </td>
-
-                        <td>
-                            <strong>
-                                {{ job.title }}
-                            </strong>
-                        </td>
-
-                        <td
-                            style="
-                                font-weight: 700;
-                                color: #2563eb;
-                            "
-                        >
-                            ₱{{ job.salary }}
-                        </td>
-
-                        <td>
-                            {{ job.location }}
-                        </td>
-
-                        <td>
-
-                            {% if job.status == 'approved' or job.get_status_display|lower == 'approved' %}
-
-                                <span class="badge-status active">
-                                    Approved
-                                </span>
-
-                            {% elif job.status == 'pending' or job.get_status_display|lower == 'pending' %}
-
-                                <span class="badge-status pending">
-                                    Pending
-                                </span>
-
-                            {% else %}
-
-                                <span class="badge-status rejected">
-                                    {{ job.get_status_display }}
-                                </span>
-
-                            {% endif %}
-
-                        </td>
-
-                    </tr>
-
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ job.title|default:"—" }}</td>
+                            <td>
+                                {{ job.employer.company_name|default:"—" }}
+                            </td>
+                            <td>{{ job.location|default:"—" }}</td>
+                            <td>{{ job.salary|default:"—" }}</td>
+                            <td>
+                                {% with status=job.status|lower %}
+                                    {% if status == "approved" %}
+                                        <span class="report-status status-approved">
+                                            {{ job.status }}
+                                        </span>
+                                    {% elif status == "pending" %}
+                                        <span class="report-status status-pending">
+                                            {{ job.status }}
+                                        </span>
+                                    {% elif status == "rejected" %}
+                                        <span class="report-status status-rejected">
+                                            {{ job.status }}
+                                        </span>
+                                    {% else %}
+                                        <span class="report-status status-default">
+                                            {{ job.status|default:"Unknown" }}
+                                        </span>
+                                    {% endif %}
+                                {% endwith %}
+                            </td>
+                        </tr>
                     {% empty %}
-
-                    <tr>
-
-                        <td
-                            colspan="5"
-                            class="empty-state"
-                        >
-                            No job advertisements found in the system.
-                        </td>
-
-                    </tr>
-
+                        <tr>
+                            <td colspan="6" class="report-empty">
+                                No job records found.
+                            </td>
+                        </tr>
                     {% endfor %}
-
                 </tbody>
-
             </table>
-
         </div>
-
     </div>
 
+    <div class="report-footer">
+        Generated from the system reports page.
+    </div>
 </div>
 
-
-<!-- =========================================================
-     CHART DATA
-========================================================= -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const dateFrom = document.getElementById("date_from");
+    const dateTo = document.getElementById("date_to");
+    const filterForm = document.getElementById("reportFilter");
 
-    const activeGreen = '#10b981';
-    const pendingAmber = '#f59e0b';
-    const accentRed = '#ef4444';
+    filterForm.addEventListener("submit", function (event) {
+        if (
+            dateFrom.value &&
+            dateTo.value &&
+            dateFrom.value > dateTo.value
+        ) {
+            event.preventDefault();
+            alert("The start date must not be later than the end date.");
+            dateFrom.focus();
+        }
+    });
 
-    const primaryBlue = '#2563eb';
-    const neutralGray = '#64748b';
-    const teal = '#0891b2';
+    const employerCanvas = document.getElementById("employerChart");
+    const jobCanvas = document.getElementById("jobChart");
 
-
-    /* =====================================================
-       JOB STATUS CHART
-    ===================================================== */
-
-    new Chart(
-        document.getElementById('jobChart'),
-        {
-            type: 'pie',
-
+    if (employerCanvas && typeof Chart !== "undefined") {
+        new Chart(employerCanvas, {
+            type: "doughnut",
             data: {
-                labels: [
-                    'Approved',
-                    'Pending',
-                    'Rejected'
-                ],
-
+                labels: ["Active", "Suspended"],
                 datasets: [{
                     data: [
-                        {{ approved_jobs }},
-                        {{ pending_jobs }},
-                        {{ rejected_jobs }}
+                        Number("{{ active_employers|default:0 }}"),
+                        Number("{{ suspended_employers|default:0 }}")
                     ],
-
-                    backgroundColor: [
-                        activeGreen,
-                        pendingAmber,
-                        accentRed
-                    ],
-
-                    borderWidth: 2,
-                    borderColor: '#ffffff'
+                    backgroundColor: ["#2563eb", "#cbd5e1"],
+                    borderWidth: 1
                 }]
             },
-
             options: {
-
                 responsive: true,
                 maintainAspectRatio: false,
-
                 plugins: {
-
                     legend: {
-                        position: 'bottom',
-
+                        position: "bottom",
                         labels: {
-                            padding: 16,
-
-                            font: {
-                                family: 'Inter, sans-serif',
-                                size: 12
-                            }
+                            boxWidth: 10,
+                            font: { size: 10 }
                         }
                     }
-
                 }
-
             }
-        }
-    );
+        });
+    }
 
-
-    /* =====================================================
-       EMPLOYER DISTRIBUTION CHART
-    ===================================================== */
-
-    new Chart(
-        document.getElementById('employerChart'),
-        {
-            type: 'doughnut',
-
+    if (jobCanvas && typeof Chart !== "undefined") {
+        new Chart(jobCanvas, {
+            type: "bar",
             data: {
-
-                labels: [
-                    'Active',
-                    'Suspended'
-                ],
-
+                labels: ["Approved", "Pending", "Rejected"],
                 datasets: [{
-
+                    label: "Number of Jobs",
                     data: [
-                        {{ active_employers }},
-                        {{ suspended_employers }}
+                        Number("{{ approved_jobs|default:0 }}"),
+                        Number("{{ pending_jobs|default:0 }}"),
+                        Number("{{ rejected_jobs|default:0 }}")
                     ],
-
-                    backgroundColor: [
-                        activeGreen,
-                        accentRed
-                    ],
-
-                    borderWidth: 2,
-                    borderColor: '#ffffff'
-
+                    backgroundColor: ["#16a34a", "#f59e0b", "#dc2626"],
+                    borderRadius: 3
                 }]
-
             },
-
             options: {
-
                 responsive: true,
                 maintainAspectRatio: false,
-
-                cutout: '72%',
-
                 plugins: {
-
-                    legend: {
-
-                        position: 'bottom',
-
-                        labels: {
-
-                            padding: 16,
-
-                            font: {
-                                family: 'Inter, sans-serif',
-                                size: 12
-                            }
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        }
-    );
-
-
-    /* =====================================================
-       OVERALL SYSTEM METRICS
-    ===================================================== */
-
-    new Chart(
-        document.getElementById('overallChart'),
-        {
-            type: 'bar',
-
-            data: {
-
-                labels: [
-                    'Employers',
-                    'Applicants',
-                    'Job Posts'
-                ],
-
-                datasets: [{
-
-                    data: [
-                        {{ total_employers }},
-                        {{ total_applicants }},
-                        {{ total_jobs }}
-                    ],
-
-                    backgroundColor: [
-                        primaryBlue,
-                        neutralGray,
-                        teal
-                    ],
-
-                    borderRadius: 6
-
-                }]
-
-            },
-
-            options: {
-
-                responsive: true,
-                maintainAspectRatio: false,
-
-                plugins: {
-
-                    legend: {
-                        display: false
-                    }
-
+                    legend: { display: false }
                 },
-
                 scales: {
-
                     y: {
-
                         beginAtZero: true,
-
-                        grid: {
-                            color: '#f1f5f9'
-                        },
-
-                        ticks: {
-                            color: '#64748b'
-                        }
-
-                    },
-
-                    x: {
-
-                        grid: {
-                            display: false
-                        },
-
-                        ticks: {
-                            color: '#64748b'
-                        }
-
+                        ticks: { precision: 0 }
                     }
-
                 }
-
             }
+        });
+    }
 
+    let printChartsReady = false;
+
+    window.addEventListener("beforeprint", function () {
+        if (typeof Chart !== "undefined") {
+            Object.values(Chart.instances).forEach(function (chart) {
+                chart.resize();
+            });
         }
-    );
-
+        printChartsReady = true;
+    });
+});
 </script>
-
 {% endblock %}

@@ -13,6 +13,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.db import transaction
 from django.http import JsonResponse
+from datetime import datetime
 
 
 def keep_alive(request):
@@ -448,24 +449,159 @@ def applicant_list(request):
 
 @login_required(login_url="login_user")
 def reports(request):
+    # =========================================================
+    # 1. READ DATE FILTERS
+    # =========================================================
+    date_from = request.GET.get("date_from", "").strip()
+    date_to = request.GET.get("date_to", "").strip()
+
+    start_date = None
+    end_date = None
+    date_error = ""
+
+    try:
+        if date_from:
+            start_date = datetime.strptime(
+                date_from, "%Y-%m-%d"
+            ).date()
+
+        if date_to:
+            end_date = datetime.strptime(
+                date_to, "%Y-%m-%d"
+            ).date()
+
+        if start_date and end_date and start_date > end_date:
+            date_error = (
+                "From Date cannot be later than To Date."
+            )
+
+    except ValueError:
+        date_error = "Please select valid dates."
+
+    valid_dates = not date_error
+
+    # =========================================================
+    # 2. BASE QUERYSETS
+    # =========================================================
+    employers = Employer.objects.all().order_by("-created_at")
+
+    applicants = Applicant.objects.all()
+
+    jobs = JobPost.objects.select_related(
+        "employer"
+    ).all().order_by("-created_at")
+
+    # =========================================================
+    # 3. FILTER RECORDS BY DATE
+    #
+    # Assumes Employer and JobPost have created_at fields.
+    # Assumes Applicant is related to User through `user`.
+    # =========================================================
+    if valid_dates:
+        if start_date:
+            employers = employers.filter(
+                created_at__date__gte=start_date
+            )
+
+            applicants = applicants.filter(
+                user__date_joined__date__gte=start_date
+            )
+
+            jobs = jobs.filter(
+                created_at__date__gte=start_date
+            )
+
+        if end_date:
+            employers = employers.filter(
+                created_at__date__lte=end_date
+            )
+
+            applicants = applicants.filter(
+                user__date_joined__date__lte=end_date
+            )
+
+            jobs = jobs.filter(
+                created_at__date__lte=end_date
+            )
+
+    else:
+        # Invalid date ranges must not return the unfiltered report.
+        employers = employers.none()
+        applicants = applicants.none()
+        jobs = jobs.none()
+
+    # =========================================================
+    # 4. CALCULATE SUMMARY COUNTS
+    # =========================================================
+    total_employers = employers.count()
+
+    active_employers = employers.filter(
+        is_active=True
+    ).count()
+
+    suspended_employers = employers.filter(
+        is_active=False
+    ).count()
+
+    total_applicants = applicants.count()
+
+    total_jobs = jobs.count()
+
+    approved_jobs = jobs.filter(
+        status="approved"
+    ).count()
+
+    pending_jobs = jobs.filter(
+        status="pending"
+    ).count()
+
+    rejected_jobs = jobs.filter(
+        status="rejected"
+    ).count()
+
+    # =========================================================
+    # 5. TEMPLATE CONTEXT
+    # =========================================================
     context = {
-        "total_employers": Employer.objects.count(),
-        "active_employers": Employer.objects.filter(is_active=True).count(),
-        "suspended_employers": Employer.objects.filter(is_active=False).count(),
+        # Filtered records
+        "employers": employers,
+        "applicants": applicants,
+        "jobs": jobs,
 
-        "total_applicants": Applicant.objects.count(),
+        # Employer metrics
+        "total_employers": total_employers,
+        "active_employers": active_employers,
+        "suspended_employers": suspended_employers,
 
-        "total_jobs": JobPost.objects.count(),
-        "approved_jobs": JobPost.objects.filter(status="approved").count(),
-        "pending_jobs": JobPost.objects.filter(status="pending").count(),
-        "rejected_jobs": JobPost.objects.filter(status="rejected").count(),
+        # Applicant metrics
+        "total_applicants": total_applicants,
 
-        "employers": Employer.objects.all(),
-        "applicants": Applicant.objects.all(),
-        "jobs": JobPost.objects.select_related("employer").all(),
+        # Job metrics
+        "total_jobs": total_jobs,
+        "approved_jobs": approved_jobs,
+        "pending_jobs": pending_jobs,
+        "rejected_jobs": rejected_jobs,
+
+        # Date filter values
+        "date_from": date_from,
+        "date_to": date_to,
+        "date_error": date_error,
+
+        # Report metadata
+        "report_generated": (
+            valid_dates and bool(date_from or date_to)
+        ),
+        "report_start": start_date,
+        "report_end": end_date,
+        "report_date": timezone.localdate(),
     }
 
-    return render(request, "pages/reports.html", context)
+    return render(
+        request,
+        "pages/reports.html",
+        context
+    )
+
 
 
 @login_required(login_url="login_user")
