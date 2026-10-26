@@ -377,6 +377,30 @@
         content: "";
     }
 
+    .tel {
+        width: 100%;
+        box-sizing: border-box;
+
+        padding: 12px 14px;
+
+        background: #ffffff;
+
+        border: 1px solid var(--border);
+        border-radius: 8px;
+
+        color: var(--text);
+
+        font-family: inherit;
+        font-size: 0.92rem;
+
+        outline: none;
+
+        transition:
+            border-color var(--transition),
+            box-shadow var(--transition),
+            background var(--transition);
+    }
+
     .field-group input[type="text"],
     .field-group input[type="email"],
     .field-group input[type="password"],
@@ -1219,15 +1243,25 @@
                         <div class="field-group">
 
                             <label for="contact_no">
-                                Contact No.
+                                Mobile Number
                             </label>
 
                             <input
-                                type="number"
+                                class="tel"
+                                type="tel"
                                 id="contact_no"
                                 name="contact_no"
-                                placeholder="Corporate line or official mobile"
+                                placeholder="09XX XXX XXXX"
+                                inputmode="numeric"
+                                autocomplete="tel"
+                                maxlength="11"
+                                pattern="09[0-9]{9}"
+                                title="Enter a valid 11-digit Philippine mobile number starting with 09."
                             >
+
+                            <div class="field-help">
+                                Enter your 11-digit Philippine mobile number, e.g., 09171234567.
+                            </div>
 
                         </div>
 
