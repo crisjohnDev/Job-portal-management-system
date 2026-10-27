@@ -1,0 +1,299 @@
+
+{% extends "home_base.html" %}
+
+{% block title %}Edit My Profile{% endblock %}
+
+{% block content %}
+<style>
+    .edit-page {
+        max-width: 850px;
+        margin: 40px auto;
+        padding: 0 16px;
+    }
+
+    .edit-card {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 28px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, .05);
+    }
+
+    .edit-card h1 {
+        color: #174a8b;
+        font-size: 27px;
+        margin-bottom: 8px;
+    }
+
+    .edit-description {
+        color: #64748b;
+        margin-bottom: 28px;
+    }
+
+    .edit-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .edit-field {
+        min-width: 0;
+    }
+
+    .edit-field.full {
+        grid-column: 1 / -1;
+    }
+
+    .edit-field label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #334155;
+    }
+
+    .edit-field input,
+    .edit-field textarea {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 11px 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font: inherit;
+    }
+
+    .edit-field input:focus,
+    .edit-field textarea:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
+    }
+
+    .field-error {
+        color: #b91c1c;
+        font-size: 13px;
+        margin-top: 6px;
+    }
+
+    .file-current,
+    .field-help {
+        display: block;
+        color: #64748b;
+        font-size: 12px;
+        margin-top: 7px;
+    }
+
+    .file-current a {
+        color: #174a8b;
+    }
+
+    .section-heading {
+        grid-column: 1 / -1;
+        color: #174a8b;
+        font-size: 17px;
+        font-weight: 700;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 10px;
+        margin: 8px 0 0;
+    }
+
+    .edit-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        border-top: 1px solid #e2e8f0;
+        margin-top: 28px;
+        padding-top: 22px;
+    }
+
+    .edit-button {
+        border-radius: 8px;
+        padding: 11px 18px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        border: 1px solid #cbd5e1;
+    }
+
+    .cancel-button {
+        background: #fff;
+        color: #334155;
+    }
+
+    .save-button {
+        background: #174a8b;
+        color: #fff;
+        border-color: #174a8b;
+    }
+
+    .error-summary {
+        background: #fef2f2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+        padding: 12px 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    @media (max-width: 600px) {
+        .edit-card {
+            padding: 20px 16px;
+        }
+
+        .edit-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .edit-field.full,
+        .section-heading {
+            grid-column: auto;
+        }
+
+        .edit-actions {
+            flex-direction: column-reverse;
+        }
+
+        .edit-button {
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="edit-page">
+    <div class="edit-card">
+        <h1>Edit My Profile</h1>
+        <p class="edit-description">
+            Update your personal information, skills, and application documents.
+        </p>
+
+        {% if errors %}
+            <div class="error-summary">
+                <strong>Please correct the following errors.</strong>
+            </div>
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="edit-grid">
+                <h2 class="section-heading">Personal Information</h2>
+
+                <div class="edit-field">
+                    <label for="first_name">First Name</label>
+                    <input id="first_name" name="first_name"
+                           value="{{ form_data.first_name|default:applicant.first_name }}"
+                           required>
+                    {% if errors.first_name %}
+                        <div class="field-error">{{ errors.first_name }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="edit-field">
+                    <label for="middle_name">Middle Name</label>
+                    <input id="middle_name" name="middle_name"
+                           value="{{ form_data.middle_name|default:applicant.middle_name }}">
+                </div>
+
+                <div class="edit-field">
+                    <label for="last_name">Last Name</label>
+                    <input id="last_name" name="last_name"
+                           value="{{ form_data.last_name|default:applicant.last_name }}"
+                           required>
+                    {% if errors.last_name %}
+                        <div class="field-error">{{ errors.last_name }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="edit-field">
+                    <label for="phone_number">Mobile Number</label>
+                    <input id="phone_number" name="phone_number"
+                           type="tel" inputmode="numeric" maxlength="11"
+                           value="{{ form_data.phone_number|default:applicant.phone_number }}"
+                           required>
+                    {% if errors.phone_number %}
+                        <div class="field-error">{{ errors.phone_number }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="edit-field full">
+                    <label for="email">Email Address</label>
+                    <input id="email" name="email" type="email"
+                           value="{{ form_data.email|default:applicant.email }}"
+                           required>
+                    {% if errors.email %}
+                        <div class="field-error">{{ errors.email }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="edit-field full">
+                    <label for="skills">Skills</label>
+                    <textarea id="skills" name="skills" rows="4"
+                              placeholder="Example: Computer Troubleshooting, Microsoft Office">{{ form_data.skills|default:applicant.skills }}</textarea>
+                    <span class="field-help">
+                        Separate skills with commas.
+                    </span>
+                </div>
+
+                <h2 class="section-heading">Application Documents</h2>
+
+                <div class="edit-field full">
+                    <label for="resume">Resume / CV</label>
+                    <input id="resume" name="resume" type="file"
+                           accept=".pdf,.doc,.docx">
+
+                    {% if applicant.resume %}
+                        <span class="file-current">
+                            Current:
+                            <a href="{{ applicant.resume.url }}" target="_blank" rel="noopener">
+                                View Resume
+                            </a>
+                        </span>
+                    {% endif %}
+
+                    <span class="field-help">
+                        Leave empty to keep your current resume. Maximum 5 MB.
+                    </span>
+
+                    {% if errors.resume %}
+                        <div class="field-error">{{ errors.resume }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="edit-field full">
+                    <label for="cover_letter">Cover Letter</label>
+                    <input id="cover_letter" name="cover_letter" type="file"
+                           accept=".pdf,.doc,.docx">
+
+                    {% if applicant.cover_letter %}
+                        <span class="file-current">
+                            Current:
+                            <a href="{{ applicant.cover_letter.url }}" target="_blank" rel="noopener">
+                                View Cover Letter
+                            </a>
+                        </span>
+                    {% endif %}
+
+                    <span class="field-help">
+                        Leave empty to keep your current cover letter. Maximum 5 MB.
+                    </span>
+
+                    {% if errors.cover_letter %}
+                        <div class="field-error">{{ errors.cover_letter }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="edit-actions">
+                <a href="{% url 'applicant-profile' %}"
+                   class="edit-button cancel-button">
+                    Cancel
+                </a>
+
+                <button type="submit" class="edit-button save-button">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

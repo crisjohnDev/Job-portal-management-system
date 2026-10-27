@@ -30,5 +30,16 @@ path(
     views.verify_applicant_registration,
     name="verify-applicant-registration"
 ),
+    path(
+        "applicant/profile/",
+        views.applicant_profile,
+        name="applicant-profile",
+    ),
+
+    path(
+    "applicant/profile/edit/",
+    views.edit_applicant_profile,
+    name="edit-applicant-profile",
+),
 
 ]

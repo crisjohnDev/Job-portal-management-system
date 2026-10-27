@@ -961,43 +961,30 @@ def verify_applicant_registration(request):
         "applicant_registration_id"
     )
 
-    # ==========================================
-    # NO REGISTRATION
-    # ==========================================
-
     if not registration_id:
-
-        return redirect(
-            "applicant-registration"
-        )
+        return redirect("applicant-registration")
 
     # ==========================================
     # GET TEMPORARY REGISTRATION
     # ==========================================
 
     try:
-
         registration = ApplicantRegistrationOTP.objects.get(
             id=registration_id
         )
 
     except ApplicantRegistrationOTP.DoesNotExist:
-
         request.session.pop(
             "applicant_registration_id",
             None
         )
-
-        return redirect(
-            "applicant-registration"
-        )
+        return redirect("applicant-registration")
 
     # ==========================================
     # CHECK EXPIRATION
     # ==========================================
 
     if registration.is_expired():
-
         registration.delete()
 
         request.session.pop(
@@ -1027,12 +1014,7 @@ def verify_applicant_registration(request):
             ""
         ).strip()
 
-        # ======================================
-        # CHECK OTP
-        # ======================================
-
         if otp != registration.otp_code:
-
             return render(
                 request,
                 "pages/verify_applicant.html",
@@ -1045,63 +1027,98 @@ def verify_applicant_registration(request):
             )
 
         # ==========================================
-        # CREATE USER
+        # VALIDATE SAVED SKILLS
         # ==========================================
 
-        user = User(
-            username=registration.username,
-            email=registration.email,
-            password=registration.password,
-        )
+        skills = (registration.skills or "").strip()
+
+        if not skills:
+            return render(
+                request,
+                "pages/verify_applicant.html",
+                {
+                    "error": (
+                        "Your skills were not saved during "
+                        "registration. Please register again."
+                    )
+                }
+            )
 
         # ==========================================
-        # SET ROLE
+        # CREATE USER AND APPLICANT ATOMICALLY
         # ==========================================
 
-        user.role = "applicant"
+        try:
+            with transaction.atomic():
 
-        user.save()
+                # Prevent duplicate account creation.
+                if User.objects.filter(
+                    username=registration.username
+                ).exists():
+                    return render(
+                        request,
+                        "pages/verify_applicant.html",
+                        {
+                            "error": (
+                                "This username is already registered. "
+                                "Please contact support."
+                            )
+                        }
+                    )
 
-        # ==========================================
-        # CREATE APPLICANT
-        # ==========================================
+                if User.objects.filter(
+                    email=registration.email
+                ).exists():
+                    return render(
+                        request,
+                        "pages/verify_applicant.html",
+                        {
+                            "error": (
+                                "This email is already registered. "
+                                "Please contact support."
+                            )
+                        }
+                    )
 
-        Applicant.objects.create(
+                # Create the user.
+                user = User(
+                    username=registration.username,
+                    email=registration.email,
+                    password=registration.password,
+                )
 
-            user=user,
+                user.role = "applicant"
+                user.save()
 
-            first_name=registration.first_name,
+                # Create the permanent applicant profile.
+                Applicant.objects.create(
+                    user=user,
+                    first_name=registration.first_name,
+                    last_name=registration.last_name,
+                    middle_name=registration.middle_name,
+                    email=registration.email,
+                    phone_number=registration.phone_number,
 
-            last_name=registration.last_name,
+                    # IMPORTANT: copy skills from the OTP record.
+                    skills=skills,
 
-            middle_name=registration.middle_name,
+                    resume=registration.resume,
+                    cover_letter=registration.cover_letter,
+                )
 
-            email=registration.email,
+                # Mark the temporary record as verified.
+                registration.is_verified = True
+                registration.save(
+                    update_fields=["is_verified"]
+                )
 
-            phone_number=registration.phone_number,
+                # Delete the temporary registration.
+                registration.delete()
 
-            resume=registration.resume,
-
-            cover_letter=registration.cover_letter,
-        )
-
-        # ==========================================
-        # MARK VERIFIED
-        # ==========================================
-
-        registration.is_verified = True
-
-        registration.save(
-            update_fields=[
-                "is_verified"
-            ]
-        )
-
-        # ==========================================
-        # DELETE TEMPORARY REGISTRATION
-        # ==========================================
-
-        registration.delete()
+        except Exception:
+            # Log the actual exception in your server logs
+            # when diagnosing unexpected database failures.
+            raise
 
         # ==========================================
         # CLEAR SESSION
@@ -1116,9 +1133,7 @@ def verify_applicant_registration(request):
         # REDIRECT TO LOGIN
         # ==========================================
 
-        return redirect(
-            "login-user"
-        )
+        return redirect("login-user")
 
     # ==========================================
     # DISPLAY OTP PAGE
@@ -1770,13 +1785,23 @@ def apply_job(request, id):
 
 @login_required(login_url="login_user")
 def my_applications(request):
-    applications = JobApplication.objects.filter(
-        applicant=request.user.applicant_profile
-    ).order_by("-applied_at")
+    applicant = getattr(request.user, "applicant_profile", None)
 
-    return render(request, "pages/my_applications.html", {
-        "applications": applications
-    })
+    if applicant is None:
+        applications = JobApplication.objects.none()
+    else:
+        applications = JobApplication.objects.filter(
+            applicant=applicant
+        ).order_by("-applied_at")
+
+    return render(
+        request,
+        "pages/my_applications.html",
+        {
+            "applications": applications,
+            "has_applicant_profile": applicant is not None,
+        }
+    )
 
 @login_required(login_url="login_user")
 def applicants(request):
@@ -2340,3 +2365,117 @@ def import_job_list(request):
 
 
     return redirect("job-list")
+
+@login_required(login_url="login-user")
+def applicant_profile(request):
+    applicant = getattr(request.user, "applicant_profile", None)
+
+    return render(
+        request,
+        "pages/applicant_profile.html",
+        {
+            "applicant": applicant,
+        },
+    )
+
+@login_required(login_url="login-user")
+def edit_applicant_profile(request):
+    applicant = get_object_or_404(
+        Applicant,
+        user=request.user,
+    )
+
+    errors = {}
+
+    if request.method == "POST":
+        first_name = request.POST.get("first_name", "").strip()
+        middle_name = request.POST.get("middle_name", "").strip()
+        last_name = request.POST.get("last_name", "").strip()
+        email = request.POST.get("email", "").strip()
+        phone_number = request.POST.get("phone_number", "").strip()
+        skills = request.POST.get("skills", "").strip()
+
+        resume = request.FILES.get("resume")
+        cover_letter = request.FILES.get("cover_letter")
+
+        # Required fields
+        if not first_name:
+            errors["first_name"] = "First name is required."
+
+        if not last_name:
+            errors["last_name"] = "Last name is required."
+
+        if not email:
+            errors["email"] = "Email address is required."
+        else:
+            from django.core.validators import validate_email
+            from django.core.exceptions import ValidationError
+
+            try:
+                validate_email(email)
+            except ValidationError:
+                errors["email"] = "Enter a valid email address."
+
+            if Applicant.objects.filter(
+                email__iexact=email
+            ).exclude(pk=applicant.pk).exists():
+                errors["email"] = "This email is already used by another applicant."
+
+            if request.user.__class__.objects.filter(
+                email__iexact=email
+            ).exclude(pk=request.user.pk).exists():
+                errors["email"] = "This email is already associated with another account."
+
+        if not phone_number:
+            errors["phone_number"] = "Mobile number is required."
+        elif not phone_number.isdigit() or len(phone_number) != 11 or not phone_number.startswith("09"):
+            errors["phone_number"] = "Enter a valid 11-digit Philippine mobile number starting with 09."
+
+        # Optional file validation
+        allowed_extensions = {".pdf", ".doc", ".docx"}
+
+        from pathlib import Path
+
+        for field_name, uploaded_file in (
+            ("resume", resume),
+            ("cover_letter", cover_letter),
+        ):
+            if uploaded_file:
+                extension = Path(uploaded_file.name).suffix.lower()
+
+                if extension not in allowed_extensions:
+                    errors[field_name] = "Only PDF, DOC, and DOCX files are allowed."
+                elif uploaded_file.size > 5 * 1024 * 1024:
+                    errors[field_name] = "The file must not exceed 5 MB."
+
+        if not errors:
+            with transaction.atomic():
+                applicant.first_name = first_name
+                applicant.middle_name = middle_name
+                applicant.last_name = last_name
+                applicant.email = email
+                applicant.phone_number = phone_number
+                applicant.skills = skills
+
+                if resume:
+                    applicant.resume = resume
+
+                if cover_letter:
+                    applicant.cover_letter = cover_letter
+
+                applicant.save()
+
+                request.user.email = email
+                request.user.save(update_fields=["email"])
+
+            return redirect("applicant-profile")
+
+    return render(
+        request,
+        "pages/edit_applicant_profile.html",
+        {
+            "applicant": applicant,
+            "errors": errors,
+            "form_data": request.POST if request.method == "POST" else {},
+        },
+    )

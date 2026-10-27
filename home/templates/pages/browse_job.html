@@ -1,18 +1,15 @@
+
 {% extends "home_base.html" %}
 {% load static %}
 
-{% block title %}
-Browse Jobs
-{% endblock %}
+{% block title %}Browse Jobs{% endblock %}
 
 {% block content %}
 
 <style>
-
 /* =========================================================
    COLOR SYSTEM
 ========================================================= */
-
 :root {
     --primary: #059669;
     --primary-dark: #047857;
@@ -28,1463 +25,1056 @@ Browse Jobs
 
     --background: #f8fafc;
     --white: #ffffff;
-
     --danger: #dc2626;
+
+    --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.07);
+
+    --radius: 10px;
+    --transition: all 0.2s ease;
 }
 
-
 /* =========================================================
-   BROWSE PAGE
+   RESET AND GLOBAL
 ========================================================= */
+.browse-container,
+.browse-container *,
+.logo-modal,
+.logo-modal * {
+    box-sizing: border-box;
+}
 
 .browse-container {
     width: 100%;
-    min-height: calc(100vh - 80px);
-
-    padding: 100px 20px 35px;
-
-    box-sizing: border-box;
-
+    max-width: 100%;
+    min-height: 100%;
+    padding: 22px 24px 35px;
     background: var(--background);
-
+    color: var(--text);
     position: relative;
     z-index: 1;
 }
 
+.browse-container button,
+.browse-container input {
+    font-family: inherit;
+}
+
+.browse-container button,
+.browse-container a,
+.browse-container input {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.browse-container img {
+    max-width: 100%;
+}
 
 /* =========================================================
-   THREE COLUMN LAYOUT
+   MAIN THREE-COLUMN GRID
 ========================================================= */
-
 .browse-grid {
     width: 100%;
-    max-width: 1600px;
-
-    height: calc(100vh - 135px);
-
+    max-width: 1700px;
+    min-width: 0;
     margin: 0 auto;
 
     display: grid;
-
-    grid-template-columns:
-        250px
-        minmax(0, 1fr)
-        330px;
-
+    grid-template-columns: 230px minmax(0, 1fr) 300px;
     gap: 18px;
-
-    overflow: hidden;
+    align-items: start;
 }
 
-
 /* =========================================================
-   COMMON SIDEBAR
+   COMMON SIDEBARS
 ========================================================= */
-
 .companies-card,
 .recommendations-card {
-
-    height: 100%;
-
+    min-width: 0;
     background: var(--white);
-
     border: 1px solid var(--border);
-
-    box-sizing: border-box;
-
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary) transparent;
-
-    box-shadow:
-        0 2px 8px rgba(15, 23, 42, 0.04);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow-sm);
 }
-
-.companies-card::-webkit-scrollbar,
-.recommendations-card::-webkit-scrollbar,
-.main-search-column::-webkit-scrollbar {
-
-    width: 6px;
-}
-
-.companies-card::-webkit-scrollbar-track,
-.recommendations-card::-webkit-scrollbar-track,
-.main-search-column::-webkit-scrollbar-track {
-
-    background: transparent;
-}
-
-.companies-card::-webkit-scrollbar-thumb,
-.recommendations-card::-webkit-scrollbar-thumb,
-.main-search-column::-webkit-scrollbar-thumb {
-
-    background: var(--primary);
-
-    border-radius: 10px;
-}
-
-
-/* =========================================================
-   COMPANY SIDEBAR
-========================================================= */
 
 .companies-card {
-    padding: 18px;
+    position: sticky;
+    top: 95px;
 }
 
-.companies-header {
-    margin-bottom: 18px;
+.recommendations-card {
+    position: sticky;
+    top: 95px;
+}
 
-    padding-bottom: 15px;
-
+.companies-header,
+.recommendations-header {
+    padding-bottom: 14px;
+    margin-bottom: 15px;
     border-bottom: 1px solid var(--border);
 }
 
-.companies-title {
-
+.companies-title,
+.recommendations-title {
     margin: 0;
-
     color: var(--text);
-
     font-size: 1rem;
-
     font-weight: 800;
-}
-
-.companies-subtitle {
-
-    margin-top: 5px;
-
-    color: var(--text-muted);
-
-    font-size: 0.73rem;
-
     line-height: 1.4;
 }
 
+.companies-subtitle,
+.recommendations-subtitle {
+    margin-top: 5px;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    line-height: 1.55;
+}
 
 /* =========================================================
-   COMPANY FILTER
+   COMPANY FILTERS
 ========================================================= */
-
 .company-filter {
-
     display: flex;
-
     flex-direction: column;
-
     gap: 7px;
 }
 
 .company-filter button {
-
+    display: block;
     width: 100%;
+    min-width: 0;
+    padding: 11px 10px;
 
-    padding: 10px 11px;
-
-    box-sizing: border-box;
-
-    background: #ffffff;
-
+    background: var(--white);
     border: 1px solid var(--border);
+    border-radius: 7px;
 
     color: var(--text-secondary);
-
-    font-family: inherit;
-
     font-size: 0.75rem;
-
     font-weight: 600;
-
     text-align: left;
+    line-height: 1.4;
 
+    overflow-wrap: anywhere;
     cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: var(--transition);
 }
 
 .company-filter button:hover {
-
     background: var(--primary-light);
-
-    color: var(--primary-dark);
-
     border-color: var(--primary-border);
-
-    transform: translateX(2px);
+    color: var(--primary-dark);
 }
 
 .company-filter button.active {
-
     background: var(--primary);
-
-    color: #ffffff;
-
     border-color: var(--primary);
-
-    box-shadow:
-        0 3px 8px rgba(5, 150, 105, 0.16);
+    color: var(--white);
+    box-shadow: 0 3px 8px rgba(5, 150, 105, 0.15);
 }
 
 .company-count {
-
     float: right;
-
+    margin-left: 6px;
     color: var(--primary);
-
-    font-size: 0.68rem;
-
+    font-size: 0.7rem;
     font-weight: 800;
 }
 
 .company-filter button.active .company-count {
-
-    color: #ffffff;
+    color: var(--white);
 }
 
-
 /* =========================================================
-   MAIN SEARCH COLUMN
+   CENTER JOB COLUMN
 ========================================================= */
-
 .main-search-column {
-
-    height: 100%;
-
+    width: 100%;
     min-width: 0;
-
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    padding-right: 5px;
-
-    box-sizing: border-box;
-
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary) transparent;
 }
-
-
-/* =========================================================
-   PAGE HEADER
-========================================================= */
 
 .browse-page-header {
-
-    margin-bottom: 20px;
-
-    padding: 2px 0;
+    margin-bottom: 24px;
 }
 
 .browse-page-title {
-
     margin: 0;
-
     color: var(--text);
-
-    font-size: clamp(1.5rem, 3vw, 2rem);
-
+    font-size: clamp(1.5rem, 2.5vw, 2.1rem);
     font-weight: 800;
-
-    line-height: 1.2;
-
-    letter-spacing: -0.025em;
+    line-height: 1.25;
+    letter-spacing: -0.035em;
+    overflow-wrap: anywhere;
 }
 
 .browse-page-description {
-
-    margin: 7px 0 0;
-
+    max-width: 650px;
+    margin: 9px 0 0;
     color: var(--text-muted);
-
-    font-size: 0.8rem;
-
-    line-height: 1.6;
+    font-size: 0.83rem;
+    line-height: 1.7;
 }
 
-
 /* =========================================================
-   JOB HEADER
+   JOBS HEADER
 ========================================================= */
-
 .jobs-header {
-
     display: flex;
-
-    align-items: flex-end;
-
+    align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
 
-    gap: 15px;
-
-    margin-bottom: 13px;
-
-    padding-bottom: 10px;
-
+    margin-bottom: 15px;
+    padding-bottom: 12px;
     border-bottom: 2px solid var(--primary-border);
 }
 
 .jobs-title {
-
     margin: 0;
-
     color: var(--text);
-
-    font-size: 1.15rem;
-
+    font-size: 1.1rem;
     font-weight: 800;
 }
 
 .jobs-count {
+    color: var(--primary-dark);
+    background: var(--primary-light);
+    border: 1px solid var(--primary-border);
+    border-radius: 20px;
+    padding: 5px 10px;
 
-    color: var(--primary);
-
-    font-size: 0.7rem;
-
+    font-size: 0.67rem;
     font-weight: 800;
-
     white-space: nowrap;
 }
 
-
 /* =========================================================
-   SEARCH
+   SEARCH INPUT
 ========================================================= */
-
 .search-wrapper {
-
-    margin-bottom: 15px;
+    position: relative;
+    margin-bottom: 16px;
 }
 
 .search-input {
-
+    display: block;
     width: 100%;
-
-    height: 44px;
-
+    min-width: 0;
+    height: 46px;
     padding: 0 14px;
 
-    box-sizing: border-box;
-
-    background: #ffffff;
-
+    background: var(--white);
     border: 1px solid var(--border);
+    border-radius: 8px;
 
     color: var(--text);
-
     outline: none;
+    font-size: 0.8rem;
 
-    font-family: inherit;
-
-    font-size: 0.78rem;
-
-    box-shadow:
-        0 1px 3px rgba(15, 23, 42, 0.03);
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+    transition: var(--transition);
 }
 
 .search-input::placeholder {
-
     color: #94a3b8;
 }
 
 .search-input:focus {
-
     border-color: var(--primary);
-
-    box-shadow:
-        0 0 0 3px rgba(5, 150, 105, 0.10);
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
 }
-
 
 /* =========================================================
    JOB LIST
 ========================================================= */
-
 .job-list {
-
     display: grid;
-
-    gap: 12px;
-
+    grid-template-columns: minmax(0, 1fr);
+    gap: 13px;
+    min-width: 0;
     padding-bottom: 20px;
 }
-
 
 /* =========================================================
    JOB CARD
 ========================================================= */
-
 .job-card {
+    min-width: 0;
+    padding: 18px;
 
-    background: #ffffff;
-
+    background: var(--white);
     border: 1px solid var(--border);
+    border-radius: var(--radius);
 
-    padding: 17px;
-
-    box-sizing: border-box;
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
 }
 
 .job-card:hover {
-
-    background: #ffffff;
-
     border-color: var(--primary-border);
-
+    box-shadow: var(--shadow-md);
     transform: translateY(-2px);
-
-    box-shadow:
-        0 8px 24px rgba(15, 23, 42, 0.08);
 }
 
-
 /* =========================================================
-   JOB TOP
+   JOB COMPANY AND LOGO
 ========================================================= */
-
 .job-top {
-
     display: flex;
-
     align-items: flex-start;
-
+    min-width: 0;
     gap: 12px;
-
-    margin-bottom: 12px;
+    margin-bottom: 13px;
 }
 
 .job-company {
-
     display: flex;
-
     align-items: center;
-
-    gap: 11px;
-
+    gap: 12px;
+    width: 100%;
     min-width: 0;
 }
 
+.job-logo,
+.job-logo-placeholder {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+    border-radius: 8px;
+}
+
 .job-logo {
-
-    width: 46px;
-    height: 46px;
-
-    flex-shrink: 0;
-
+    display: block;
     object-fit: contain;
-
-    padding: 5px;
-
-    box-sizing: border-box;
-
-    background: #ffffff;
-
+    padding: 4px;
+    background: var(--white);
     border: 1px solid var(--border);
-
-    cursor: pointer;
+    cursor: zoom-in;
 }
 
 .job-logo-placeholder {
-
-    width: 46px;
-    height: 46px;
-
-    flex-shrink: 0;
-
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     background: var(--primary-light);
-
     border: 1px solid var(--primary-border);
-
-    color: var(--primary);
-
-    font-size: 1rem;
-
+    color: var(--primary-dark);
+    font-size: 1.1rem;
     font-weight: 800;
 }
 
 .job-company-info {
-
     min-width: 0;
+    flex: 1;
 }
 
 .job-title {
-
     margin: 0;
-
     color: var(--text);
-
-    font-size: 0.95rem;
-
+    font-size: 0.98rem;
     font-weight: 800;
-
-    line-height: 1.35;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
 }
 
 .job-company-name {
-
-    margin-top: 3px;
-
-    color: var(--primary);
-
-    font-size: 0.72rem;
-
+    margin-top: 4px;
+    color: var(--primary-dark);
+    font-size: 0.75rem;
     font-weight: 700;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
 }
-
 
 /* =========================================================
    JOB META
 ========================================================= */
-
 .job-meta {
-
     display: flex;
-
+    align-items: flex-start;
     flex-wrap: wrap;
-
-    gap: 6px 13px;
-
-    margin-bottom: 12px;
-
-    color: var(--text-muted);
-
-    font-size: 0.7rem;
+    gap: 7px;
+    margin-bottom: 13px;
 }
 
 .job-meta span {
-
     display: inline-flex;
-
     align-items: center;
+    min-width: 0;
+    max-width: 100%;
 
-    gap: 4px;
-}
-
-
-/* =========================================================
-   DESCRIPTION
-========================================================= */
-
-.job-description {
-
-    margin: 0 0 13px;
+    padding: 5px 8px;
+    background: #f8fafc;
+    border: 1px solid var(--border-light);
+    border-radius: 5px;
 
     color: var(--text-secondary);
-
-    font-size: 0.76rem;
-
-    line-height: 1.55;
-
-    display: -webkit-box;
-
-    -webkit-line-clamp: 3;
-
-    -webkit-box-orient: vertical;
-
-    overflow: hidden;
+    font-size: 0.7rem;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
 }
 
+/* =========================================================
+   JOB DESCRIPTION
+========================================================= */
+.job-description {
+    margin: 0 0 15px;
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
 
 /* =========================================================
    JOB FOOTER
 ========================================================= */
-
 .job-footer {
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
 
-    gap: 10px;
-
-    padding-top: 12px;
-
+    padding-top: 13px;
     border-top: 1px solid var(--border-light);
 }
 
 .job-vacancies {
-
+    min-width: 0;
     color: var(--text-muted);
-
-    font-size: 0.68rem;
+    font-size: 0.72rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
 }
 
-.view-job-button {
-
+.view-job-button,
+.recommendation-button {
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
-
-    padding: 8px 13px;
+    min-height: 38px;
+    padding: 9px 15px;
 
     background: var(--primary);
-
-    color: #ffffff;
-
     border: 1px solid var(--primary);
+    border-radius: 7px;
 
+    color: var(--white);
+    text-align: center;
     text-decoration: none;
-
-    font-size: 0.7rem;
-
+    font-size: 0.73rem;
     font-weight: 800;
 
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease;
+    transition: var(--transition);
 }
 
-.view-job-button:hover {
-
+.view-job-button:hover,
+.recommendation-button:hover {
     background: var(--primary-dark);
-
     border-color: var(--primary-dark);
-
-    color: #ffffff;
-
-    transform: translateY(-1px);
+    color: var(--white);
 }
 
-
 /* =========================================================
-   RIGHT RECOMMENDATION SIDEBAR
+   RECOMMENDATIONS
 ========================================================= */
-
-.recommendations-card {
-
-    padding: 18px;
-
-    background: #ffffff;
-}
-
-
-/* =========================================================
-   RECOMMENDATION HEADER
-========================================================= */
-
 .recommendations-header {
-
-    padding-bottom: 13px;
-
-    margin-bottom: 14px;
-
     border-bottom: 2px solid var(--primary-border);
 }
 
-.recommendations-title {
-
-    margin: 0;
-
-    color: var(--text);
-
-    font-size: 1rem;
-
-    font-weight: 800;
-
-    line-height: 1.3;
-}
-
-.recommendations-subtitle {
-
-    margin: 5px 0 0;
-
-    color: var(--text-muted);
-
-    font-size: 0.71rem;
-
-    line-height: 1.45;
-}
-
-
-/* =========================================================
-   RECOMMENDATION LIST
-========================================================= */
-
 .recommendation-list {
-
     display: flex;
-
     flex-direction: column;
-
-    gap: 10px;
+    gap: 12px;
 }
-
-
-/* =========================================================
-   RECOMMENDATION CARD
-========================================================= */
 
 .recommendation-item {
-
-    position: relative;
-
+    min-width: 0;
     padding: 14px;
 
-    box-sizing: border-box;
-
-    background: #ffffff;
-
+    background: var(--white);
     border: 1px solid var(--border);
-
     border-left: 3px solid var(--primary);
+    border-radius: 7px;
 
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: var(--transition);
 }
 
 .recommendation-item:hover {
-
-    background: #ffffff;
-
     border-color: var(--primary-border);
-
     border-left-color: var(--primary);
-
-    transform: translateX(-3px);
-
-    box-shadow:
-        0 7px 20px rgba(15, 23, 42, 0.08);
+    box-shadow: var(--shadow-md);
 }
 
-
-/* =========================================================
-   RECOMMENDATION TOP
-========================================================= */
-
 .recommendation-top {
-
     display: flex;
-
     align-items: flex-start;
-
     justify-content: space-between;
-
     gap: 8px;
-
-    margin-bottom: 11px;
+    margin-bottom: 12px;
 }
 
 .recommendation-company {
-
     display: flex;
-
     align-items: center;
-
     gap: 9px;
-
     min-width: 0;
+    flex: 1;
+}
+
+.recommendation-logo,
+.recommendation-logo-placeholder {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    border-radius: 7px;
 }
 
 .recommendation-logo {
-
-    width: 40px;
-    height: 40px;
-
-    flex-shrink: 0;
-
     object-fit: contain;
-
-    padding: 4px;
-
-    box-sizing: border-box;
-
-    background: #ffffff;
-
+    padding: 3px;
+    background: var(--white);
     border: 1px solid var(--border);
-
-    cursor: pointer;
+    cursor: zoom-in;
 }
 
 .recommendation-logo-placeholder {
-
-    width: 40px;
-    height: 40px;
-
-    flex-shrink: 0;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     background: var(--primary-light);
-
     border: 1px solid var(--primary-border);
-
-    color: var(--primary);
-
-    font-size: 0.9rem;
-
+    color: var(--primary-dark);
+    font-size: 0.95rem;
     font-weight: 800;
 }
 
 .recommendation-company-info {
-
     min-width: 0;
+    flex: 1;
 }
 
 .recommendation-company-name {
-
     color: var(--text-muted);
-
-    font-size: 0.65rem;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
+    font-size: 0.67rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
 }
 
 .recommendation-job-title {
-
-    margin: 3px 0 0;
-
+    margin: 4px 0 0;
     color: var(--text);
-
     font-size: 0.82rem;
-
     font-weight: 800;
-
-    line-height: 1.3;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
 }
 
-
-/* =========================================================
-   MATCH BADGE
-========================================================= */
-
 .match-badge {
-
     flex-shrink: 0;
-
-    padding: 4px 7px;
-
+    padding: 5px 7px;
     background: var(--primary-light);
-
     border: 1px solid var(--primary-border);
-
+    border-radius: 5px;
     color: var(--primary-dark);
-
-    font-size: 0.62rem;
-
+    font-size: 0.66rem;
     font-weight: 800;
-
     white-space: nowrap;
 }
 
-
-/* =========================================================
-   RECOMMENDATION META
-========================================================= */
-
 .recommendation-meta {
-
     display: flex;
-
     flex-direction: column;
-
-    gap: 4px;
-
-    margin-bottom: 10px;
-
+    gap: 5px;
+    margin-bottom: 12px;
     color: var(--text-muted);
-
-    font-size: 0.66rem;
+    font-size: 0.7rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
 }
 
-
-/* =========================================================
-   MATCHED SKILLS
-========================================================= */
-
 .matched-skills {
-
     display: flex;
-
     flex-wrap: wrap;
-
     gap: 5px;
-
-    margin-bottom: 11px;
+    margin-bottom: 12px;
 }
 
 .skill-tag {
-
-    padding: 3px 6px;
-
+    max-width: 100%;
+    padding: 4px 7px;
     background: var(--primary-light);
-
     border: 1px solid var(--primary-border);
-
+    border-radius: 5px;
     color: var(--primary-dark);
-
-    font-size: 0.59rem;
-
-    line-height: 1.2;
+    font-size: 0.63rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
 }
-
-
-/* =========================================================
-   RECOMMENDATION BUTTON
-========================================================= */
 
 .recommendation-button {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
     width: 100%;
-
-    padding: 8px;
-
-    box-sizing: border-box;
-
-    background: var(--primary);
-
-    border: 1px solid var(--primary);
-
-    color: #ffffff;
-
-    text-decoration: none;
-
-    font-size: 0.66rem;
-
-    font-weight: 800;
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease;
 }
-
-.recommendation-button:hover {
-
-    background: var(--primary-dark);
-
-    border-color: var(--primary-dark);
-
-    color: #ffffff;
-}
-
-
-/* =========================================================
-   NO RECOMMENDATION
-========================================================= */
 
 .no-recommendations {
-
-    padding: 18px 12px;
-
+    padding: 17px 13px;
     background: var(--primary-light);
-
     border: 1px solid var(--primary-border);
-
     border-left: 3px solid var(--primary);
+    border-radius: 7px;
 }
 
 .no-recommendations-title {
-
-    margin: 0 0 5px;
-
+    margin: 0 0 6px;
     color: var(--text);
-
-    font-size: 0.75rem;
-
+    font-size: 0.8rem;
     font-weight: 800;
 }
 
 .no-recommendations-text {
-
     margin: 0;
-
     color: var(--text-muted);
-
-    font-size: 0.66rem;
-
-    line-height: 1.5;
+    font-size: 0.72rem;
+    line-height: 1.6;
 }
 
-
 /* =========================================================
-   NO JOBS
+   EMPTY STATES
 ========================================================= */
-
-.no-jobs {
-
-    padding: 40px 20px;
-
-    text-align: center;
-
-    background: #ffffff;
-
+.no-jobs,
+.search-empty {
+    padding: 35px 20px;
+    background: var(--white);
     border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-align: center;
 }
 
 .no-jobs-title {
-
-    margin: 0 0 6px;
-
+    margin: 0 0 8px;
     color: var(--text);
-
-    font-size: 0.9rem;
-
+    font-size: 0.95rem;
     font-weight: 800;
 }
 
 .no-jobs-text {
-
     margin: 0;
-
     color: var(--text-muted);
-
-    font-size: 0.72rem;
+    font-size: 0.76rem;
+    line-height: 1.6;
 }
 
-
-/* =========================================================
-   SEARCH EMPTY
-========================================================= */
-
 .search-empty {
-
     display: none;
-
-    padding: 30px 20px;
-
-    text-align: center;
-
-    background: #ffffff;
-
-    border: 1px solid var(--border);
 }
 
 .search-empty strong {
-
     display: block;
-
-    margin-bottom: 5px;
-
+    margin-bottom: 6px;
     color: var(--text);
-
-    font-size: 0.85rem;
+    font-size: 0.88rem;
 }
 
 .search-empty span {
-
     color: var(--text-muted);
-
-    font-size: 0.7rem;
+    font-size: 0.74rem;
+    line-height: 1.5;
 }
-
-
-/* =========================================================
-   LOGO MODAL
-========================================================= */
-
-.logo-modal {
-
-    display: none;
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 99999;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 20px;
-
-    box-sizing: border-box;
-
-    background: rgba(15, 23, 42, 0.78);
-}
-
-.logo-modal.show {
-
-    display: flex;
-}
-
-.logo-modal-content {
-
-    position: relative;
-
-    width: min(500px, 100%);
-
-    padding: 20px;
-
-    box-sizing: border-box;
-
-    background: #ffffff;
-
-    border: 1px solid var(--border);
-
-    box-shadow:
-        0 20px 50px rgba(15, 23, 42, 0.20);
-
-    text-align: center;
-}
-
-.logo-modal-content img {
-
-    max-width: 100%;
-
-    max-height: 65vh;
-
-    object-fit: contain;
-
-    background: #ffffff;
-
-    padding: 10px;
-
-    box-sizing: border-box;
-
-    border: 1px solid var(--border-light);
-}
-
-.logo-modal-title {
-
-    margin-top: 14px;
-
-    color: var(--text);
-
-    font-size: 0.9rem;
-
-    font-weight: 800;
-}
-
-.logo-modal-close {
-
-    position: absolute;
-
-    top: 8px;
-
-    right: 8px;
-
-    width: 32px;
-    height: 32px;
-
-    background: #ffffff;
-
-    border: 1px solid var(--border);
-
-    color: var(--text-secondary);
-
-    font-size: 1.1rem;
-
-    cursor: pointer;
-}
-
-.logo-modal-close:hover {
-
-    background: var(--primary);
-
-    border-color: var(--primary);
-
-    color: #ffffff;
-}
-
 
 /* =========================================================
    HIDDEN JOB
 ========================================================= */
-
 .hidden-job {
-
     display: none !important;
 }
 
+/* =========================================================
+   LOGO MODAL
+========================================================= */
+.logo-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 16px;
+    background: rgba(15, 23, 42, 0.78);
+}
+
+.logo-modal.show {
+    display: flex;
+}
+
+.logo-modal-content {
+    position: relative;
+    width: min(480px, 100%);
+    max-height: 90dvh;
+    overflow-y: auto;
+    padding: 22px;
+
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.2);
+    text-align: center;
+}
+
+.logo-modal-content img {
+    display: block;
+    width: 100%;
+    max-height: 65dvh;
+    object-fit: contain;
+    padding: 10px;
+    background: var(--white);
+    border: 1px solid var(--border-light);
+    border-radius: 7px;
+}
+
+.logo-modal-title {
+    margin-top: 14px;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.logo-modal-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+
+    color: var(--text-secondary);
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+.logo-modal-close:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
+}
 
 /* =========================================================
    TABLET
 ========================================================= */
-
-@media (max-width: 1200px) {
+@media (max-width: 1250px) {
+    .browse-container {
+        padding: 20px 16px 30px;
+    }
 
     .browse-grid {
+        grid-template-columns: 200px minmax(0, 1fr);
+        gap: 15px;
+    }
 
-        grid-template-columns:
-            220px
-            minmax(0, 1fr)
-            290px;
+    .recommendations-card {
+        position: static;
+        grid-column: 2;
+        width: 100%;
+    }
+
+    .companies-card {
+        top: 90px;
+    }
+
+    .recommendation-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* =========================================================
+   MOBILE AND SMALL TABLETS
+========================================================= */
+@media (max-width: 760px) {
+    .browse-container {
+        padding: 18px 12px 25px;
+    }
+
+    .browse-grid {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
     }
 
     .companies-card,
     .recommendations-card {
-
+        position: static;
+        width: 100%;
         padding: 15px;
     }
-}
 
-
-/* =========================================================
-   MOBILE / TABLET
-========================================================= */
-
-@media (max-width: 950px) {
-
-    .browse-container {
-
-        padding: 90px 12px 20px;
+    /* Keep the employer filter compact and horizontally scrollable. */
+    .companies-header {
+        padding-bottom: 10px;
+        margin-bottom: 12px;
     }
 
-    .browse-grid {
+    .company-filter {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        gap: 8px;
 
-        height: calc(100vh - 110px);
+        width: 100%;
+        padding-bottom: 5px;
 
-        grid-template-columns:
-            210px
-            minmax(0, 1fr);
-
-        gap: 12px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        overscroll-behavior-x: contain;
+        scrollbar-width: thin;
     }
 
-    .recommendations-card {
+    .company-filter button {
+        flex: 0 0 auto;
+        width: auto;
+        max-width: 220px;
+        min-height: 40px;
+        padding: 9px 12px;
+        white-space: nowrap;
+        overflow-wrap: normal;
+    }
 
-        display: none;
+    .company-count {
+        float: none;
+        margin-left: 7px;
     }
 
     .main-search-column {
+        width: 100%;
+    }
 
-        height: 100%;
+    .browse-page-header {
+        margin-bottom: 20px;
+    }
+
+    .browse-page-title {
+        font-size: clamp(1.45rem, 5vw, 1.85rem);
+    }
+
+    .browse-page-description {
+        font-size: 0.79rem;
+    }
+
+    .jobs-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .jobs-title {
+        font-size: 1.05rem;
+    }
+
+    .search-input {
+        height: 46px;
+        font-size: 16px;
+    }
+
+    .job-card {
+        padding: 15px;
+    }
+
+    .job-title {
+        font-size: 0.95rem;
+    }
+
+    .job-meta {
+        gap: 6px;
+    }
+
+    .job-footer {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 11px;
+    }
+
+    .view-job-button {
+        width: 100%;
+        min-height: 42px;
+    }
+
+    /* Recommendations become visible below the job listings. */
+    .recommendations-card {
+        display: block;
+    }
+
+    .recommendation-list {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
     }
 }
-
 
 /* =========================================================
    SMALL MOBILE
 ========================================================= */
-
-@media (max-width: 700px) {
-
+@media (max-width: 480px) {
     .browse-container {
-
-        padding: 85px 8px 15px;
+        padding: 14px 9px 20px;
     }
 
     .browse-grid {
-
-        height: calc(100vh - 100px);
-
-        display: flex;
-
-        flex-direction: column;
-
-        gap: 10px;
-
-        overflow: hidden;
+        gap: 13px;
     }
 
-    .companies-card {
-
-        flex-shrink: 0;
-
-        height: auto;
-
-        max-height: 145px;
-
-        overflow-y: auto;
-    }
-
-    .main-search-column {
-
-        flex: 1;
-
-        min-height: 0;
-
-        height: auto;
-
-        overflow-y: auto;
-    }
-
-    .company-filter {
-
-        display: grid;
-
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-
-        gap: 6px;
-    }
-
-    .company-filter button {
-
-        padding: 8px;
+    .companies-card,
+    .recommendations-card {
+        padding: 12px;
+        border-radius: 8px;
     }
 
     .browse-page-title {
-
-        font-size: 1.35rem;
+        font-size: 1.4rem;
+        line-height: 1.3;
     }
 
     .browse-page-description {
-
-        font-size: 0.73rem;
+        font-size: 0.76rem;
     }
 
-    .jobs-header {
-
-        align-items: flex-start;
-
-        flex-direction: column;
-
-        gap: 4px;
+    .jobs-count {
+        white-space: normal;
     }
 
     .job-card {
+        padding: 12px;
+        border-radius: 8px;
+    }
 
-        padding: 14px;
+    .job-company {
+        gap: 9px;
+    }
+
+    .job-logo,
+    .job-logo-placeholder {
+        width: 42px;
+        height: 42px;
+        flex-basis: 42px;
+    }
+
+    .job-title {
+        font-size: 0.9rem;
+    }
+
+    .job-company-name {
+        font-size: 0.71rem;
+    }
+
+    .job-meta span {
+        font-size: 0.67rem;
+    }
+
+    .job-description {
+        font-size: 0.75rem;
+    }
+
+    .recommendation-top {
+        gap: 6px;
+    }
+
+    .recommendation-logo,
+    .recommendation-logo-placeholder {
+        width: 36px;
+        height: 36px;
+        flex-basis: 36px;
+    }
+
+    .match-badge {
+        padding: 4px 6px;
+        font-size: 0.62rem;
+    }
+
+    .logo-modal-content {
+        padding: 16px;
     }
 }
-
 
 /* =========================================================
-   VERY SMALL MOBILE
+   REDUCED MOTION
 ========================================================= */
-
-@media (max-width: 450px) {
-
-    .company-filter {
-
-        grid-template-columns: 1fr;
-    }
-
-    .job-footer {
-
-        align-items: stretch;
-
-        flex-direction: column;
-    }
-
-    .view-job-button {
-
-        width: 100%;
+@media (prefers-reduced-motion: reduce) {
+    .browse-container *,
+    .logo-modal * {
+        scroll-behavior: auto !important;
+        transition: none !important;
+        animation: none !important;
     }
 }
-
 </style>
 
 
 <div class="browse-container">
-
     <div class="browse-grid">
 
-
         <!-- =====================================================
-             LEFT:
-             COMPANIES
+             LEFT: COMPANY FILTERS
         ====================================================== -->
-
         <aside class="companies-card">
-
             <div class="companies-header">
-
-                <h3 class="companies-title">
-                    Companies
-                </h3>
+                <h3 class="companies-title">Companies</h3>
 
                 <div class="companies-subtitle">
                     Filter available jobs by employer.
                 </div>
-
             </div>
 
-
             <div class="company-filter">
-
                 <button
                     type="button"
                     class="company-filter-btn active"
                     data-company-filter="all"
+                    aria-pressed="true"
                 >
-
                     All Companies
-
-                    <span class="company-count">
-                        {{ job|length }}
-                    </span>
-
+                    <span class="company-count">{{ job|length }}</span>
                 </button>
-
 
                 {% regroup job by employer.company_name as company_list %}
 
                 {% for company in company_list %}
-
                     <button
                         type="button"
                         class="company-filter-btn"
                         data-company-filter="{{ company.grouper|lower|escape }}"
+                        aria-pressed="false"
                     >
-
                         {{ company.grouper }}
-
-                        <span class="company-count">
-                            {{ company.list|length }}
-                        </span>
-
+                        <span class="company-count">{{ company.list|length }}</span>
                     </button>
-
                 {% endfor %}
-
             </div>
-
         </aside>
 
 
-
         <!-- =====================================================
-             CENTER:
-             ALL JOBS
+             CENTER: ALL AVAILABLE JOBS
         ====================================================== -->
-
         <main class="main-search-column">
-
-
             <div class="browse-page-header">
-
                 <h1 class="browse-page-title">
                     Job Vacancies in Pioduran
                 </h1>
@@ -1493,146 +1083,87 @@ Browse Jobs
                     Find employment opportunities from local employers
                     and discover jobs that match your skills.
                 </p>
-
             </div>
-
 
             <div class="jobs-header">
+                <h2 class="jobs-title">All Available Jobs</h2>
 
-                <h2 class="jobs-title">
-                    All Available Jobs
-                </h2>
-
-                <div class="jobs-count">
+                <div class="jobs-count" id="jobsCount">
                     {{ job|length }} JOBS AVAILABLE
                 </div>
-
             </div>
 
-
             <div class="search-wrapper">
-
                 <input
-                    type="text"
+                    type="search"
                     id="liveSearch"
                     class="search-input"
                     placeholder="Search job title, company, location, qualification..."
                     autocomplete="off"
+                    aria-label="Search available jobs"
                 >
-
             </div>
 
-
-            <div
-                class="job-list"
-                id="jobList"
-            >
-
+            <div class="job-list" id="jobList">
                 {% for i in job %}
-
                     <article
                         class="job-card"
                         data-company="{{ i.employer.company_name|lower|escape }}"
-                        data-searchable="
-                            {{ i.title|lower }}
-                            {{ i.employer.company_name|lower }}
-                            {{ i.location|default:''|lower }}
-                            {{ i.description|default:''|lower }}
-                            {{ i.qualifications|default:''|lower }}
-                            {{ i.responsibilities|default:''|lower }}
-                        "
+                        data-searchable="{{ i.title|lower }} {{ i.employer.company_name|lower }} {{ i.location|default:''|lower }} {{ i.description|default:''|lower }} {{ i.qualifications|default:''|lower }} {{ i.responsibilities|default:''|lower }} {{ i.get_job_type_display|lower }} {{ i.salary|default:''|lower }}"
                     >
-
-
                         <div class="job-top">
-
                             <div class="job-company">
-
                                 {% if i.employer.company_logo %}
-
                                     <img
                                         src="{{ i.employer.company_logo.url }}"
-                                        alt="{{ i.employer.company_name }}"
+                                        alt="{{ i.employer.company_name }} logo"
                                         class="job-logo"
-                                        onclick="openLogoModal(
-                                            '{{ i.employer.company_logo.url|escapejs }}',
-                                            '{{ i.employer.company_name|escapejs }}'
-                                        )"
+                                        data-logo-url="{{ i.employer.company_logo.url }}"
+                                        data-company-name="{{ i.employer.company_name }}"
+                                        role="button"
+                                        tabindex="0"
+                                        aria-label="View {{ i.employer.company_name }} logo"
                                     >
-
                                 {% else %}
-
-                                    <div class="job-logo-placeholder">
+                                    <div class="job-logo-placeholder" aria-hidden="true">
                                         {{ i.employer.company_name|first|upper }}
                                     </div>
-
                                 {% endif %}
 
-
                                 <div class="job-company-info">
-
-                                    <h3 class="job-title">
-                                        {{ i.title }}
-                                    </h3>
+                                    <h3 class="job-title">{{ i.title }}</h3>
 
                                     <div class="job-company-name">
                                         {{ i.employer.company_name }}
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
-
 
                         <div class="job-meta">
-
-                            <span>
-                                {{ i.location }}
-                            </span>
-
-                            <span>
-                                {{ i.get_job_type_display }}
-                            </span>
-
-                            {% if i.salary %}
-
-                                <span>
-                                    {{ i.salary }}
-                                </span>
-
+                            {% if i.location %}
+                                <span>{{ i.location }}</span>
                             {% endif %}
 
+                            <span>{{ i.get_job_type_display }}</span>
+
+                            {% if i.salary %}
+                                <span>{{ i.salary }}</span>
+                            {% endif %}
                         </div>
 
-
                         {% if i.description %}
-
-                            <p class="job-description">
-                                {{ i.description }}
-                            </p>
-
+                            <p class="job-description">{{ i.description }}</p>
                         {% endif %}
 
-
                         <div class="job-footer">
-
                             <div class="job-vacancies">
-
                                 {% if i.vacancies %}
-
-                                    {{ i.vacancies }}
-                                    vacancy{{ i.vacancies|pluralize }}
-
+                                    {{ i.vacancies }} vacancy{{ i.vacancies|pluralize }}
                                 {% else %}
-
                                     Vacancy information not specified
-
                                 {% endif %}
-
                             </div>
-
 
                             <a
                                 href="{% url 'job_details' i.id %}"
@@ -1640,112 +1171,71 @@ Browse Jobs
                             >
                                 View Details
                             </a>
-
                         </div>
-
                     </article>
-
                 {% empty %}
-
                     <div class="no-jobs">
-
-                        <h3 class="no-jobs-title">
-                            No Job Vacancies Available
-                        </h3>
+                        <h3 class="no-jobs-title">No Job Vacancies Available</h3>
 
                         <p class="no-jobs-text">
                             There are currently no approved job vacancies.
                             Please check again later.
                         </p>
-
                     </div>
-
                 {% endfor %}
-
             </div>
 
-
-            <div
-                id="searchEmpty"
-                class="search-empty"
-            >
-
-                <strong>
-                    No Matching Jobs
-                </strong>
+            <div id="searchEmpty" class="search-empty" role="status" aria-live="polite">
+                <strong>No Matching Jobs</strong>
 
                 <span>
                     No jobs match your search or selected company.
+                    Try a different keyword or choose another company.
                 </span>
-
             </div>
-
-
         </main>
 
 
-
         <!-- =====================================================
-             RIGHT:
-             PERSONALIZED RECOMMENDATIONS
+             RIGHT: PERSONALIZED RECOMMENDATIONS
         ====================================================== -->
-
         {% if request.user.is_authenticated and request.user.role == "applicant" %}
-
             <aside class="recommendations-card">
-
                 <div class="recommendations-header">
-
                     <h2 class="recommendations-title">
                         Personalized Job Recommendations
                     </h2>
 
                     <p class="recommendations-subtitle">
-                        Jobs selected based on the skills
-                        in your applicant profile.
+                        Jobs selected based on the skills in your applicant profile.
                     </p>
-
                 </div>
 
-
                 {% if recommended_jobs %}
-
                     <div class="recommendation-list">
-
                         {% for recommendation in recommended_jobs %}
-
                             {% with i=recommendation.job %}
-
                                 <article class="recommendation-item">
-
-
                                     <div class="recommendation-top">
-
                                         <div class="recommendation-company">
-
                                             {% if i.employer.company_logo %}
-
                                                 <img
                                                     src="{{ i.employer.company_logo.url }}"
-                                                    alt="{{ i.employer.company_name }}"
+                                                    alt="{{ i.employer.company_name }} logo"
                                                     class="recommendation-logo"
-                                                    onclick="openLogoModal(
-                                                        '{{ i.employer.company_logo.url|escapejs }}',
-                                                        '{{ i.employer.company_name|escapejs }}'
-                                                    )"
+                                                    data-logo-url="{{ i.employer.company_logo.url }}"
+                                                    data-company-name="{{ i.employer.company_name }}"
+                                                    role="button"
+                                                    tabindex="0"
+                                                    aria-label="View {{ i.employer.company_name }} logo"
                                                 >
-
                                             {% else %}
-
-                                                <div class="recommendation-logo-placeholder">
+                                                <div class="recommendation-logo-placeholder" aria-hidden="true">
                                                     {{ i.employer.company_name|first|upper }}
                                                 </div>
-
                                             {% endif %}
 
-
                                             <div class="recommendation-company-info">
-
                                                 <div class="recommendation-company-name">
                                                     {{ i.employer.company_name }}
                                                 </div>
@@ -1753,56 +1243,33 @@ Browse Jobs
                                                 <h3 class="recommendation-job-title">
                                                     {{ i.title }}
                                                 </h3>
-
                                             </div>
-
                                         </div>
-
 
                                         <div class="match-badge">
-                                            {{ recommendation.score }}%
+                                            {{ recommendation.score }}% Match
                                         </div>
-
                                     </div>
-
 
                                     <div class="recommendation-meta">
-
-                                        <span>
-                                            {{ i.location }}
-                                        </span>
-
-                                        <span>
-                                            {{ i.get_job_type_display }}
-                                        </span>
-
-                                        {% if i.salary %}
-
-                                            <span>
-                                                {{ i.salary }}
-                                            </span>
-
+                                        {% if i.location %}
+                                            <span>{{ i.location }}</span>
                                         {% endif %}
 
+                                        <span>{{ i.get_job_type_display }}</span>
+
+                                        {% if i.salary %}
+                                            <span>{{ i.salary }}</span>
+                                        {% endif %}
                                     </div>
 
-
                                     {% if recommendation.matched_skills %}
-
                                         <div class="matched-skills">
-
                                             {% for skill in recommendation.matched_skills %}
-
-                                                <span class="skill-tag">
-                                                    {{ skill }}
-                                                </span>
-
+                                                <span class="skill-tag">{{ skill }}</span>
                                             {% endfor %}
-
                                         </div>
-
                                     {% endif %}
-
 
                                     <a
                                         href="{% url 'job_details' i.id %}"
@@ -1810,22 +1277,12 @@ Browse Jobs
                                     >
                                         View Job
                                     </a>
-
-
                                 </article>
-
                             {% endwith %}
-
                         {% endfor %}
-
                     </div>
-
-
                 {% else %}
-
-
                     <div class="no-recommendations">
-
                         <h3 class="no-recommendations-title">
                             No Matching Jobs Yet
                         </h3>
@@ -1835,340 +1292,223 @@ Browse Jobs
                             your current skills. You can still browse all
                             available vacancies.
                         </p>
-
                     </div>
-
-
                 {% endif %}
-
             </aside>
-
         {% endif %}
 
-
     </div>
-
 </div>
-
 
 
 <!-- =========================================================
-     LOGO MODAL
+     COMPANY LOGO MODAL
 ========================================================= -->
-
 <div
     id="logoModal"
     class="logo-modal"
-    onclick="closeLogoModal(event)"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalCompanyName"
+    aria-hidden="true"
 >
-
     <div class="logo-modal-content">
-
         <button
             type="button"
             class="logo-modal-close"
-            onclick="closeLogoModal()"
+            id="closeLogoModal"
+            aria-label="Close company logo"
         >
-            ×
+            &times;
         </button>
 
+        <img id="modalLogo" src="" alt="Company logo">
 
-        <img
-            id="modalLogo"
-            src=""
-            alt="Company Logo"
-        >
-
-
-        <div
-            id="modalCompanyName"
-            class="logo-modal-title"
-        ></div>
-
+        <div id="modalCompanyName" class="logo-modal-title"></div>
     </div>
-
 </div>
 
 
-
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+    "use strict";
 
-/* =========================================================
-   SEARCH + COMPANY FILTER
-========================================================= */
+    /* =====================================================
+       LIVE SEARCH AND COMPANY FILTER
+    ====================================================== */
+    const searchInput = document.getElementById("liveSearch");
+    const jobCards = Array.from(document.querySelectorAll(".job-card"));
+    const filterButtons = Array.from(
+        document.querySelectorAll(".company-filter-btn")
+    );
+    const searchEmpty = document.getElementById("searchEmpty");
+    const jobsCount = document.getElementById("jobsCount");
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+    let selectedCompany = "all";
 
-        const searchInput =
-            document.getElementById(
-                "liveSearch"
-            );
+    function filterJobs() {
+        const searchValue = (searchInput?.value || "")
+            .toLocaleLowerCase()
+            .trim();
 
+        let visibleCount = 0;
 
-        const jobCards =
-            Array.from(
-                document.querySelectorAll(
-                    ".job-card"
-                )
-            );
-
-
-        const filterButtons =
-            document.querySelectorAll(
-                ".company-filter-btn"
-            );
-
-
-        const searchEmpty =
-            document.getElementById(
-                "searchEmpty"
-            );
-
-
-        let selectedCompany = "all";
-
-
-        function filterJobs() {
-
-            const searchValue =
-                (
-                    searchInput.value || ""
-                )
-                .toLowerCase()
+        jobCards.forEach(function (card) {
+            const company = (card.dataset.company || "")
+                .toLocaleLowerCase()
                 .trim();
 
+            const searchable = (card.dataset.searchable || "")
+                .toLocaleLowerCase()
+                .trim();
 
-            let visibleCount = 0;
+            const companyMatch =
+                selectedCompany === "all" ||
+                company === selectedCompany;
 
+            const searchMatch =
+                !searchValue ||
+                searchable.includes(searchValue);
 
-            jobCards.forEach(
-                function (card) {
+            const visible = companyMatch && searchMatch;
 
-                    const company =
-                        (
-                            card.dataset.company ||
-                            ""
-                        )
-                        .toLowerCase();
+            card.classList.toggle("hidden-job", !visible);
 
-
-                    const searchable =
-                        (
-                            card.dataset.searchable ||
-                            ""
-                        )
-                        .toLowerCase();
-
-
-                    const companyMatch =
-                        selectedCompany === "all" ||
-                        company === selectedCompany;
-
-
-                    const searchMatch =
-                        !searchValue ||
-                        searchable.includes(
-                            searchValue
-                        );
-
-
-                    if (
-                        companyMatch &&
-                        searchMatch
-                    ) {
-
-                        card.classList.remove(
-                            "hidden-job"
-                        );
-
-                        visibleCount++;
-
-                    } else {
-
-                        card.classList.add(
-                            "hidden-job"
-                        );
-
-                    }
-
-                }
-            );
-
-
-            if (
-                jobCards.length > 0 &&
-                visibleCount === 0
-            ) {
-
-                searchEmpty.style.display =
-                    "block";
-
-            } else {
-
-                searchEmpty.style.display =
-                    "none";
-
+            if (visible) {
+                visibleCount++;
             }
+        });
 
+        if (searchEmpty) {
+            searchEmpty.style.display =
+                jobCards.length > 0 && visibleCount === 0
+                    ? "block"
+                    : "none";
         }
 
-
-        searchInput.addEventListener(
-            "input",
-            filterJobs
-        );
-
-
-        filterButtons.forEach(
-            function (button) {
-
-                button.addEventListener(
-                    "click",
-                    function () {
-
-                        filterButtons.forEach(
-                            function (item) {
-
-                                item.classList.remove(
-                                    "active"
-                                );
-
-                            }
-                        );
-
-
-                        button.classList.add(
-                            "active"
-                        );
-
-
-                        selectedCompany =
-                            button.dataset.companyFilter ||
-                            "all";
-
-
-                        filterJobs();
-
-                    }
-                );
-
-            }
-        );
-
-    }
-);
-
-
-/* =========================================================
-   LOGO MODAL
-========================================================= */
-
-function openLogoModal(
-    imageUrl,
-    companyName
-) {
-
-    const modal =
-        document.getElementById(
-            "logoModal"
-        );
-
-
-    const modalLogo =
-        document.getElementById(
-            "modalLogo"
-        );
-
-
-    const modalCompanyName =
-        document.getElementById(
-            "modalCompanyName"
-        );
-
-
-    modalLogo.src =
-        imageUrl;
-
-
-    modalCompanyName.textContent =
-        companyName;
-
-
-    modal.classList.add(
-        "show"
-    );
-
-
-    document.body.style.overflow =
-        "hidden";
-}
-
-
-/* =========================================================
-   CLOSE MODAL
-========================================================= */
-
-function closeLogoModal(event) {
-
-    const modal =
-        document.getElementById(
-            "logoModal"
-        );
-
-
-    if (
-        event &&
-        event.target !== modal
-    ) {
-
-        return;
-
+        if (jobsCount) {
+            jobsCount.textContent =
+                visibleCount +
+                (visibleCount === 1 ? " JOB AVAILABLE" : " JOBS AVAILABLE");
+        }
     }
 
+    if (searchInput) {
+        searchInput.addEventListener("input", filterJobs);
+    }
 
-    modal.classList.remove(
-        "show"
-    );
+    filterButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            filterButtons.forEach(function (item) {
+                item.classList.remove("active");
+                item.setAttribute("aria-pressed", "false");
+            });
 
+            button.classList.add("active");
+            button.setAttribute("aria-pressed", "true");
 
-    document.body.style.overflow =
-        "";
-}
+            selectedCompany = (
+                button.dataset.companyFilter || "all"
+            ).toLocaleLowerCase().trim();
 
+            filterJobs();
+        });
+    });
 
-/* =========================================================
-   ESC KEY
-========================================================= */
+    /* =====================================================
+       COMPANY LOGO MODAL
+    ====================================================== */
+    const modal = document.getElementById("logoModal");
+    const modalLogo = document.getElementById("modalLogo");
+    const modalCompanyName = document.getElementById("modalCompanyName");
+    const closeButton = document.getElementById("closeLogoModal");
 
-document.addEventListener(
-    "keydown",
-    function (event) {
+    let previouslyFocusedElement = null;
+
+    function openLogoModal(imageUrl, companyName) {
+        if (!modal || !modalLogo || !modalCompanyName) {
+            return;
+        }
+
+        previouslyFocusedElement = document.activeElement;
+
+        modalLogo.src = imageUrl;
+        modalLogo.alt = companyName + " logo";
+        modalCompanyName.textContent = companyName;
+
+        modal.classList.add("show");
+        modal.setAttribute("aria-hidden", "false");
+
+        document.body.style.overflow = "hidden";
+
+        if (closeButton) {
+            closeButton.focus();
+        }
+    }
+
+    function closeLogoModal() {
+        if (!modal || !modal.classList.contains("show")) {
+            return;
+        }
+
+        modal.classList.remove("show");
+        modal.setAttribute("aria-hidden", "true");
+
+        document.body.style.overflow = "";
+
+        modalLogo.src = "";
 
         if (
-            event.key === "Escape"
+            previouslyFocusedElement &&
+            typeof previouslyFocusedElement.focus === "function"
         ) {
-
-            const modal =
-                document.getElementById(
-                    "logoModal"
-                );
-
-
-            modal.classList.remove(
-                "show"
-            );
-
-
-            document.body.style.overflow =
-                "";
-
+            previouslyFocusedElement.focus();
         }
-
     }
-);
 
+    document.querySelectorAll("[data-logo-url]").forEach(function (logo) {
+        logo.addEventListener("click", function () {
+            openLogoModal(
+                logo.dataset.logoUrl,
+                logo.dataset.companyName || "Company"
+            );
+        });
+
+        logo.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+
+                openLogoModal(
+                    logo.dataset.logoUrl,
+                    logo.dataset.companyName || "Company"
+                );
+            }
+        });
+    });
+
+    if (closeButton) {
+        closeButton.addEventListener("click", closeLogoModal);
+    }
+
+    if (modal) {
+        modal.addEventListener("click", function (event) {
+            if (event.target === modal) {
+                closeLogoModal();
+            }
+        });
+    }
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            closeLogoModal();
+        }
+    });
+
+    /* =====================================================
+       INITIALIZE FILTER COUNTS
+    ====================================================== */
+    filterJobs();
+});
 </script>
 
 {% endblock %}
